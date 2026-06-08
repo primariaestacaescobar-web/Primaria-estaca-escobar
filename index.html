@@ -619,9 +619,30 @@ const SHEET_URL='https://script.google.com/macros/s/AKfycbznQrG3BKzhk2AjIodRCiCt
 
 function sheetWrite(tab,data){
   try{
-    const payload=JSON.stringify(Object.assign({action:'write',tab:tab,barrio:barrio},data));
-    const url=SHEET_URL+'?payload='+encodeURIComponent(payload);
-    fetch(url,{redirect:'follow'}).catch(()=>{});
+    if(tab==='Presentacion'){
+      // Convertir a filas legibles por sección
+      const pres=data.datos||{};
+      const secciones=PRES_SECCIONES.map(sec=>{
+        const s=pres[sec.id]||{};
+        return{
+          seccion:sec.id,
+          tema:sec.tema,
+          himno:s.himno||sec.himno,
+          escrituras:(s.escrituras||[]).map(e=>e.ref).join(' | '),
+          ninosEsc:(s.escrituras||[]).map(e=>e.nino).filter(n=>n).join(' | '),
+          discurso:(s.discursos||[]).map(e=>e.ref).join(' | '),
+          ninoDisc:(s.discursos||[]).map(e=>e.nino).filter(n=>n).join(' | '),
+          rayitoNombre:s.rayitoNombre||'',
+          rayitoFrase:s.rayito||sec.rayito,
+          impreso:pres._impreso||''
+        };
+      });
+      const body=JSON.stringify({action:'write',tab:'Presentacion',barrio:barrio,secciones:secciones});
+      fetch(SHEET_URL,{method:'POST',body:body,redirect:'follow'}).catch(()=>{});
+    } else {
+      const body=JSON.stringify(Object.assign({action:'write',tab:tab,barrio:barrio},data));
+      fetch(SHEET_URL+'?payload='+encodeURIComponent(body),{redirect:'follow'}).catch(()=>{});
+    }
   }catch(e){}
 }
 
@@ -866,7 +887,8 @@ function saveMinuta(){
   lsSet(weekKey,JSON.stringify(data));
   updatePresFromMinuta(weekKey,sunday,'escritura',data.escritura,data.escrituraNino,data.presEscritura);
   updatePresFromMinuta(weekKey,sunday,'discurso',data.discurso,data.discursoNino,data.presDiscurso);
-  sheetWrite('Minuta',Object.assign({semana:lec.i},data));
+  clearTimeout(window._minutaSync);
+  window._minutaSync=setTimeout(()=>sheetWrite('Minuta',Object.assign({semana:lec.i},data)),10000);
 }
 
 // ═══ LECCIÓN ═══
@@ -893,7 +915,8 @@ function saveBautismo(){
   const fecha=document.getElementById('b-fecha').value;
   const consejera=document.getElementById('b-consejera').value;
   lsSet('bautismo_fecha',fecha);lsSet('bautismo_consejera',consejera);
-  sheetWrite('Bautismo',{fecha:fecha,consejera:consejera});
+  clearTimeout(window._bautSync);
+  window._bautSync=setTimeout(()=>sheetWrite('Bautismo',{fecha:fecha,consejera:consejera}),10000);
 }
 
 // ═══ TEMPLO ═══
@@ -902,7 +925,8 @@ function saveTemplo(){
   const fecha=document.getElementById('t-fecha').value;
   const consejera=document.getElementById('t-consejera').value;
   lsSet('templo_fecha',fecha);lsSet('templo_consejera',consejera);
-  sheetWrite('Templo',{fecha:fecha,consejera:consejera});
+  clearTimeout(window._tempSync);
+  window._tempSync=setTimeout(()=>sheetWrite('Templo',{fecha:fecha,consejera:consejera}),10000);
 }
 
 // ═══ PRESENTACIÓN ═══
@@ -939,6 +963,8 @@ function editPresEntry(secId,arrKey,idx,campo,val){
   if(!pres[secId][arrKey][idx])pres[secId][arrKey][idx]={};
   pres[secId][arrKey][idx][campo]=val;
   lsSet('pres',JSON.stringify(pres));
+  clearTimeout(window._presEntrySync);
+  window._presEntrySync=setTimeout(()=>sheetWrite('Presentacion',{datos:pres}),10000);
 }
 function deletePresEntry(secId,arrKey,idx){
   const pres=JSON.parse(lsGet('pres')||'{}');
@@ -1063,7 +1089,7 @@ function editPresField(secId,campo,val){
   pres[secId][campo]=val;
   lsSet('pres',JSON.stringify(pres));
   clearTimeout(window._presSyncTimer);
-  window._presSyncTimer=setTimeout(()=>sheetWrite('Presentacion',{datos:pres}),2000);
+  window._presSyncTimer=setTimeout(()=>sheetWrite('Presentacion',{datos:pres}),10000);
 }
 function savePres(){
   const pres=JSON.parse(lsGet('pres')||'{}');
@@ -1073,7 +1099,8 @@ function savePres(){
   pres.presidenta=document.getElementById('p-presidenta').value;
   pres.mensaje=document.getElementById('p-mensaje').value;
   lsSet('pres',JSON.stringify(pres));
-  sheetWrite('Presentacion',{datos:pres});
+  clearTimeout(window._presSync);
+  window._presSync=setTimeout(()=>sheetWrite('Presentacion',{datos:pres}),10000);
 }
 function restaurarMensaje(){document.getElementById('p-mensaje').value=MSG_AUTO;savePres();}
 function restaurarNarrador(){document.getElementById('p-narrador-msg').value=MSG_NARRADOR;savePres();}
@@ -1085,25 +1112,26 @@ function exportPresPDF(){
     const escrituras=s.escrituras||[];
     const discursos=s.discursos||[];
     const csdEntry=getCSDForSeccion(sec);
-    // Si no hay escrituras, usar la sugerida
-    const escToShow=escrituras.length>0?escrituras:[{ref:csdEntry?csdEntry.e:'—',nino:'',sugerida:true}];
-    const escHtml=escToShow.map(e=>`
-      <p style="margin:4px 0 4px 16px;font-size:12px"><span style="color:#1E5F8E;font-weight:bold">📖 ${e.ref||'—'}</span>${e.nino?' — HLJ: '+e.nino:' — HLJ'}${e.sugerida?' (sugerida)':''}</p>`).join('');
-    return`<div style="margin-bottom:22px;break-inside:avoid">
-      <p style="font-size:15px;font-weight:bold;color:#1E5F8E;text-decoration:underline;margin-bottom:8px">♪ ${s.himno||sec.himno}</p>
-      ${s.valenteTema?`<p style="margin:5px 0 5px 16px;font-size:12px"><strong style="color:#B83A2A">🎓 ${s.valenteTema}</strong>${s.valenteNombre?' — Valiente: '+s.valenteNombre:' — Valiente'}</p>`:''}
-      ${escHtml}
-      <p style="margin:5px 0 5px 16px;font-size:12px"><strong style="color:#2E7D4F">👧 ${s.rayito||sec.rayito}</strong>${s.rayitoNombre?' — Rayito de Sol/Guardería: '+s.rayitoNombre:' — Rayito de Sol/Guardería'}</p>
-    </div>`;
+    const escToShow=escrituras.length>0?escrituras:[{ref:csdEntry?csdEntry.e:'—',nino:''}];
+    const discToShow=discursos.length>0?discursos:[{ref:csdEntry?csdEntry.disc:'—',nino:''}];
+    const escHtml=escToShow.map(e=>
+      '<p style="margin:4px 0 4px 16px;font-size:12px"><span style="color:#1E5F8E;font-weight:bold">📖 '+
+      (e.ref||'—')+'</span>'+(e.nino?' — '+e.nino:'')+'</p>').join('');
+    const discHtml=discToShow.map(e=>
+      '<p style="margin:4px 0 4px 16px;font-size:12px"><span style="color:#B83A2A;font-weight:bold">🎓 '+
+      (e.ref||'—')+'</span>'+(e.nino?' — '+e.nino:'')+'</p>').join('');
+    return '<div style="margin-bottom:22px;break-inside:avoid">'+
+      '<p style="font-size:15px;font-weight:bold;color:#1E5F8E;text-decoration:underline;margin-bottom:8px">♪ '+(s.himno||sec.himno)+'</p>'+
+      discHtml+
+      escHtml+
+      '<p style="margin:5px 0 5px 16px;font-size:12px"><strong style="color:#2E7D4F">👧 '+(s.rayito||sec.rayito)+'</strong>'+(s.rayitoNombre?' — '+s.rayitoNombre:'')+'</p>'+
+      '</div>';
   }).join('');
-  const html=`<h1>Programa Sacramental | Primaria</h1>
-  <h2>${CURRICULO} — Barrio ${barrio} · Estaca Escobar</h2>
-  <p style="font-size:13px;margin-bottom:4px"><strong>Narrador/a:</strong> ${saved.narrador||'___________'}</p>
-  <p style="font-size:13px;margin-bottom:12px"><strong>Fecha:</strong> ${saved.fecha||'___________'}</p>
-  ${saved.narradorMsg?'<p style="font-size:12px;font-style:italic;color:#555;margin-bottom:20px;white-space:pre-wrap">'+saved.narradorMsg+'</p>':''}
-  ${secHtml}
-  <p style="margin-top:24px;font-size:13px">• <strong>Mensaje Final — ${saved.presidenta||'Presidenta de Primaria'}</strong></p>
-  <p style="font-size:12px;color:#555;margin-top:6px;white-space:pre-wrap">${saved.mensaje||MSG_AUTO}</p>`;
+  // Marcar como impreso
+  saved._impreso=new Date().toISOString();
+  lsSet('pres',JSON.stringify(saved));
+  clearTimeout(window._presSync);
+  window._presSync=setTimeout(()=>sheetWrite('Presentacion',{datos:saved}),1000);
   showPrintOverlay(html);
 }
 
