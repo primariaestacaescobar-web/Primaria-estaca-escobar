@@ -619,8 +619,9 @@ const SHEET_URL='https://script.google.com/macros/s/AKfycbznQrG3BKzhk2AjIodRCiCt
 
 function sheetWrite(tab,data){
   try{
-    const body=JSON.stringify(Object.assign({action:'write',tab:tab,barrio:barrio},data));
-    fetch(SHEET_URL,{method:'POST',body:body,headers:{'Content-Type':'text/plain;charset=utf-8'},mode:'no-cors'}).catch(()=>{});
+    const payload=JSON.stringify(Object.assign({action:'write',tab:tab,barrio:barrio},data));
+    const url=SHEET_URL+'?payload='+encodeURIComponent(payload);
+    fetch(url,{redirect:'follow'}).catch(()=>{});
   }catch(e){}
 }
 
