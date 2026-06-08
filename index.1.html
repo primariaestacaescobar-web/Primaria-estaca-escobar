@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Primaria · Estaca Escobar</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#B83A2A;--rojo-c:#FDF2F0;--rojo-b:#EAC4BE;
+  --azul:#1E5F8E;--azul-c:#EEF4FA;--azul-b:#B8D4EA;
+  --amarillo:#B8920A;--amarillo-c:#FBF7EC;--amarillo-b:#E8D898;
+  --verde:#2E7D4F;--verde-c:#EEF6F0;--verde-b:#B8D8BE;
+  --violeta:#5B3F8A;--violeta-c:#F5F0FB;--violeta-b:#D8CCF0;
+  --fondo:#F8F6F2;--blanco:#FFFFFF;--texto:#2C2C2C;--suave:#787068;--borde:#E4E0DA;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--fondo);color:var(--texto);max-width:480px;margin:0 auto;min-height:100vh;}
+h1,h2,h3{font-family:'Lora',Georgia,serif;}
+.screen{display:none;min-height:100vh;padding-bottom:80px;}
+.screen.active{display:block;}
+.header{padding:22px 18px 20px;position:relative;overflow:hidden;}
+.header::after{content:'';position:absolute;top:-40px;right:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.06);}
+.hr{background:var(--rojo);color:var(--blanco);}
+.ha{background:var(--azul);color:var(--blanco);}
+.hv{background:var(--verde);color:var(--blanco);}
+.header label{font-size:11px;opacity:.7;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:4px;}
+.header h1{font-size:22px;font-weight:700;color:var(--blanco);}
+.header h2{font-size:18px;font-weight:700;color:var(--blanco);line-height:1.3;}
+.header p{font-size:13px;opacity:.85;margin-top:4px;}
+.back-btn{background:rgba(255,255,255,.15);border:none;border-radius:8px;padding:7px 14px;color:var(--blanco);font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;margin-bottom:14px;display:inline-block;}
+.card{background:var(--blanco);border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);padding:18px 16px;margin:0 0 12px;}
+.card-r{border-top:4px solid var(--rojo);}
+.card-a{border-top:4px solid var(--azul);}
+.card-am{border-top:4px solid var(--amarillo);}
+.card-v{border-top:4px solid var(--verde);}
+.card-vi{border-top:4px solid var(--violeta);}
+.slabel{display:flex;align-items:center;gap:6px;margin-bottom:12px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+.fld{margin-bottom:9px;}
+.fld label{font-size:11px;color:var(--suave);display:block;margin-bottom:3px;}
+.fld input,.fld textarea{width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:9px 11px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--texto);background:var(--fondo);outline:none;}
+.fld textarea{resize:vertical;min-height:80px;}
+.chip{background:var(--amarillo-c);border:1px solid var(--amarillo-b);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--amarillo);font-weight:600;cursor:pointer;display:block;width:100%;text-align:left;margin-bottom:5px;}
+.pcheck{display:flex;align-items:center;gap:6px;margin:5px 0 2px 2px;}
+.pcheck input{width:14px;height:14px;accent-color:var(--rojo);cursor:pointer;}
+.pcheck span{font-size:11px;color:var(--suave);}
+.extlink{display:flex;align-items:center;justify-content:space-between;border-radius:10px;padding:10px 14px;font-weight:600;font-size:13px;text-decoration:none;margin-bottom:8px;border:1.5px solid;}
+.btn{border:none;border-radius:10px;padding:12px 18px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-bottom:8px;}
+.btn-r{background:var(--rojo);color:var(--blanco);}
+.quick-nav{position:sticky;top:0;z-index:50;background:var(--blanco);border-bottom:1px solid var(--borde);display:flex;overflow-x:auto;gap:8px;padding:10px 14px;scrollbar-width:none;}
+.quick-nav::-webkit-scrollbar{display:none;}
+.qbtn{flex-shrink:0;display:flex;align-items:center;gap:5px;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--borde);background:var(--fondo);color:var(--suave);white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.qbtn.active{background:var(--rojo);color:var(--blanco);border-color:var(--rojo);}
+.week-nav{background:rgba(0,0,0,.15);border-radius:12px;display:flex;align-items:center;padding:4px;margin-top:14px;}
+.week-arrow{background:rgba(255,255,255,.15);border:none;border-radius:8px;width:38px;height:38px;color:var(--blanco);font-size:18px;cursor:pointer;flex-shrink:0;}
+.week-arrow:disabled{opacity:.3;cursor:default;}
+.week-center{flex:1;text-align:center;padding:0 8px;}
+.week-label{font-size:12px;color:rgba(255,255,255,.8);margin-bottom:2px;}
+.week-date{font-size:15px;font-weight:700;color:var(--blanco);}
+.reunion-btn{width:100%;border-radius:12px;padding:13px 15px;margin-bottom:9px;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;border:1.5px solid;background:var(--blanco);}
+.barrio-btn{background:var(--blanco);border:1.5px solid var(--borde);border-radius:12px;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;color:var(--texto);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:9px;width:100%;}
+.tema-card{background:var(--violeta-c);border-radius:10px;border:1px solid var(--violeta-b);padding:12px 14px;margin-bottom:8px;}
+.tema-titulo{font-family:'Lora',serif;font-size:14px;font-weight:600;color:var(--violeta);margin-bottom:4px;}
+.tema-idea{font-size:13px;color:var(--suave);line-height:1.55;margin-bottom:6px;}
+.block-e{background:var(--azul-c);border-radius:10px;border:1px solid var(--azul-b);padding:10px 12px;margin-bottom:8px;}
+.block-e.manual{background:var(--verde-c);border-color:var(--verde-b);}
+.block-e .elabel{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+.inp-sm{width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:8px 10px;font-size:14px;font-family:'DM Sans',sans-serif;background:white;outline:none;color:var(--texto);}
+.minuta-block{background:var(--rojo-c);border-radius:10px;border:1px solid var(--rojo-b);padding:14px;margin-bottom:10px;}
+.minuta-time{font-size:11px;font-weight:700;color:var(--rojo);margin-bottom:12px;letter-spacing:.05em;}
+.minuta-item{background:var(--fondo);border-radius:10px;border:1px solid var(--borde);padding:11px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
+.guard-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--borde);font-size:13px;}
+.especial-card{border-radius:14px;padding:14px 16px;margin-bottom:10px;border:1.5px solid;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+#loading{position:fixed;inset:0;background:var(--fondo);display:flex;align-items:center;justify-content:center;z-index:999;}
+.load-icon{width:44px;height:44px;border-radius:12px;background:var(--rojo);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--blanco);}
+
+  /* BOTTOM NAV */
+  #bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:var(--blanco);border-top:1.5px solid var(--borde);display:none;z-index:100;box-shadow:0 -2px 12px rgba(0,0,0,.07);}
+  .nav-btn{flex:1;border:none;background:transparent;padding:10px 0 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:'DM Sans',sans-serif;}
+  .nav-btn .nav-icon{font-size:20px;}
+  .nav-btn .nav-label{font-size:11px;color:var(--suave);font-weight:400;}
+  .nav-btn.active .nav-label{color:var(--rojo);font-weight:700;}
+  .nav-btn .nav-bar{width:20px;height:2px;border-radius:2px;background:var(--rojo);margin-top:1px;display:none;}
+  .nav-btn.active .nav-bar{display:block;}
+  #print-overlay{position:fixed;inset:0;z-index:9999;background:white;overflow:auto;}
+  #print-overlay .print-toolbar{position:sticky;top:0;background:white;padding:10px 14px;display:flex;gap:8px;border-bottom:1px solid var(--borde);z-index:1;}
+  #print-overlay .print-body{padding:24px 20px;max-width:700px;margin:0 auto;}
+  @media print{
+    body>*:not(#print-overlay){display:none!important;}
+    #print-overlay .print-toolbar{display:none!important;}
+    #print-overlay{position:static!important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div style="text-align:center">
+    <div class="load-icon">✦</div>
+    <p style="font-family:'Lora',serif;font-style:italic;font-size:14px;color:var(--suave)">Cargando…</p>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav id="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="goTab('home')">
+    <span class="nav-icon">🏠</span><span class="nav-label">Inicio</span><div class="nav-bar"></div>
+  </button>
+  <button class="nav-btn" id="nav-semana" onclick="goTab('semana')">
+    <span class="nav-icon">📅</span><span class="nav-label">Esta Semana</span><div class="nav-bar"></div>
+  </button>
+</nav>
+
+<!-- ═══ BARRIO SELECTOR ═══ -->
+<div id="screen-barrio" class="screen active">
+  <div class="header hr" style="padding:32px 24px 28px;text-align:center">
+    <div style="width:56px;height:56px;border-radius:14px;background:rgba(255,255,255,.2);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--blanco)">✦</div>
+    <h1 style="font-size:24px;margin-bottom:6px">Primaria</h1>
+    <p style="font-family:'Lora',serif;font-style:italic;font-size:15px;opacity:.85;margin:0">Estaca Escobar</p>
+  </div>
+  <div style="padding:20px">
+    <div style="background:var(--blanco);border-radius:16px;padding:18px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-left:4px solid var(--amarillo)">
+      <p style="font-family:'Lora',serif;font-size:15px;font-weight:600;margin-bottom:8px">Bienvenidas a la Primaria</p>
+      <p style="font-size:13px;color:var(--suave);line-height:1.65">Cada llamamiento en la Primaria es una oportunidad para ayudar a los niños a sentir el amor de Jesucristo, fortalecer su fe y prepararse para avanzar en la senda de los convenios. Al servir unidas, apoyamos a las familias y a los maestros en la creación de experiencias significativas que acerquen a cada niño al Salvador.</p>
+      <p style="font-size:13px;color:var(--suave);line-height:1.65;margin-top:8px">Gracias por su dedicación, amor y servicio en esta obra tan importante.</p>
+    </div>
+    <p style="font-size:14px;color:var(--suave);margin-bottom:14px">Elegí tu barrio para comenzar:</p>
+    <div id="barrio-list"></div>
+  </div>
+</div>
+
+<!-- ═══ INICIO BARRIO ═══ -->
+<div id="screen-home" class="screen">
+  <div class="header hr">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <label>Primaria · Estaca Escobar</label>
+        <h1 id="home-titulo" style="margin-bottom:0">Barrio —</h1>
+      </div>
+      <button onclick="openSettings()" style="background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.3);border-radius:10px;width:38px;height:38px;color:var(--blanco);font-size:17px;cursor:pointer;flex-shrink:0;margin-top:2px">⚙️</button>
+    </div>
+  </div>
+  <div style="padding:16px 14px 0">
+    <!-- Botón principal -->
+    <button onclick="goTab('semana')" style="width:100%;background:var(--rojo);color:white;border:none;border-radius:14px;padding:16px 18px;cursor:pointer;margin-bottom:16px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 16px rgba(184,58,42,.25)">
+      <span style="font-size:26px">📅</span>
+      <div style="text-align:left">
+        <p style="font-family:'Lora',serif;font-size:16px;font-weight:700;margin:0">Ver Esta Semana</p>
+        <p style="font-size:12px;opacity:.8;margin:2px 0 0">Minuta, himnos y clase del domingo</p>
+      </div>
+      <span style="margin-left:auto;font-size:18px">→</span>
+    </button>
+
+    <!-- Reuniones especiales -->
+    <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--suave);margin-bottom:10px">Reuniones especiales</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:16px">
+      <button onclick="goDetail('bautismo')" style="background:var(--azul-c);border:1.5px solid var(--azul-b);border-radius:12px;padding:14px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
+        <span style="font-size:22px">💧</span><span style="font-size:10px;font-weight:600;color:var(--azul);line-height:1.3">Bautismo</span>
+      </button>
+      <button onclick="goDetail('templo')" style="background:var(--verde-c);border:1.5px solid var(--verde-b);border-radius:12px;padding:14px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
+        <span style="font-size:22px">🏛️</span><span style="font-size:10px;font-weight:600;color:var(--verde);line-height:1.3">Templo</span>
+      </button>
+      <button onclick="goDetail('presentacion')" style="background:var(--rojo-c);border:1.5px solid var(--rojo-b);border-radius:12px;padding:14px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
+        <span style="font-size:22px">📜</span><span style="font-size:10px;font-weight:600;color:var(--rojo);line-height:1.3">Presentación</span>
+      </button>
+    </div>
+
+    <!-- Exportar -->
+    <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--suave);margin-bottom:10px">Exportar datos</p>
+    <button onclick="exportMinutas()" style="width:100%;background:var(--blanco);border:1.5px solid var(--azul-b);border-radius:12px;padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <span style="font-size:18px">📊</span>
+      <div style="text-align:left">
+        <p style="font-size:13px;font-weight:600;color:var(--azul);margin:0">Exportar minutas del año</p>
+        <p style="font-size:11px;color:var(--suave);margin:2px 0 0">Tabla con todas las asignaciones</p>
+      </div>
+    </button>
+
+    <!-- Consejero -->
+    <div class="card card-a" style="margin:0 0 12px">
+      <div class="slabel" style="color:var(--azul)">👤 Consejero del obispado</div>
+      <div class="fld">
+        <input id="home-consejero" type="text" placeholder="Nombre del consejero asignado" oninput="saveCfgConsejero2()">
+      </div>
+    </div>
+
+    <button onclick="cambiarBarrio()" style="width:100%;background:transparent;border:1.5px solid var(--borde);border-radius:10px;padding:11px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--suave);cursor:pointer;margin-bottom:12px">↩ Cambiar de barrio</button>
+  </div>
+</div>
+
+<!-- ═══ ESTA SEMANA ═══ -->
+<div id="screen-semana" class="screen">
+  <div class="header hr">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <label id="semana-barrio-label" onclick="openSettings()" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px">Barrio —</label>
+        <h1 id="semana-titulo">Esta Semana</h1>
+      </div>
+      <button onclick="openSettings()" style="background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.3);border-radius:10px;width:38px;height:38px;color:var(--blanco);font-size:17px;cursor:pointer;flex-shrink:0;margin-top:2px">⚙️</button>
+    </div>
+    <div class="week-nav">
+      <button class="week-arrow" id="prev-week" onclick="changeWeek(-1)">←</button>
+      <div class="week-center">
+        <div class="week-label" id="week-label">Próximo domingo</div>
+        <div class="week-date" id="week-date">—</div>
+      </div>
+      <button class="week-arrow" id="next-week" onclick="changeWeek(1)">→</button>
+    </div>
+  </div>
+  <div class="quick-nav">
+    <button class="qbtn active" onclick="scrollSec('minuta',this)">📋 Minuta</button>
+    <button class="qbtn" onclick="scrollSec('himnos',this)">🎵 Himnos</button>
+    <button class="qbtn" onclick="scrollSec('clase',this)">📖 Clase</button>
+    <button class="qbtn" onclick="scrollSec('especiales',this)">⭐ Especiales</button>
+  </div>
+  <div style="padding:14px 14px 0">
+    <div id="especiales-banner"></div>
+
+    <!-- MINUTA -->
+    <div id="sec-minuta" class="card card-r">
+      <div class="slabel" style="color:var(--rojo)">📋 Minuta del domingo</div>
+      <p style="font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--suave);margin-bottom:10px">Reunión Primaria · 3 a 11 años · 50 min</p>
+      <div class="minuta-block">
+        <div class="minuta-time">5 MIN · Apertura</div>
+        <!-- Oración -->
+        <div class="fld">
+          <label>Oración de apertura</label>
+          <input type="text" id="m-oracion" placeholder="Nombre del niño/a" oninput="saveMinuta()">
+        </div>
+        <!-- Escritura -->
+        <div style="background:white;border-radius:10px;border:1px solid var(--borde);padding:10px 12px;margin-bottom:9px">
+          <p style="font-size:10px;font-weight:700;color:var(--azul);margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase">📖 Escritura o Artículo de Fe</p>
+          <input type="text" id="m-escritura" placeholder="Ej: Isaías 9:6 o Artículo de Fe 1" oninput="saveMinuta()" style="width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:8px 10px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--fondo);outline:none;color:var(--texto)">
+          <div id="chips-escritura" style="margin-top:5px"></div>
+          <input type="text" id="m-escritura-nino" placeholder="Niño/a asignado/a" oninput="saveMinuta()" style="width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:8px 10px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--fondo);outline:none;color:var(--texto);margin-top:6px">
+          <div class="pcheck">
+            <input type="checkbox" id="m-pres-escritura" onchange="saveMinuta()" onclick="setTimeout(saveMinuta,100)">
+            <span>Usar en Presentación Sacramental</span>
+          </div>
+        </div>
+        <!-- Discurso -->
+        <div style="background:white;border-radius:10px;border:1px solid var(--borde);padding:10px 12px;margin-bottom:9px">
+          <p style="font-size:10px;font-weight:700;color:var(--rojo);margin-bottom:6px;letter-spacing:.06em;text-transform:uppercase">👦 Discurso — tema</p>
+          <input type="text" id="m-discurso" placeholder="Tema del discurso" oninput="saveMinuta()" style="width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:8px 10px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--fondo);outline:none;color:var(--texto)">
+          <div id="chips-discurso" style="margin-top:5px"></div>
+          <input type="text" id="m-discurso-nino" placeholder="Niño/a que da el discurso" oninput="saveMinuta()" style="width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:8px 10px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--fondo);outline:none;color:var(--texto);margin-top:6px">
+          <div class="pcheck">
+            <input type="checkbox" id="m-pres-discurso" onchange="saveMinuta()" onclick="setTimeout(saveMinuta,100)">
+            <span>Usar en Presentación Sacramental</span>
+          </div>
+        </div>
+        <div class="fld">
+          <label>Mensaje del obispado (opcional)</label>
+          <input type="text" id="m-obispado" placeholder="Nombre del miembro del obispado" oninput="saveMinuta()">
+        </div>
+      </div>
+      <div class="minuta-item" style="background:var(--azul-c);border-color:var(--azul-b)"><span>Tiempo para cantar</span><span style="font-size:11px;font-weight:700;color:var(--azul)">20 MIN</span></div>
+      <div class="minuta-item" style="background:var(--amarillo-c);border-color:var(--amarillo-b)"><span>Transición a las clases</span><span style="font-size:11px;font-weight:700;color:var(--amarillo)">5 MIN</span></div>
+      <div class="minuta-item" style="background:var(--verde-c);border-color:var(--verde-b)"><span>Clases y oración final</span><span style="font-size:11px;font-weight:700;color:var(--verde)">20 MIN</span></div>
+      <button onclick="toggleGuarderia()" style="width:100%;margin-top:10px;background:var(--fondo);border:1px solid var(--borde);border-radius:10px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--suave);cursor:pointer;display:flex;justify-content:space-between" id="guard-toggle">
+        <span>Guardería (18 meses – 3 años)</span><span id="guard-arrow">▼</span>
+      </button>
+      <div id="guarderia-body" style="display:none;padding-top:12px">
+        <div class="guard-row"><span>Bienvenida y oración</span><span style="color:var(--suave);font-weight:600">5 MIN</span></div>
+        <div class="guard-row"><span>Actividad libre / refrigerio</span><span style="color:var(--suave);font-weight:600">25 MIN</span></div>
+        <div class="guard-row"><span>Lección Mirad a vuestros pequeñitos</span><span style="color:var(--suave);font-weight:600">10 MIN</span></div>
+        <div class="guard-row" style="border:none"><span>Tiempo para cantar</span><span style="color:var(--suave);font-weight:600">10 MIN</span></div>
+      </div>
+    </div>
+
+    <!-- HIMNOS -->
+    <div id="sec-himnos" class="card card-a">
+      <div class="slabel" style="color:var(--azul)">🎵 Himnos del mes</div>
+      <div id="himnos-content"></div>
+      <p style="font-size:11px;color:var(--suave);margin-top:10px">Fuente: Apéndice C · Ven sígueme 2026</p>
+    </div>
+
+    <!-- CLASE -->
+    <div id="sec-clase" class="card card-am">
+      <div class="slabel" style="color:var(--amarillo)">📖 Clase esta semana</div>
+      <div id="clase-content"></div>
+    </div>
+
+    <!-- ESPECIALES -->
+    <div id="sec-especiales">
+      <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--suave);margin-bottom:12px">Actividades especiales</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px">
+        <button onclick="goDetail('bautismo')" style="background:var(--azul-c);border:1.5px solid var(--azul-b);border-radius:12px;padding:13px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
+          <span style="font-size:20px">💧</span><span style="font-size:10px;font-weight:600;color:var(--azul);line-height:1.3">Reunión de Bautismo</span>
+        </button>
+        <button onclick="goDetail('templo')" style="background:var(--verde-c);border:1.5px solid var(--verde-b);border-radius:12px;padding:13px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
+          <span style="font-size:20px">🏛️</span><span style="font-size:10px;font-weight:600;color:var(--verde);line-height:1.3">Templo y Sacerdocio</span>
+        </button>
+        <button onclick="goDetail('presentacion')" style="background:var(--rojo-c);border:1.5px solid var(--rojo-b);border-radius:12px;padding:13px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
+          <span style="font-size:20px">📜</span><span style="font-size:10px;font-weight:600;color:var(--rojo);line-height:1.3">Presentación Sacramental</span>
+        </button>
+      </div>
+      <button onclick="openSettings()" style="width:100%;background:transparent;border:1.5px solid var(--borde);border-radius:10px;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--suave);cursor:pointer;margin-top:4px">⚙️ Configuración · Cambiar barrio</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LECCIÓN ═══ -->
+<div id="screen-leccion" class="screen">
+  <div class="header ha">
+    <button class="back-btn" onclick="goBack()">← Volver</button>
+    <label>Clase · Ven sígueme 2026</label>
+    <h2 id="lec-titulo">—</h2>
+    <p id="lec-escrituras">—</p>
+  </div>
+  <div style="padding:16px 14px 0">
+    <div class="card card-am">
+      <div class="slabel" style="color:var(--amarillo)">📖 Introducción</div>
+      <p id="lec-desc" style="font-family:'Lora',serif;font-style:italic;font-size:15px;line-height:1.7;margin-bottom:8px"></p>
+      <p style="font-size:11px;color:var(--suave)">Fuente: Ven, sígueme — Antiguo Testamento 2026</p>
+    </div>
+    <div class="card card-vi">
+      <div class="slabel" style="color:var(--violeta)">💡 Temas e ideas — sección para niños</div>
+      <div id="lec-temas"></div>
+    </div>
+    <div class="card card-a">
+      <div class="slabel" style="color:var(--azul)">🔗 Recursos</div>
+      <a id="lec-link" href="#" target="_blank" class="extlink" style="background:var(--azul-c);color:var(--azul);border-color:var(--azul-b)">Lección completa — Ven sígueme <span>→</span></a>
+      <a id="lec-gsa" href="#" target="_blank" class="extlink" style="background:var(--verde-c);color:var(--verde);border-color:var(--verde-b)">Recursos para niños — Juegos, relatos y actividades <span>→</span></a>
+    </div>
+    <div style="background:var(--rojo-c);border-radius:14px;border:1px solid var(--rojo-b);padding:12px 16px;text-align:center">
+      <p style="font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--rojo);line-height:1.65">🌿 Buscá siempre la guía del Espíritu Santo al preparar y enseñar.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BAUTISMO ═══ -->
+<div id="screen-bautismo" class="screen">
+  <div class="header ha">
+    <button class="back-btn" onclick="goBack()">← Volver</button>
+    <label id="bautismo-barrio-label">Barrio —</label>
+    <h2>Reunión de preparación para el bautismo y la confirmación</h2>
+    <p>Manual General 12.1.8 · Valientes 7 y sus familias</p>
+  </div>
+  <div style="padding:16px 14px 0">
+    <div class="card card-a">
+      <div class="slabel" style="color:var(--azul)">📌 Propósito oficial</div>
+      <p style="font-size:13px;color:var(--suave);margin-bottom:12px;line-height:1.5">Reunión anual para los niños de Valientes 7, sus padres y maestros.</p>
+      <ul style="list-style:none;padding:0">
+        <li style="display:flex;gap:8px;margin-bottom:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--azul);margin-top:6px;flex-shrink:0"></div><p style="font-size:13px;line-height:1.55">Ayudar a los niños a entender el convenio bautismal y sus bendiciones.</p></li>
+        <li style="display:flex;gap:8px;margin-bottom:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--azul);margin-top:6px;flex-shrink:0"></div><p style="font-size:13px;line-height:1.55">Enseñar la importancia de ser miembro de La Iglesia de Jesucristo.</p></li>
+        <li style="display:flex;gap:8px;margin-bottom:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--azul);margin-top:6px;flex-shrink:0"></div><p style="font-size:13px;line-height:1.55">Ayudar a los niños a entender el don del Espíritu Santo.</p></li>
+        <li style="display:flex;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--azul);margin-top:6px;flex-shrink:0"></div><p style="font-size:13px;line-height:1.55">Enseñar que la Santa Cena renueva el convenio bautismal.</p></li>
+      </ul>
+      <a href="https://www.churchofjesuschrist.org/study/manual/general-handbook/12-primary?lang=spa" target="_blank" class="extlink" style="background:var(--azul-c);color:var(--azul);border-color:var(--azul-b);margin-top:12px">Ver sección 12.1.8 del Manual <span>→</span></a>
+    </div>
+    <div class="card card-v">
+      <div class="slabel" style="color:var(--verde)">📅 Datos de la reunión</div>
+      <div class="fld"><label>Fecha</label><input type="text" id="b-fecha" placeholder="Ej: 15 de marzo de 2026" oninput="saveBautismo()"></div>
+      <div class="fld"><label>Consejera asignada</label><input type="text" id="b-consejera" placeholder="Nombre de la consejera" oninput="saveBautismo()"></div>
+    </div>
+    <div class="card card-am">
+      <div class="slabel" style="color:var(--amarillo)">📥 Materiales</div>
+      <a href="https://drive.google.com/drive/folders/1rNCUpTFCGZX5cEOxYBAOzFcOQyGWTZqJ" target="_blank" class="extlink" style="background:var(--amarillo-c);color:var(--amarillo);border-color:var(--amarillo-b)">Materiales para imprimir (Drive) <span>→</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TEMPLO ═══ -->
+<div id="screen-templo" class="screen">
+  <div class="header hv">
+    <button class="back-btn" onclick="goBack()">← Volver</button>
+    <label id="templo-barrio-label">Barrio —</label>
+    <h2>Reunión de preparación para el templo y el sacerdocio</h2>
+    <p>Manual General 12.1.7 · Valientes 10 y sus padres</p>
+  </div>
+  <div style="padding:16px 14px 0">
+    <div class="card card-v">
+      <div class="slabel" style="color:var(--verde)">📌 Propósito oficial</div>
+      <p style="font-size:13px;color:var(--suave);margin-bottom:12px;line-height:1.5">Reunión anual para los niños de Valientes 10 y sus padres.</p>
+      <ul style="list-style:none;padding:0">
+        <li style="display:flex;gap:8px;margin-bottom:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--verde);margin-top:6px;flex-shrink:0"></div><p style="font-size:13px;line-height:1.55">Ayudar a los niños a entender las responsabilidades y bendiciones del sacerdocio.</p></li>
+        <li style="display:flex;gap:8px;margin-bottom:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--verde);margin-top:6px;flex-shrink:0"></div><p style="font-size:13px;line-height:1.55">Preparar a los niños para hacer y guardar convenios sagrados.</p></li>
+        <li style="display:flex;gap:8px"><div style="width:6px;height:6px;border-radius:50%;background:var(--verde);margin-top:6px;flex-shrink:0"></div><p style="font-size:13px;line-height:1.55">Alentar a los niños a prepararse para recibir la recomendación para el templo.</p></li>
+      </ul>
+      <a href="https://www.churchofjesuschrist.org/study/manual/general-handbook/12-primary?lang=spa" target="_blank" class="extlink" style="background:var(--verde-c);color:var(--verde);border-color:var(--verde-b);margin-top:12px">Ver sección 12.1.7 del Manual <span>→</span></a>
+    </div>
+    <div class="card card-a">
+      <div class="slabel" style="color:var(--azul)">📅 Datos de la reunión</div>
+      <div class="fld"><label>Fecha</label><input type="text" id="t-fecha" placeholder="Ej: 5 de octubre de 2026" oninput="saveTemplo()"></div>
+      <div class="fld"><label>Consejera asignada</label><input type="text" id="t-consejera" placeholder="Nombre de la consejera" oninput="saveTemplo()"></div>
+    </div>
+    <div class="card card-am">
+      <div class="slabel" style="color:var(--amarillo)">📥 Materiales</div>
+      <a href="https://drive.google.com/drive/folders/1UU7ONYRD72buM3SnstHmZZZll46mN05d" target="_blank" class="extlink" style="background:var(--amarillo-c);color:var(--amarillo);border-color:var(--amarillo-b)">Mi preparación para el Templo (Drive) <span>→</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRESENTACIÓN SACRAMENTAL ═══ -->
+<div id="screen-presentacion" class="screen">
+  <div class="header hr">
+    <button class="back-btn" onclick="goBack()">← Volver</button>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <label id="pres-barrio-label">Barrio —</label>
+        <h2>Presentación Sacramental 2026</h2>
+        <p>Antiguo Testamento</p>
+      </div>
+    </div>
+  </div>
+  <button onclick="exportPresPDF()" style="background:rgba(255,255,255,.2);border:none;border-radius:12px;padding:10px 18px;color:var(--blanco);font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:12px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px">🖨️ Exportar PDF de la Presentación</button>
+  <div style="padding:14px 14px 0">
+    <div class="card card-a">
+      <div class="slabel" style="color:var(--azul)">📅 Datos generales</div>
+      <div class="fld"><label>Fecha</label><input type="text" id="p-fecha" placeholder="Ej: 15 de noviembre de 2026" oninput="savePres()"></div>
+      <div class="fld"><label>Narrador/a</label><input type="text" id="p-narrador" placeholder="Nombre del narrador/a" oninput="savePres()"></div>
+    </div>
+    <div class="card card-r">
+      <div class="slabel" style="color:var(--rojo)">📣 Mensaje del narrador</div>
+      <div class="fld"><textarea id="p-narrador-msg" oninput="savePres()" style="min-height:90px"></textarea></div>
+      <button onclick="restaurarNarrador()" style="width:100%;background:var(--rojo-c);border:1px solid var(--rojo-b);border-radius:10px;padding:9px 14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--rojo);cursor:pointer;font-weight:600;text-align:left">↺ Restaurar mensaje sugerido</button>
+    </div>
+    <div id="pres-secciones"></div>
+    <div class="card card-vi">
+      <div class="slabel" style="color:var(--violeta)">✨ Mensaje final</div>
+      <div class="fld"><label>Presidenta de Primaria</label><input type="text" id="p-presidenta" placeholder="Nombre de la presidenta" oninput="savePres()"></div>
+      <div class="fld"><label>Mensaje</label><textarea id="p-mensaje" oninput="savePres()"></textarea></div>
+      <button onclick="restaurarMensaje()" style="width:100%;background:var(--violeta-c);border:1px solid var(--violeta-b);border-radius:10px;padding:9px 14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--violeta);cursor:pointer;font-weight:600;text-align:left">↺ Restaurar mensaje sugerido</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SETTINGS OVERLAY ═══ -->
+<div id="settings-overlay" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);align-items:flex-end">
+  <div style="background:var(--fondo);width:100%;max-width:480px;margin:0 auto;border-radius:20px 20px 0 0;padding:24px 18px 36px;max-height:85vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <h2 style="font-family:'Lora',serif;font-size:18px;font-weight:700;color:var(--texto)">Configuración</h2>
+      <button onclick="closeSettings()" style="background:var(--borde);border:none;border-radius:8px;width:32px;height:32px;font-size:16px;cursor:pointer">✕</button>
+    </div>
+    <div style="background:var(--rojo-c);border-radius:12px;border:1px solid var(--rojo-b);padding:12px 14px;margin-bottom:16px">
+      <p style="font-size:11px;font-weight:700;color:var(--rojo);margin:0 0 4px;letter-spacing:.06em;text-transform:uppercase">Barrio actual</p>
+      <p id="cfg-barrio-nombre" style="font-family:'Lora',serif;font-size:16px;font-weight:600;color:var(--texto);margin:0"></p>
+    </div>
+    <div style="background:var(--blanco);border-radius:12px;border:1px solid var(--borde);padding:14px;margin-bottom:16px">
+      <p style="font-size:11px;font-weight:700;color:var(--azul);margin:0 0 8px;letter-spacing:.06em;text-transform:uppercase">👤 Consejero del obispado</p>
+      <input id="cfg-consejero" type="text" placeholder="Nombre del consejero asignado" oninput="saveCfgConsejero()" style="width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:9px 11px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--texto);background:var(--fondo);outline:none">
+    </div>
+    <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--suave);margin-bottom:10px">Recursos oficiales</p>
+    <a href="https://www.churchofjesuschrist.org/children?lang=spa" target="_blank" class="extlink" style="background:var(--azul-c);color:var(--azul);border-color:var(--azul-b)">Recursos para niños — 2026 <span>→</span></a>
+    <a href="https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026?lang=spa" target="_blank" class="extlink" style="background:var(--rojo-c);color:var(--rojo);border-color:var(--rojo-b)">Ven sígueme — Antiguo Testamento 2026 <span>→</span></a>
+    <a href="https://www.churchofjesuschrist.org/study/manual/childrens-songbook?lang=spa" target="_blank" class="extlink" style="background:var(--amarillo-c);color:var(--amarillo);border-color:var(--amarillo-b)">Canciones para los niños <span>→</span></a>
+    <button onclick="cambiarBarrio()" class="btn" style="background:transparent;border:1.5px solid var(--borde);color:var(--suave);margin-top:8px">Cambiar de barrio</button>
+  </div>
+</div>
+
+<script>
+// CONFIGURACIÓN DE AÑO — Cambiar en 2027
+// ═══════════════════════════════════════════════════
+const ANO = 2026;
+const CURRICULO = 'Antiguo Testamento';
+const URL_VSM = 'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026';
+const URL_GSA = 'https://www.churchofjesuschrist.org/study/manual/games-stories-activities/2026';
+
+const BARRIOS = ['Escobar','Garín','Maschwitz','Matheu','Savio','Benavídez','La Cabaña'];
+const MESES   = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+// ─── CANCIONES POR MES ────────────────────────────
+const CANCIONES = {
+  1:[{t:'Mi Padre Celestial me ama',f:'Canciones, págs. 16–17',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/my-heavenly-father-loves-me?lang=spa'},{t:'El plan de Dios puedo seguir',f:'Canciones, págs. 86–87',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/i-will-follow-gods-plan?lang=spa'}],
+  2:[{t:'Sigue al Profeta',f:'Canciones, págs. 58–59',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/follow-the-prophet?lang=spa'},{t:'Oración de un niño',f:'Canciones, págs. 6–7',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/a-childs-prayer?lang=spa'}],
+  3:[{t:'La bondad por mí empieza',f:'Canciones, pág. 83',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/kindness-begins-with-me?lang=spa'},{t:'Señor, te necesito',f:'Himnos, nro. 49',u:'https://www.churchofjesuschrist.org/study/manual/hymns/i-need-thee-every-hour?lang=spa'}],
+  4:[{t:'Getsemaní',f:'Biblioteca del Evangelio',u:'https://www.churchofjesuschrist.org/study/liahona/2018/03/children/gethsemane?lang=spa'},{t:'Siempre obedece los mandamientos',f:'Canciones, págs. 68–69',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/keep-the-commandments?lang=spa'}],
+  5:[{t:'Lugares santos',f:'Biblioteca del Evangelio',u:'https://www.churchofjesuschrist.org/music/library?lang=spa'},{t:'Al leer las Escrituras',f:'Himnos, nro. 180',u:'https://www.churchofjesuschrist.org/study/manual/hymns/as-i-search-the-holy-scriptures?lang=spa'}],
+  6:[{t:'Voy a ser valiente',f:'Canciones, pág. 85',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/i-will-be-valiant?lang=spa'},{t:'Amad a otros',f:'Canciones, pág. 74',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/love-one-another?lang=spa'}],
+  7:[{t:'Escudriñar, meditar y orar',f:'Canciones, pág. 66',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/search-ponder-and-pray?lang=spa'},{t:'Oro con fe',f:'Liahona, marzo 1991',u:'https://www.churchofjesuschrist.org/study?lang=spa'}],
+  8:[{t:'Muestra valor',f:'Canciones, pág. 80',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/dare-to-do-right?lang=spa'},{t:'Siento el amor de mi Salvador',f:'Canciones, págs. 42–43',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/i-feel-my-saviors-love?lang=spa'}],
+  9:[{t:'Hazme andar en la luz',f:'Canciones, págs. 70–71',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/teach-me-to-walk-in-the-light?lang=spa'},{t:'Allí donde hay amor',f:'Canciones, págs. 102–103',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/love-is-spoken-here?lang=spa'}],
+  10:[{t:'Buscaré al Señor',f:'Canciones, pág. 67',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/seek-the-lord-early?lang=spa'},{t:'Viví en los cielos',f:'Canciones, nro. 148',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/i-lived-in-heaven?lang=spa'}],
+  11:[{t:'Las familias pueden ser eternas',f:'Canciones, pág. 98',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/families-can-be-together-forever?lang=spa'},{t:'Haz el bien',f:'Himnos, nro. 155',u:'https://www.churchofjesuschrist.org/study/manual/hymns/choose-the-right?lang=spa'}],
+  12:[{t:'Llevaremos Su verdad al mundo',f:'Canciones, págs. 92–93',u:'https://www.churchofjesuschrist.org/study/manual/childrens-songbook/well-bring-the-world-his-truth-army-of-helaman?lang=spa'},{t:'The Hearts of the Children',f:'Canciones para los niños',u:'https://www.churchofjesuschrist.org/study?lang=spa'}]
+};
+
+// ─── CSD ──────────────────────────────────────────
+const CSD=[
+  {d:'2026-01-04',e:'Isaías 9:6',texto:'Porque un niño nos es nacido, hijo nos es dado; … y se llamará su nombre Admirable...',disc:'El Padre Celestial quiere hacer convenios conmigo.',af:1},
+  {d:'2026-01-11',e:'Moisés 1:39',texto:'...esta es mi obra y mi gloria: Llevar a cabo la inmortalidad y la vida eterna del hombre.',disc:'Viví como espíritu antes de nacer en la tierra.',af:1},
+  {d:'2026-01-18',e:'Génesis 1:1',texto:'En el principio creó Dios los cielos y la tierra.',disc:'Jesús creó la tierra.',af:2},
+  {d:'2026-01-25',e:'Moisés 5:4',texto:'Y Adán y Eva, su esposa, invocaron el nombre del Señor, y oyeron la voz del Señor que les hablaba...',disc:'Puedo escoger lo correcto.',af:2},
+  {d:'2026-02-01',e:'Moisés 6:58',texto:'Enseña estas cosas sin reserva a tus hijos.',disc:'El evangelio me prepara para regresar a Dios.',af:3},
+  {d:'2026-02-08',e:'Moisés 7:18',texto:'Y el Señor llamó Sion a su pueblo, porque eran uno en corazón y voluntad.',disc:'Jesús regresará a la tierra.',af:3},
+  {d:'2026-02-15',e:'Moisés 8:27',texto:'Y así Noé halló gracia ante los ojos del Señor; porque Noé fue un hombre justo y perfecto en su generación...',disc:'El seguir al profeta del Señor me bendecirá a mí y a mi familia.',af:3},
+  {d:'2026-02-22',e:'Abraham 1:18',texto:'...con mi mano te conduciré, y te llevaré para poner sobre ti mi nombre...',disc:'Puedo ser un pacificador.',af:3},
+  {d:'2026-03-01',e:'Génesis 18:14',texto:'¿Hay para Dios alguna cosa difícil?',disc:'Puedo confiar en que Dios cumplirá Sus promesas.',af:4},
+  {d:'2026-03-08',e:'Génesis 24:40',texto:'...Jehová enviará su ángel contigo y prosperará tu camino...',disc:'El Padre Celestial y Jesucristo me pueden ayudar a amar a mi familia.',af:4},
+  {d:'2026-03-15',e:'Génesis 39:21',texto:'Mas Jehová estaba con José y le extendió su misericordia...',disc:'Con la ayuda del Señor, puedo huir de la tentación.',af:4},
+  {d:'2026-03-22',e:'Génesis 50:20',texto:'Vosotros pensasteis hacerme mal, mas Dios lo encaminó a bien...',disc:'El Señor me ayuda por medio de las bendiciones del sacerdocio.',af:4},
+  {d:'2026-03-29',e:'Éxodo 3:5',texto:'No te acerques acá; quita el calzado de tus pies, porque el lugar en que tú estás tierra santa es.',disc:'Puedo tratar los lugares santos con reverencia.',af:4},
+  {d:'2026-04-05',conf:true},
+  {d:'2026-04-12',e:'Éxodo 12:5',texto:'El cordero será sin defecto, macho de un año; lo tomaréis de las ovejas o de las cabras.',disc:'La Santa Cena me ayuda a recordar a Jesús.',af:5},
+  {d:'2026-04-19',e:'Éxodo 14:13-14',texto:'No temáis... Jehová peleará por vosotros.',disc:'Puedo ayudar a aliviar la carga de hacer la obra del Señor.',af:5},
+  {d:'2026-04-26',e:'Éxodo 20:3',texto:'No tendrás dioses ajenos delante de mí.',disc:'Dios me da mandamientos porque desea que yo sea feliz.',af:5},
+  {d:'2026-05-03',e:'Levítico 19:2',texto:'...Santos seréis, porque santo soy yo, Jehová, vuestro Dios.',disc:'Puedo sentir la presencia del Señor en lugares santos.',af:6},
+  {d:'2026-05-10',e:'Números 14:9',texto:'...no seáis rebeldes contra Jehová, ni temáis...',disc:'Puedo sentir gratitud por lo que Dios me ha dado.',af:6},
+  {d:'2026-05-17',e:'Deuteronomio 8:11',texto:'Cuídate de no olvidarte de Jehová...',disc:'Los profetas nos enseñan sobre Jesucristo.',af:6},
+  {d:'2026-05-24',e:'Josué 24:15',texto:'...escogeos hoy a quién sirváis; ... pero yo y mi casa serviremos a Jehová.',disc:'Estudiar las Escrituras me brinda bendiciones.',af:6},
+  {d:'2026-05-31',e:'Jueces 3:9',texto:'...Jehová levantó un libertador.',disc:'Puedo inspirar a otros a tener fe en el Señor.',af:6},
+  {d:'2026-06-07',e:'1 Samuel 2:1',texto:'...Mi corazón se regocija en Jehová...',disc:'El Padre Celestial escucha y contesta mis oraciones.',af:7},
+  {d:'2026-06-14',e:'1 Samuel 16:7',texto:'...porque Jehová no mira lo que el hombre mira... Jehová mira el corazón.',disc:'Quienes prestan servicio en la Iglesia son llamados por Dios.',af:7},
+  {d:'2026-06-21',e:'1 Samuel 17:47',texto:'...Jehová es la batalla, y él os entregará en nuestras manos.',disc:'Los buenos amigos pueden ser una bendición de Dios.',af:7},
+  {d:'2026-06-28',e:'1 Reyes 8:45',texto:'escucha tú en los cielos su oración y su súplica...',disc:'Hacer convenios en la Casa del Señor me ayuda a andar por Sus caminos.',af:7},
+  {d:'2026-07-05',e:'1 Reyes 18:21',texto:'Si Jehová es Dios, seguidle...',disc:'El Señor me habla por medio de la voz apacible y delicada del Espíritu Santo.',af:8},
+  {d:'2026-07-12',e:'2 Reyes 5:8',texto:'Venga él ahora a mí y sabrá que hay profeta en Israel.',disc:'Dios puede obrar milagros en mi vida.',af:8},
+  {d:'2026-07-19',e:'2 Reyes 18:5',texto:'En Jehová Dios de Israel puso su esperanza...',disc:'Las Escrituras me enseñan a seguir a Jesucristo.',af:8},
+  {d:'2026-07-26',e:'2 Crónicas 20:12',texto:'...a ti volvemos nuestros ojos.',disc:'Puedo ser humilde.',af:8},
+  {d:'2026-08-02',e:'Nehemías 6:3',texto:'...Yo estoy ocupado en una gran obra...',disc:'La Casa del Señor es un lugar de gozo.',af:9},
+  {d:'2026-08-09',e:'Ester 4:16',texto:'Yo también ayunaré... y así entraré a ver al rey y si perezco, que perezca.',disc:'El ayuno brinda las bendiciones del Señor.',af:9},
+  {d:'2026-08-16',e:'Job 13:15',texto:'...en él confiaré; pero defenderé delante de él mis caminos.',disc:'Los buenos amigos se edifican y alientan unos a otros.',af:9},
+  {d:'2026-08-23',e:'Salmo 24:3-4',texto:'...¿Y quién estará en su lugar santo? El limpio de manos y puro de corazón...',disc:'Jesucristo puede convertir la tristeza en alegría.',af:9},
+  {d:'2026-08-30',e:'Salmo 51:10',texto:'Crea en mí, oh Dios, un corazón limpio, y renueva un espíritu recto dentro de mí.',disc:'Puedo hablarles a los demás sobre Jesucristo.',af:9},
+  {d:'2026-09-06',e:'Salmo 119:105',texto:'Lámpara es a mis pies tu palabra, y luz a mi camino.',disc:'El Padre Celestial y Jesucristo me conocen y me aman.',af:10},
+  {d:'2026-09-13',e:'Proverbios 3:5-6',texto:'Confía en Jehová con todo tu corazón.',disc:'Puedo utilizar palabras amables.',af:10},
+  {d:'2026-09-20',e:'Isaías 5:20',texto:'¡Ay de los que a lo malo llaman bueno, y a lo bueno, malo!...',disc:'Gracias a Jesucristo, puedo arrepentirme y ser limpio.',af:10},
+  {d:'2026-09-27',e:'Isaías 29:14',texto:'...haré una obra maravillosa entre este pueblo, una obra maravillosa y un prodigio...',disc:'Jesucristo puede salvarme del pecado y de la muerte.',af:10},
+  {d:'2026-10-04',conf:true},
+  {d:'2026-10-11',e:'Isaías 53:4',texto:'...él nuestras enfermedades y sufrió nuestros dolores...',disc:'Jesucristo tomó sobre Sí mis pecados y mis dolores.',af:11},
+  {d:'2026-10-18',e:'Isaías 58:13',texto:'Si retraes del día de reposo tu pie, de hacer tu voluntad en mi día santo, y lo llamas delicia, santo, glorioso de Jehová...',disc:'El día de reposo puede ser una delicia para mí.',af:11},
+  {d:'2026-10-25',e:'Jeremías 1:5',texto:'Antes que te formase en el vientre, te conocí; y antes que nacieses, te santifiqué...',disc:'Puedo ayudar a los hijos del Padre Celestial a volver a Él.',af:11},
+  {d:'2026-11-01',e:'Jeremías 31:13',texto:'...y cambiaré su duelo en gozo, y los consolaré y los alegraré de su dolor.',disc:'Puedo defender lo correcto.',af:12},
+  {d:'2026-11-08',e:'Ezequiel 36:26',texto:'Y os daré un corazón nuevo y pondré un espíritu nuevo dentro de vosotros...',disc:'Nuestro corazón y familia pueden encontrar sanación en la Casa del Señor.',af:12},
+  {d:'2026-11-15',e:'Daniel 2:47',texto:'Ciertamente el Dios vuestro es Dios de dioses, y Señor de los reyes...',disc:'El Padre Celestial desea que cuide mi cuerpo.',af:12},
+  {d:'2026-11-22',e:'Joel 2:13',texto:'Volveos a Jehová vuestro Dios, porque es misericordioso y clemente, tardo para la ira y grande en misericordia.',disc:'El Espíritu Santo puede guiarme.',af:12},
+  {d:'2026-11-29',e:'Amós 3:7',texto:'Porque no hará nada Jehová el Señor sin que revele su secreto a sus siervos los profetas.',disc:'La restauración del Evangelio dio fin al hambre de la Apostasía.',af:12},
+  {d:'2026-12-06',e:'Miqueas 7:18',texto:'...No retiene para siempre su enojo, porque se deleita en la misericordia.',disc:'Jesucristo nació en Belén.',af:13},
+  {d:'2026-12-13',e:'Hageo 1:5',texto:'Meditad bien sobre vuestros caminos.',disc:'Jesucristo es el Mesías prometido.',af:13},
+  {d:'2026-12-20',e:'Malaquías 4:6',texto:'Él hará volver el corazón de los padres hacia los hijos, y el corazón de los hijos hacia sus padres...',disc:'El Señor me bendecirá al pagar el diezmo.',af:13},
+  {d:'2026-12-27',e:'Isaías 25:9',texto:'He aquí, este es nuestro Dios, le hemos esperado, y nos salvará.',disc:'Las tradiciones navideñas pueden recordarnos a Jesucristo.',af:13},
+];
+
+// ─── LECCIONES ────────────────────────────────────
+const LECCIONES=[
+  {i:'2025-12-29',e:'Introducción al AT',t:'El Antiguo Testamento — Una introducción',desc:'El Antiguo Testamento es otro testamento de Jesucristo. A través de sus historias aprendemos sobre el amor de Dios, Sus convenios con Israel y cómo Jesucristo ha guiado a Su pueblo desde el principio.',n:'01',temas:[{t:'¿Por qué estudiar el AT?',i:'Es otro testamento de Jesucristo. Sus historias enseñan fe, convenios y obediencia.'},{t:'Jehová es Jesucristo',i:'El Dios de Israel que habló a los profetas es el mismo Jesucristo que nació en Belén.'}]},
+  {i:'2026-01-05',e:'Moisés 1; Abraham 3',t:'Somos hijos e hijas de Dios',desc:'Antes de nacer vivimos con nuestro Padre Celestial. Somos Sus hijos espirituales y Él nos conoce y ama profundamente.',n:'02',temas:[{t:'Soy un hijo de Dios.',i:'Dios habló a Moisés llamándolo Su hijo (Moisés 1:1–4). Somos hijos espirituales de nuestro Padre Celestial.'},{t:'El Padre Celestial tiene una obra para que yo lleve a cabo.',i:'Moisés 1:6, 39 — Dios tiene un propósito para cada uno de Sus hijos en esta vida.'},{t:'Puedo resistir las tentaciones de Satanás.',i:'Moisés 1:12–26 — Moisés rechazó las tentaciones de Satanás por su testimonio de quién era.'},{t:'Viví como espíritu antes de nacer en la tierra.',i:'Abraham 3:22–28 — Antes de nacer, fuimos espíritus en la presencia de nuestro Padre Celestial.'}]},
+  {i:'2026-01-12',e:'Génesis 1–2; Moisés 2–3; Abraham 4–5',t:'La Creación — el amor de Dios por nosotros',desc:'Dios creó la tierra y todo lo que hay en ella para que Sus hijos pudieran vivir, aprender y crecer.',n:'03',temas:[{t:'La Creación habla del amor de Dios',i:'Todo fue creado con propósito: para que Sus hijos tuvieran un lugar donde aprender y crecer.'},{t:'Somos mayordomos de la tierra',i:'Dios confió Su Creación a los hombres para que la cuiden con gratitud y respeto.'}]},
+  {i:'2026-01-19',e:'Génesis 3–4; Moisés 4–5',t:'El plan de Dios y la libertad de escoger',desc:'Adán y Eva eligieron sabiamente, permitiendo que el plan de Dios avanzara. La caída fue necesaria para que pudiéramos aprender y crecer.',n:'04',temas:[{t:'La Caída fue necesaria y sabia',i:'Moisés 5:10–11 — Adán y Eva eligieron sabiamente. Gracias a su elección podemos existir y aprender.'},{t:'El albedrío — uno de los mayores dones',i:'Dios nos dio la libertad de escoger para que pudiéramos aprender, crecer y regresar a Él.'}]},
+  {i:'2026-01-26',e:'Génesis 5; Moisés 6',t:'El Evangelio desde el principio',desc:'Desde el principio el Señor ha enseñado Su Evangelio a través de profetas. El arrepentimiento y el bautismo han sido parte del plan de Dios desde el inicio.',n:'05',temas:[{t:'El Evangelio existió desde el principio',i:'El arrepentimiento, el bautismo y el Espíritu Santo existieron desde Adán y Eva (Moisés 6).'},{t:'Los profetas siempre han enseñado el Evangelio',i:'Dios llama profetas para guiar a Su pueblo en cada época. El patrón no ha cambiado.'}]},
+  {i:'2026-02-02',e:'Moisés 7',t:'Enoc y la ciudad de Sion',desc:'Enoc fue un profeta de gran fe que llevó a su pueblo a vivir en tal unidad y justicia que Dios los tomó del mundo.',n:'06',temas:[{t:'La ciudad de Sion — vivir en unidad',i:'Moisés 7:18 — Enoc construyó un pueblo de corazón unido. Ese es el ideal del pueblo del convenio.'},{t:'El Señor llora por Sus hijos',i:'Moisés 7:28–33 — Dios siente el dolor de Sus hijos. Él nos ama profundamente.'}]},
+  {i:'2026-02-09',e:'Génesis 6–11; Moisés 8',t:'Noé — obedecer con fe',desc:'Noé fue obediente a Dios en un mundo lleno de maldad. Su fe y obediencia le permitieron preservar a su familia.',n:'07',temas:[{t:'Noé — un predicador de justicia',i:'Noé obedeció cuando nadie más lo hacía. La obediencia fiel siempre trae bendición.'},{t:'El convenio del arco iris',i:'Génesis 9 — Dios hizo convenios con Noé. Sus convenios son señales eternas de Su amor.'}]},
+  {i:'2026-02-16',e:'Génesis 12–17; Abraham 1–2',t:'Abraham — los convenios de Dios',desc:'Abraham fue llamado a dejar su hogar y seguir al Señor. Su fe dio lugar a convenios eternos que nos bendicen a todos.',n:'08',temas:[{t:'Salir de Ur — dejar el mundo por la fe',i:'Abraham obedeció sin saber a dónde iba (Abraham 2:4). La fe auténtica camina sin ver el final.'},{t:'Los convenios de Abraham nos incluyen',i:'DyC 110:12 — Somos herederos de los convenios de Abraham. Esa es nuestra identidad sagrada.'}]},
+  {i:'2026-02-23',e:'Génesis 18–23',t:'La fe de Abraham e Isaac',desc:'La fe de Abraham fue probada de maneras extraordinarias. En cada prueba, Abraham confió plenamente en el Señor.',n:'09',temas:[{t:'La prueba suprema de Abraham',i:'El sacrificio de Isaac (Génesis 22) anticipa el sacrificio de Jesucristo.'},{t:"'¿Hay para Dios alguna cosa difícil?'",i:'Génesis 18:14 — Cuando Dios promete algo, puede cumplirlo. Nuestra fe descansa en esa verdad.'}]},
+  {i:'2026-03-02',e:'Génesis 24–33',t:'Jacob y los convenios de Dios',desc:'Jacob recibió el convenio de Abraham y aprendió que las bendiciones de Dios llegan cuando confiamos en Él.',n:'10',temas:[{t:'Jacob — el hombre que luchó con Dios',i:'Génesis 32:28 — Jacob luchó toda la noche y no cedió. Así debe ser nuestra fe perseverante.'},{t:'Los convenios pasan de generación en generación',i:'Isaac y Jacob recibieron el convenio de Abraham. Los convenios familiares tienen poder eterno.'}]},
+  {i:'2026-03-09',e:'Génesis 37–41',t:'José en Egipto — Dios cuida de nosotros',desc:'Aunque José fue vendido como esclavo, Dios estaba con él. Su historia enseña que Dios convierte las adversidades en bendición.',n:'11',temas:[{t:'José — un tipo de Cristo en el AT',i:'Como Cristo, José fue rechazado por los suyos, sufrió injustamente y luego salvó a su pueblo.'},{t:'Dios convierte la adversidad en bendición',i:'Génesis 50:20 — Lo que parecía un desastre fue el plan de Dios para salvar a muchos.'}]},
+  {i:'2026-03-16',e:'Génesis 42–50',t:'José perdona a sus hermanos',desc:'El perdón de José a sus hermanos es uno de los actos más poderosos del AT. El perdón libera tanto al que perdona como al perdonado.',n:'12',temas:[{t:'El perdón que libera al que perdona',i:'José perdonó completamente (Génesis 45). El perdón es una de las virtudes más parecidas a Cristo.'},{t:'La familia puede ser salvada unida',i:'Dios trabajó a través de José para preservar a toda su familia.'}]},
+  {i:'2026-03-23',e:'Éxodo 1–6',t:'Moisés y la zarza ardiente',desc:'Moisés fue llamado desde la zarza ardiente. El Señor llama y capacita a personas comunes para propósitos extraordinarios.',n:'13',temas:[{t:'La zarza ardiente — Dios habla a Sus profetas',i:"Éxodo 3:14 — 'YO SOY EL QUE SOY.' Dios reveló Su identidad a Moisés para darle autoridad divina."},{t:"'¿Quién soy yo para ir?'",i:'Éxodo 3:11 — Moisés se sintió insuficiente. Dios siempre llama a personas imperfectas que se humillan.'}]},
+  {i:'2026-03-30',e:'Pascua de Resurrección',t:'Jesucristo resucitó — Él vive',desc:'La Resurrección de Jesucristo es el acontecimiento más importante de la historia. Porque Él vive, todos viviremos.',n:'14',temas:[{t:'La Resurrección de Jesucristo es real',i:'El sepulcro vacío (Lucas 24) prueba que Jesús resucitó. Porque Él vive, todos viviremos.'},{t:'Él apareció a Sus discípulos',i:'Jesús se apareció a muchos después de resucitar. Su Resurrección no es símbolo — es un hecho.'}]},
+  {i:'2026-04-06',e:'Éxodo 7–13',t:'El poder de Dios — las plagas',desc:'Las plagas demostraron el poder de Dios para librar a Su pueblo. Nada resiste Su poder.',n:'15',temas:[{t:'El poder de Dios supera cualquier poder humano',i:'Las plagas demostraron que Jehová supera a cualquier poder del mundo.'},{t:'El endurecimiento del corazón',i:'Cada vez que ignoramos las advertencias de Dios nos endurecemos más.'}]},
+  {i:'2026-04-13',e:'Éxodo 14–18',t:'El Mar Rojo — Dios abre el camino',desc:'El cruce del Mar Rojo es un símbolo de la liberación que Cristo ofrece. Cuando no había salida, el Señor abrió un camino.',n:'16',temas:[{t:'El Mar Rojo — tipo del bautismo',i:'Pasar por el mar fue una liberación. El bautismo es nuestra liberación del pecado (1 Corintios 10:1–2).'},{t:"'El Señor peleará por vosotros'",i:'Éxodo 14:14 — A veces Dios pide estar quietos y confiar mientras Él hace lo que nosotros no podemos.'}]},
+  {i:'2026-04-20',e:'Éxodo 19–20; 24; 31–34',t:'Los Diez Mandamientos — reglas de amor',desc:'Los Diez Mandamientos son un regalo de amor. Dios nos los da para protegernos y ayudarnos a vivir con gozo.',n:'17',temas:[{t:'Los Diez Mandamientos son un regalo de amor',i:'Dios los dio porque nos ama, no para limitarnos. Cada mandamiento protege algo precioso.'},{t:'El primer y gran mandamiento',i:"Éxodo 20:3 — 'No tendrás dioses ajenos.' Dios primero. Todo lo demás fluye de esa lealtad."}]},
+  {i:'2026-04-27',e:'Éxodo 35–40; Levítico 1; 4; 16; 19',t:'El tabernáculo — lugar sagrado de Dios',desc:'El tabernáculo era donde Dios habitaba entre Su pueblo. Hoy nuestros templos son casas del Señor.',n:'18',temas:[{t:'El tabernáculo — la casa del Señor en el desierto',i:"Éxodo 25:8 — 'Háganme un santuario para que yo habite entre ellos.' Dios quiere estar cerca."},{t:'Los tipos de Cristo en el tabernáculo',i:'El cordero, el altar, el sumo sacerdote — todo anticipa a Jesucristo y Su expiación.'}]},
+  {i:'2026-05-04',e:'Números 11–14; 20–24; 27',t:'Confiar en el Señor aunque no veamos el camino',desc:'El camino de los israelitas estuvo lleno de pruebas. Confiar en el Señor, sin ver el final, siempre lleva a la bendición.',n:'19',temas:[{t:'Las murmuraciones del pueblo',i:'Números 14 — La falta de gratitud cierra el corazón a las bendiciones de Dios.'},{t:'La serpiente de bronce — tipo de Cristo',i:'Números 21:8–9 — Mirar a la serpiente era un acto de fe. Mirar a Cristo con fe nos sana.'}]},
+  {i:'2026-05-11',e:'Deuteronomio 6–8; 15; 18; 29–30; 34',t:'Amar a Dios con todo el corazón',desc:'Moisés exhortó a Israel a amar al Señor con todo el corazón, alma y fuerzas.',n:'20',temas:[{t:"'Ama al Señor tu Dios con todo tu corazón'",i:'Deuteronomio 6:5 — Amar a Dios es el fundamento de todos los mandamientos.'},{t:'El gran profeta que vendría',i:'Deuteronomio 18:15 — Moisés prometió un profeta como él. Ese profeta es Jesucristo.'}]},
+  {i:'2026-05-18',e:'Josué 1–8; 23–24',t:'Sé fuerte y valiente — elige a quién servir',desc:"Josué tomó el liderazgo con valentía y fe. Su declaración 'Yo y mi casa serviremos al Señor' sigue siendo modelo para cada familia.",n:'21',temas:[{t:"'Sed fuertes y valientes'",i:'Josué 1:9 — El Señor repitió este mandato varias veces. La valentía es fruto de la fe.'},{t:"'Yo y mi casa serviremos al Señor'",i:'Josué 24:15 — Una declaración familiar de convenio que resuena en cada hogar del pueblo del convenio.'}]},
+  {i:'2026-05-25',e:'Jueces 2–4; 6–8; 13–16',t:'Débora — fe y valentía para liderar',desc:'El libro de Jueces nos recuerda que el Señor siempre está dispuesto a recibirnos cuando nos arrepentimos.',n:'22',temas:[{t:'El ciclo de Jueces — apostasía y rescate',i:'El patrón: Israel peca → sufre → clama → Dios envía un libertador. Este patrón se repite en nuestra vida.'},{t:'Débora — una líder con valentía y fe',i:'Jueces 4:14 — Débora confió en Dios completamente. Las mujeres fieles cambian el curso de la historia.'}]},
+  {i:'2026-06-01',e:'Rut; 1 Samuel 1–7',t:'Rut y Ana — lealtad y fe',desc:"Rut eligió permanecer fiel a su suegra y al pueblo de Dios. Su lealtad fue recompensada con bendiciones que nunca imaginó.",n:'23',temas:[{t:'Puedo demostrar amor y bondad a los que me rodean.',i:'La historia de Rut y Noemí enseña que la lealtad y el amor son expresiones del carácter de Cristo (Rut 1).'},{t:'Puedo tener fe en el Señor.',i:'Rut y Ana enfrentaron grandes pérdidas pero confiaron en Dios. Él guía y bendice a quienes confían en Él.'},{t:'El Padre Celestial escucha y contesta mis oraciones.',i:'Ana oró con toda su alma y Dios la escuchó (1 Samuel 1). El Padre Celestial escucha las oraciones sinceras.'},{t:'Puedo escuchar y obedecer la voz del Señor.',i:'Samuel aprendió a reconocer la voz del Señor (1 Samuel 3:1–10). Nosotros también podemos aprender a escuchar al Espíritu.'}]},
+  {i:'2026-06-08',e:'1 Samuel 8–10; 13; 15–16',t:'El Señor ve el corazón',desc:'El Señor no mira las apariencias. Eligió a David porque tenía el corazón correcto.',n:'24',temas:[{t:'El Señor mira el corazón, no las apariencias',i:'1 Samuel 16:7 — Dios no eligió al más guapo. Eligió a David porque tenía el corazón correcto.'},{t:"'Habla, que tu siervo escucha'",i:'1 Samuel 3:10 — Así debería ser nuestra actitud ante el Espíritu Santo que nos habla.'}]},
+  {i:'2026-06-15',e:'1 Samuel 17–18; 24–26; 2 Samuel 5–7',t:'David y Goliat — con Dios somos valientes',desc:'David venció al gigante porque su confianza estaba en el Señor. Con Dios de nuestro lado podemos enfrentar cualquier adversidad.',n:'25',temas:[{t:'David y Goliat — fuerza en el nombre del Señor',i:'1 Samuel 17:45 — David fue con el nombre de Jehová. Ese es el arma más poderosa.'},{t:'El convenio de amistad de David y Jonatán',i:'1 Samuel 18:3 — Su amistad fue un convenio sagrado. Las amistades fieles son una bendición de Dios.'}]},
+  {i:'2026-06-22',e:'2 Samuel 11–12; 1 Reyes 3; 6–9; 11',t:'Salomón — pedir sabiduría a Dios',desc:'Salomón pidió sabiduría para servir, no riquezas. Dios honra a quienes buscan servir a los demás.',n:'26',temas:[{t:'Salomón pide sabiduría, no riquezas',i:'1 Reyes 3:9 — Al pedir sabiduría para servir, Dios le dio todo lo demás también.'},{t:'El templo de Salomón — la gloria del Señor',i:'1 Reyes 8:10–11 — Cuando el templo se dedicó, la gloria del Señor lo llenó. Así son nuestros templos.'}]},
+  {i:'2026-06-29',e:'1 Reyes 12–13; 17–22',t:'Elías — valentía para defender la verdad',desc:'Elías se mantuvo firme en su testimonio en tiempos de apostasía. Su valentía nos inspira a defender nuestra fe.',n:'27',temas:[{t:'Elías en el monte Carmelo',i:"1 Reyes 18:21 — '¿Hasta cuándo claudicaréis?' Elías desafió al pueblo a elegir a quién servirían."},{t:'La voz apacible y delicada',i:'1 Reyes 19:12 — Dios no siempre habla en el viento o en el fuego. Habla en voz apacible al corazón.'}]},
+  {i:'2026-07-06',e:'2 Reyes 2–7',t:'Naamán — la fe sencilla sana',desc:'Naamán fue curado cuando hizo algo simple con fe. El Señor muchas veces nos pide hacer cosas pequeñas que requieren gran fe.',n:'28',temas:[{t:'Eliseo — una doble porción del espíritu',i:'2 Reyes 2:9 — Eliseo pidió una doble porción del espíritu de Elías. La fe que pide en grande recibe en grande.'},{t:'Naamán — humillarse para ser sanado',i:'2 Reyes 5 — Naamán era orgulloso. Cuando se humilló e hizo lo simple, fue sanado.'}]},
+  {i:'2026-07-13',e:'2 Reyes 16–25',t:'Consecuencias de alejarse de Dios',desc:'Israel fue llevado al cautiverio por alejarse de sus convenios. Sus experiencias nos enseñan el peligro de apartarnos de Dios.',n:'29',temas:[{t:'Consecuencias de abandonar los convenios',i:'2 Reyes 17:7–8 — Israel fue cautivo porque abandonó a Dios. Alejarse de Él siempre tiene consecuencias.'},{t:'Josías — renovar los convenios',i:'2 Reyes 23:3 — Josías leyó la ley y renovó el convenio con todo el pueblo. La Escritura transforma.'}]},
+  {i:'2026-07-20',e:'2 Crónicas 14–20; 26; 30',t:'Confiar en el Señor — no en nuestra propia fuerza',desc:'Las bendiciones llegan cuando confiamos en Dios más que en nuestra propia sabiduría.',n:'30',temas:[{t:'La batalla es del Señor',i:'2 Crónicas 20:15 — Josafat adoró a Dios ante el ejército enemigo y ganó sin pelear.'},{t:'El peligro del orgullo en el éxito',i:'2 Crónicas 26:16 — Uzías cayó cuando se enalteció. El éxito prueba el carácter.'}]},
+  {i:'2026-07-27',e:'Esdras 1; 3–7; Nehemías 2; 4–6; 8',t:'Reconstruir con fe — no rendirse',desc:'Los judíos trabajaron con fe para reconstruir el templo. Su determinación de no rendirse nos inspira.',n:'31',temas:[{t:'Reconstruir con fe',i:'Esdras 3:11–12 — Reconstruyeron el templo llorando y cantando a la vez. Así se construye sobre ruinas.'},{t:"'¿Por qué ha de cesar la obra?'",i:'Nehemías 6:3 — Nehemías no se distrajo. La obra del Señor tiene prioridad.'}]},
+  {i:'2026-08-03',e:'Ester',t:"Ester — valor para hacer lo correcto",desc:"Ester arriesgó su vida para salvar a su pueblo. Dios tiene un propósito para cada uno de nosotros.",n:'32',temas:[{t:"'Para una ocasión como esta'",i:'Ester 4:14 — Nuestra posición, nuestros dones, nuestro tiempo — todos tienen un propósito divino.'},{t:'El valor que viene de la oración y el ayuno',i:'Ester 4:16 — Antes de actuar, Ester ayunó tres días. La fe se prepara antes de actuar con valentía.'}]},
+  {i:'2026-08-10',e:'Job 1–3; 12–14; 19; 21–24; 38–40; 42',t:'Job — fe firme en las pruebas',desc:"Job perdió todo pero mantuvo su fe. 'Yo sé que mi Redentor vive' es uno de los testimonios más poderosos del AT.",n:'33',temas:[{t:'Job — sufrir sin perder la fe',i:"Job 19:25–26 — 'Yo sé que mi Redentor vive.' La fe en la Resurrección sostuvo a Job en su peor momento."},{t:'Las respuestas de Dios llegan en Su tiempo',i:'Job 38–40 — Dios respondió las preguntas de Job. A veces el misterio es parte de la respuesta.'}]},
+  {i:'2026-08-17',e:'Salmos 1–2; 8; 19; 33; 40; 46',t:'El Señor es mi Pastor — Salmo 23',desc:'Los Salmos son las oraciones del corazón del pueblo de Dios. El Salmo 23 nos recuerda que el Señor cuida de nosotros.',n:'34',temas:[{t:'El Señor es mi Pastor — Salmo 23',i:'El pastor cuida, guía, alimenta y protege a Sus ovejas. Jesucristo es nuestro Pastor fiel.'},{t:'La Creación alaba a Dios — Salmo 19',i:'Salmo 19:1 — Los cielos declaran la gloria de Dios. La naturaleza es un testimonio de Su existencia.'}]},
+  {i:'2026-08-24',e:'Salmos 49–51; 61–66; 69–72; 77–78; 85–86',t:'Alabar al Señor con gratitud',desc:'Los salmistas clamaron al Señor en angustia y recibieron paz. Dios escucha nuestras oraciones más profundas.',n:'35',temas:[{t:'Arrepentimiento y perdón — Salmo 51',i:"Salmo 51:10 — 'Crea en mí, oh Dios, un corazón limpio.' La oración del arrepentimiento genuino."},{t:'Confiar en Dios en el dolor',i:'El salmista recuerda las obras de Dios en el pasado para tener esperanza en el presente.'}]},
+  {i:'2026-08-31',e:'Salmos 102–103; 116–119; 127–128; 146–150',t:'Gratitud y alabanza al Señor',desc:'Los Salmos concluyen con una explosión de alabanza. La gratitud nos abre el corazón y nos llena de gozo.',n:'36',temas:[{t:"'Dad gracias al Señor porque Él es bueno'",i:'Salmo 107:1 — La gratitud nos recuerda quién es Dios y lo que ha hecho por nosotros.'},{t:'Los niños son herencia del Señor',i:'Salmo 127:3 — Los niños son un regalo de Dios. Cada niño en la Primaria es precioso para Él.'}]},
+  {i:'2026-09-07',e:'Proverbios 1–4; 15–16; 22; 31; Eclesiastés',t:'La sabiduría comienza con Dios',desc:'La sabiduría comienza con el temor del Señor. Cuando reconocemos a Dios en todo lo que hacemos encontramos el camino seguro.',n:'37',temas:[{t:'La sabiduría comienza con el temor del Señor',i:'Proverbios 1:7 — Reconocer a Dios en todo lo que hacemos es el principio de la sabiduría verdadera.'},{t:'La mujer virtuosa — Proverbios 31',i:'Proverbios 31:10 — Una descripción de la mujer de convenio: fiel, generosa y temerosa de Dios.'}]},
+  {i:'2026-09-14',e:'Isaías 1–12',t:'Isaías — profecías sobre Jesucristo',desc:'Isaías profetizó acerca de Jesucristo con claridad asombrosa. Sus palabras fortalecen el testimonio de que Dios conoce el futuro.',n:'38',temas:[{t:'Emmanuel — Dios con nosotros',i:"Isaías 7:14 — 'He aquí una virgen concebirá.' Cumplida en el nacimiento de Jesús."},{t:"'A nosotros es dado un hijo'",i:'Isaías 9:6 — Los títulos de Cristo en Isaías 9 describen todo lo que Él es para nosotros.'}]},
+  {i:'2026-09-21',e:'Isaías 13–14; 22; 24–30; 35',t:'La Restauración del Evangelio',desc:'Isaías profetizó sobre la apostasía y la restauración del Evangelio. Sus palabras se cumplieron en la misión del profeta José Smith.',n:'39',temas:[{t:'La apostasía y la Restauración profetizadas',i:"Isaías 29:13–14 — Dios profetizó la apostasía y que haría 'una obra maravillosa'. Esa obra es La Iglesia."},{t:'El desierto florecerá',i:'Isaías 35 — Las profecías de la Restauración se están cumpliendo hoy.'}]},
+  {i:'2026-09-28',e:'Isaías 40–49',t:"Jesucristo — nuestro Redentor y Salvador",desc:"'No temas, porque yo estoy contigo' ha consolado a millones. Jesucristo es nuestro Redentor y Su amor nunca nos abandona.",n:'40',temas:[{t:"'No temas, porque yo estoy contigo'",i:"Isaías 41:10 — Dios prometió estar con Israel. Esa misma promesa es para nosotros hoy."},{t:'Jesucristo — el único Redentor',i:"Isaías 43:11 — 'Yo, yo Jehová, soy tu Salvador.' Solo Él puede salvarnos completamente."}]},
+  {i:'2026-10-05',e:'Isaías 50–57',t:'El Siervo Sufriente — la expiación de Cristo',desc:'Las profecías del Siervo Sufriente describen con precisión la expiación de Jesucristo. Él tomó nuestras penas para sanarnos.',n:'41',temas:[{t:'El Siervo Sufriente — profecía de la Expiación',i:'Isaías 53 — Cada versículo describe con precisión la vida y muerte de Jesucristo.'},{t:"'Venid a mí' — la invitación del Salvador",i:'Isaías 55:1–3 — La gracia de Dios es gratuita para todos los que vengan.'}]},
+  {i:'2026-10-12',e:'Isaías 58–66',t:'El ayuno verdadero — la luz del Señor',desc:'El verdadero ayuno es liberar al oprimido, compartir con el necesitado y cuidar a los vulnerables.',n:'42',temas:[{t:'El ayuno verdadero es servicio',i:'Isaías 58:6–7 — El ayuno que Dios elige es liberar al oprimido y compartir con el necesitado.'},{t:'La luz que brilla en las tinieblas',i:"Isaías 60:1–3 — 'Levántate, resplandece.' El pueblo del convenio es una luz para el mundo."}]},
+  {i:'2026-10-19',e:'Jeremías 1–3; 7; 16–18; 20',t:'Jeremías — Dios nos llama aunque seamos jóvenes',desc:"'A donde yo te envíe irás.' Dios llama y capacita a quienes Él escoge, sin importar la edad.",n:'43',temas:[{t:"'Antes que te formase en el vientre, te conocí'",i:'Jeremías 1:5 — Dios nos conocía antes de nacer. Tenemos un propósito divino desde antes de la vida.'},{t:'La vasija del alfarero',i:'Jeremías 18:1–6 — Dios puede reformar lo que parece arruinado. Somos arcilla en Sus manos.'}]},
+  {i:'2026-10-26',e:'Jeremías 31–33; 36–38; Lamentaciones',t:'El nuevo convenio en nuestro corazón',desc:'El nuevo convenio no estaría escrito en tablas de piedra, sino en el corazón de cada persona.',n:'44',temas:[{t:'El nuevo convenio en el corazón',i:'Jeremías 31:33 — No tablas de piedra sino corazones cambiados. El Evangelio es transformación interna.'},{t:"'Planes de bienestar, no de mal'",i:'Jeremías 29:11 — Dios tiene planes de bien para nosotros, incluso en el exilio.'}]},
+  {i:'2026-11-02',e:'Ezequiel 1–3; 33–34; 36–37; 47',t:'El valle de los huesos secos — el poder de Dios',desc:'El Señor puede revivir lo que parece muerto: una iglesia, una familia, un corazón.',n:'45',temas:[{t:'Los huesos secos que reviven',i:'Ezequiel 37 — El Señor puede revivir lo que parece muerto: una iglesia, una familia, un corazón.'},{t:'El pastor que busca a la oveja perdida',i:'Ezequiel 34:11–12 — Dios mismo busca a Sus ovejas perdidas. Anticipa la parábola de Lucas 15.'}]},
+  {i:'2026-11-09',e:'Daniel 1–7',t:'Daniel en el foso de los leones — Dios protege',desc:'Daniel y sus amigos se negaron a comprometer su fe incluso frente a la muerte.',n:'46',temas:[{t:'Daniel — fe en el foso de los leones',i:'Daniel 6:22 — Los ángeles sellaron la boca de los leones. Dios protege a los fieles a Sus convenios.'},{t:"'El Dios que servimos puede librarnos'",i:'Daniel 3:17 — Sadrac, Mesac y Abed-nego eligieron el horno antes que negar a Dios.'}]},
+  {i:'2026-11-16',e:'Oseas 1–6; 10–14; Joel',t:'El amor de Dios — Él siempre nos espera',desc:'El amor de Dios por Sus hijos nunca cambia, sin importar cuánto nos alejemos.',n:'47',temas:[{t:"'Yo los amaré de pura gracia'",i:'Oseas 14:4 — El amor de Dios no depende de nuestro desempeño. Él nos ama aunque fallemos.'},{t:'Joel — el derramamiento del Espíritu',i:'Joel 2:28–29 — Profecía del Pentecostés y de la Restauración. El Espíritu Santo es para todos.'}]},
+  {i:'2026-11-23',e:'Amós; Abdías; Jonás',t:'Jonás — la misericordia del Señor para todos',desc:'El Señor ordenó a Jonás predicar a Nínive. Aprendió que la misericordia del Señor se extiende a todos.',n:'48',temas:[{t:'Jonás — huir de Dios es imposible',i:"Jonás 1:3 — Intentó escapar del llamado de Dios. No se puede huir de la voluntad del Señor."},{t:'La misericordia de Dios para los enemigos',i:'Jonás 4:10–11 — Dios amó a Nínive. Su amor es para todos, no solo para los que ya creen.'}]},
+  {i:'2026-11-30',e:'Miqueas; Nahúm; Habacuc; Sofonías',t:"'¿Qué pide Jehová de ti?' — Miqueas 6:8",desc:'Miqueas resumió los requisitos del Señor: hacer justicia, amar misericordia y andar humildemente con Dios.',n:'49',temas:[{t:"'¿Qué pide Jehová de ti?'",i:'Miqueas 6:8 — Hacer justicia, amar misericordia y andar humildemente. Tres principios que resumen la Ley.'},{t:'La fe cuando Dios parece silencioso',i:"Habacuc 2:4 — 'El justo por su fe vivirá.' Aunque no entiendas, sigue confiando en Dios."}]},
+  {i:'2026-12-07',e:'Hageo 1–2; Zacarías 1–4; 7–14',t:'El templo del Señor — lugar sagrado',desc:'El Señor llamó a Su pueblo a reconstruir el templo. Zacarías prometió que Sus ojos nunca descansan de Sus hijos.',n:'50',temas:[{t:'Prioridades correctas — Hageo 1',i:'Hageo 1:4–5 — El pueblo construía sus casas mientras el templo estaba en ruinas. ¿Cuáles son nuestras prioridades?'},{t:"'No con ejército, sino con mi Espíritu'",i:'Zacarías 4:6 — La obra de Dios avanza por Su poder, no por el poder humano.'}]},
+  {i:'2026-12-14',e:'Malaquías',t:"El mensajero del Señor — Malaquías 3:1",desc:'Malaquías prometió que el Señor enviaría a Elías para unir los corazones de padres e hijos. Se cumple en el trabajo de templo.',n:'51',temas:[{t:"'¿Robará el hombre a Dios?'",i:'Malaquías 3:8–10 — El diezmo es una ley de bendición. Dios promete abrir las ventanas del cielo.'},{t:'Elías regresará — los corazones se unirán',i:'Malaquías 4:5–6 — Elías volvería para unir padres e hijos. Se cumplió en el Templo de Kirtland (DyC 110:13–16).'}]},
+  {i:'2026-12-21',e:'Navidad',t:'El nacimiento de Jesucristo — el mayor regalo',desc:'El nacimiento de Jesucristo fue el cumplimiento de siglos de profecías del AT. El Niño que nació en Belén es el mismo Jehová de Israel.',n:'52',temas:[{t:'El AT apunta enteramente a Cristo',i:'Todas las profecías, los tipos y los convenios del AT apuntan a Jesucristo que vendría.'},{t:'El nacimiento de Jesús cumple las profecías',i:'Isaías 9:6, Miqueas 5:2, Isaías 7:14 — El Niño que nació en Belén era el Jehová de Israel.'}]}
+];
+
+// ─── PRESENTACIÓN SACRAMENTAL ─────────────────────
+const PRES_SECCIONES=[
+  {id:'s1',tema:'Somos hijos de Dios',himno:'Mi Padre Celestial me ama',rayito:'Mi Padre Celestial me ama',color:'rojo',desde:'2026-01-04',hasta:'2026-01-25'},
+  {id:'s2',tema:'Los convenios de Dios',himno:'Sigue al Profeta',rayito:'Puedo cumplir mis convenios al seguir al profeta',color:'azul',desde:'2026-02-01',hasta:'2026-02-22'},
+  {id:'s3',tema:'Fe y obediencia',himno:'La bondad por mí empieza',rayito:'Puedo ser bondadoso/a',color:'verde',desde:'2026-03-01',hasta:'2026-03-22'},
+  {id:'s4',tema:'Jesucristo vive',himno:'Getsemaní',rayito:'Yo sé que Jesús resucitó y Él vive',color:'rojo',desde:'2026-03-29',hasta:'2026-04-19'},
+  {id:'s5',tema:'Valentía para elegir',himno:'Voy a ser valiente',rayito:'Mi fe me ayuda a ser valiente',color:'azul',desde:'2026-04-26',hasta:'2026-05-31'},
+  {id:'s6',tema:'El Señor nos guía',himno:'Amad a otros',rayito:'Puedo amar a otros como Jesucristo nos ama',color:'verde',desde:'2026-06-07',hasta:'2026-07-26'},
+  {id:'s7',tema:'Fe en las pruebas',himno:'Muestra valor',rayito:'Dios me ayuda en las pruebas',color:'rojo',desde:'2026-08-02',hasta:'2026-08-30'},
+  {id:'s8',tema:'Jesucristo nuestro Salvador',himno:'Buscaré al Señor',rayito:'Jesucristo es mi Salvador',color:'azul',desde:'2026-09-06',hasta:'2026-10-25'},
+  {id:'s9',tema:'Las familias y los convenios',himno:'Las familias pueden ser eternas',rayito:'Las familias pueden ser eternas',color:'verde',desde:'2026-11-01',hasta:'2026-11-29'},
+];
+
+// ─── GSA PATHS ────────────────────────────────────
+const GSA_PATHS={'2025-12-29':'january/01-introduction-to-the-old-testament','2026-01-05':'january/02-moses-1-abraham-3','2026-01-12':'january/03-genesis-1-2-moses-2-3-abraham-4-5','2026-01-19':'january/04-genesis-3-4-moses-4-5','2026-01-26':'january/05-genesis-5-moses-6','2026-02-02':'february/06-moses-7','2026-02-09':'february/07-genesis-6-11-moses-8','2026-02-16':'february/08-genesis-12-17-abraham-1-2','2026-02-23':'february/09-genesis-18-23','2026-03-02':'march/10-genesis-24-33','2026-03-09':'march/11-genesis-37-41','2026-03-16':'march/12-genesis-42-50','2026-03-23':'march/13-exodus-1-6','2026-03-30':'march/14-easter','2026-04-06':'april/15-exodus-7-13','2026-04-13':'april/16-exodus-14-18','2026-04-20':'april/17-exodus-19-20-24-31-34','2026-04-27':'april/18-exodus-35-40-leviticus-1-4-16-19','2026-05-04':'may/19-numbers-11-14-20-24-27','2026-05-11':'may/20-deuteronomy-6-8-15-18-29-30-34','2026-05-18':'may/21-joshua-1-8-23-24','2026-05-25':'may/22-judges-2-4-6-8-13-16','2026-06-01':'june/23-ruth-1-samuel-1-7','2026-06-08':'june/24-1-samuel-8-10-13-15-16','2026-06-15':'june/25-1-samuel-17-18-24-26-2-samuel-5-7','2026-06-22':'june/26-2-samuel-11-12-1-kings-3-6-9-11','2026-06-29':'june/27-1-kings-12-13-17-22','2026-07-06':'july/28-2-kings-2-7','2026-07-13':'july/29-2-kings-16-25','2026-07-20':'july/30-2-chronicles-14-20-26-30','2026-07-27':'august/31-ezra-1-3-7-nehemiah-2-4-6-8','2026-08-03':'august/32-esther','2026-08-10':'august/33-job-1-3-12-14-19-21-24-38-40-42','2026-08-17':'august/34-psalms-1-2-8-19-33-40-46','2026-08-24':'august/35-psalms-49-51-61-66-69-72-77-78-85-86','2026-08-31':'september/36-psalms-102-103-116-119-127-128-146-150','2026-09-07':'september/37-proverbs-1-4-15-16-22-31-ecclesiastes','2026-09-14':'september/38-isaiah-1-12','2026-09-21':'september/39-isaiah-13-14-22-24-30-35','2026-09-28':'october/40-isaiah-40-49','2026-10-05':'october/41-isaiah-50-57','2026-10-12':'october/42-isaiah-58-66','2026-10-19':'october/43-jeremiah-1-3-7-16-18-20','2026-10-26':'november/44-jeremiah-31-33-36-38-lamentations','2026-11-02':'november/45-ezekiel-1-3-33-34-36-37-47','2026-11-09':'november/46-daniel-1-7','2026-11-16':'november/47-hosea-1-6-10-14-joel','2026-11-23':'november/48-amos-obadiah-jonah','2026-11-30':'december/49-micah-nahum-habakkuk-zephaniah','2026-12-07':'december/50-haggai-1-2-zechariah-1-4-7-14','2026-12-14':'december/51-malachi','2026-12-21':'december/52-christmas'};
+
+// ═══════════════════════════════════════════════════
+// ESTADO DE LA APP
+// ═══════════════════════════════════════════════════
+const URL_APENDICE_B = 'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-doctrine-and-covenants-2025/54-appendix-b-for-primary?lang=spa';
+const MSG_NARRADOR = `Hola, hoy queremos compartir con ustedes lo que aprendimos este año en la Primaria. Estudiamos el Antiguo Testamento y descubrimos que es otro testamento de Jesucristo. En las historias que leímos conocimos a profetas y personas que confiaron en Dios y nos enseñaron que nosotros también podemos hacerlo. Aprendimos que nuestro Padre Celestial nos ama, que Él siempre cumple Sus promesas y que Jesucristo ha cuidado a Su pueblo desde el principio. Ahora los niños queremos contarles lo que sentimos y aprendimos este año.`
+
+const MSG_AUTO = `Este año los niños de nuestra Primaria caminaron junto a Adán, Noé, Abraham, Moisés, David, Isaías y tantos otros hombres y mujeres de fe del Antiguo Testamento. Aprendieron que somos hijos de Dios, que Sus convenios nos protegen, que Jesucristo vive y que las familias pueden ser eternas. Como nos recuerda Ven sígueme: lo más importante que podemos hacer es ayudar a nuestros niños a descubrir por sí mismos que el Padre Celestial los ama y que Jesucristo es su Salvador. Oramos para que estas verdades permanezcan en sus corazones y guíen sus pasos para siempre. En el nombre de Jesucristo, amén.`
+
+// ═══ ESTADO ═══
+let barrio=null, weekOffset=0, prevDetail='semana';
+// ═══ GOOGLE SHEETS SYNC ═══
+const SHEET_URL='https://script.google.com/macros/s/AKfycbznQrG3BKzhk2AjIodRCiCtn5v1xFAXHpWMJmnCxg6ss5jG-OWjSgMLTHm3RpFWsbVJ/exec';
+
+function sheetWrite(tab,data){
+  try{
+    const body=JSON.stringify(Object.assign({action:'write',tab:tab,barrio:barrio},data));
+    fetch(SHEET_URL,{method:'POST',body:body,headers:{'Content-Type':'text/plain;charset=utf-8'},mode:'no-cors'}).catch(()=>{});
+  }catch(e){}
+}
+
+async function sheetRead(tab){
+  try{
+    const url=SHEET_URL+'?action=read&tab='+encodeURIComponent(tab)+'&barrio='+encodeURIComponent(barrio);
+    const res=await fetch(url,{redirect:'follow'});
+    if(!res.ok)return null;
+    return await res.json();
+  }catch(e){return null;}
+}
+
+async function syncFromSheets(){
+  if(!barrio)return;
+  try{
+    // Minutas
+    const m=await sheetRead('Minuta');
+    if(m&&m.rows){
+      for(const r of m.rows){
+        const wk='minuta_'+r.Semana;
+        lsSet(wk,JSON.stringify({
+          oracion:r.Oracion||'',escritura:r.Escritura||'',escrituraNino:r.EscrituraNino||'',
+          discurso:r.Discurso||'',discursoNino:r.DiscursoNino||'',obispado:r.Obispado||'',
+          presEscritura:r.PresEscritura==='SI',presDiscurso:r.PresDiscurso==='SI'
+        }));
+      }
+    }
+    // Bautismo
+    const b=await sheetRead('Bautismo');
+    if(b&&b.data){lsSet('bautismo_fecha',b.data.Fecha||'');lsSet('bautismo_consejera',b.data.Consejera||'');}
+    // Templo
+    const t=await sheetRead('Templo');
+    if(t&&t.data){lsSet('templo_fecha',t.data.Fecha||'');lsSet('templo_consejera',t.data.Consejera||'');}
+    // Presentación
+    const p=await sheetRead('Presentacion');
+    if(p&&p.data&&p.data.Datos){try{lsSet('pres',typeof p.data.Datos==='string'?p.data.Datos:JSON.stringify(p.data.Datos));}catch(e){}}
+    // Consejero
+    const c=await sheetRead('Consejero');
+    if(c&&c.data){lsSet('consejero',c.data.Consejero||'');}
+  }catch(e){console.log('Sync error:',e);}
+  // Re-render la pantalla actual
+  const activeScreen=document.querySelector('.screen.active');
+  if(activeScreen){
+    const id=activeScreen.id.replace('screen-','');
+    if(id==='semana')renderSemana();
+    if(id==='home')renderHome();
+  }
+}
+
+
+
+// ═══ UTILS ═══
+function getSunday(o=0){const h=new Date(),d=h.getDay(),s=new Date(h);s.setDate(h.getDate()+(d===0?0:7-d)+o*7);s.setHours(0,0,0,0);return s;}
+function getLeccion(date){let r=LECCIONES[0];for(const l of LECCIONES){if(date>=new Date(l.i))r=l;else break;}return r;}
+function fCorta(d){return`${d.getDate()} de ${MESES[d.getMonth()]}`;}
+function weekLabel(o){if(o===0)return'Próximo domingo';if(o===-1)return'Domingo anterior';if(o<0)return`Hace ${Math.abs(o)} semanas`;return`En ${o} semana${o>1?'s':''}`;}
+function isFifthSunday(d){return d.getDay()===0&&d.getDate()>=29;}
+function sk(s){return s.replace(/[\s/\'"]/g,'_');}
+function getCSDForSunday(sunday){const s=sunday.toISOString().split('T')[0];let best=null;for(const e of CSD){if(e.d<=s&&!e.conf)best=e;}return best;}
+function getSuggestedEscritura(desde,hasta){for(const e of CSD){if(e.conf||!e.e)continue;if(e.d>=desde&&e.d<=hasta)return e.e;}return null;}
+function getActiveSpecials(){const h=new Date();h.setHours(0,0,0,0);const r=[];if(h>=new Date('2026-03-15')&&h<=new Date('2026-04-12'))r.push('pascua');if((h>=new Date('2026-03-28')&&h<=new Date('2026-04-06'))||(h>=new Date('2026-09-26')&&h<=new Date('2026-10-05')))r.push('conferencia');if(h>=new Date('2026-12-01')&&h<=new Date('2026-12-27'))r.push('navidad');return r;}
+function lsKey(k){return`pee_${sk(barrio||'_')}_${k}`;}
+function lsGet(k){try{return localStorage.getItem(lsKey(k));}catch{return null;}}
+function lsSet(k,v){try{localStorage.setItem(lsKey(k),v);}catch{}}
+function getEscriturasFromMinuta(desde,hasta){
+  const d1=new Date(desde),d2=new Date(hasta),seen=new Set(),result=[];
+  let d=new Date(d1);
+  while(d<=d2){
+    const lec=getLeccion(d);
+    if(!seen.has(lec.i)){
+      seen.add(lec.i);
+      const saved=JSON.parse(lsGet(`minuta_${lec.i}`)||'{}');
+      if(saved.presEscritura&&saved.escritura)
+        result.push({ref:saved.escritura,nino:saved.escrituraNino||'',weekKey:`minuta_${lec.i}`});
+    }
+    d.setDate(d.getDate()+7);
+  }
+  return result;
+}
+
+// ═══ NAV ═══
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');window.scrollTo(0,0);}
+function goTab(tab){
+  showScreen(tab);
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const nb=document.getElementById('nav-'+tab);if(nb)nb.classList.add('active');
+  if(tab==='semana')renderSemana();
+  if(tab==='home')renderHome();
+}
+function goDetail(detail){
+  prevDetail=document.querySelector('.nav-btn.active')?.id?.replace('nav-','')||'home';
+  document.getElementById('bottom-nav').style.display='none';
+  showScreen(detail);
+  if(detail==='bautismo')renderBautismo();if(detail==='templo')renderTemplo();if(detail==='presentacion')renderPresentacion();if(detail==='leccion')renderLeccion();
+}
+function goBack(){document.getElementById('bottom-nav').style.display='flex';goTab(prevDetail||'home');}
+function renderHome(){
+  document.getElementById('home-titulo').textContent='Barrio '+barrio;
+  document.getElementById('home-consejero').value=lsGet('consejero')||'';
+}
+function saveCfgConsejero2(){lsSet('consejero',document.getElementById('home-consejero').value);}
+function cambiarBarrio(){barrio=null;localStorage.removeItem('pee_barrio_sel');closeSettings();document.getElementById('bottom-nav').style.display='none';showScreen('barrio');}
+function openSettings(){document.getElementById('settings-overlay').style.display='flex';document.getElementById('cfg-consejero').value=lsGet('consejero')||'';document.getElementById('cfg-barrio-nombre').textContent='Barrio '+barrio;}
+function closeSettings(){document.getElementById('settings-overlay').style.display='none';}
+function saveCfgConsejero(){lsSet('consejero',document.getElementById('cfg-consejero').value);}
+
+// ═══ BARRIOS ═══
+function renderBarrios(){
+  document.getElementById('barrio-list').innerHTML=BARRIOS.map(b=>`<button class="barrio-btn" onclick="selectBarrio('${b}')"><span>Barrio ${b}</span><span style="color:var(--rojo);font-size:17px">→</span></button>`).join('');
+}
+function selectBarrio(b){
+  barrio=b;
+  localStorage.setItem('pee_barrio_sel',b);
+  updateBarrioLabels();
+  document.getElementById('bottom-nav').style.display='flex';
+  goTab('home');
+  syncFromSheets();
+}
+function updateBarrioLabels(){
+  ['bautismo-barrio-label','templo-barrio-label','pres-barrio-label','semana-barrio-label','home-titulo'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.textContent='Barrio '+barrio;
+  });
+  const st=document.getElementById('semana-titulo');if(st)st.textContent=barrio;
+}
+
+// ═══ SEMANA ═══
+function saveHimnoToPres(himnoName,checked){
+  const sunday=getSunday(weekOffset);
+  const sec=getSeccionForDate(sunday);
+  if(!sec)return;
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  if(!pres[sec.id])pres[sec.id]={};
+  if(checked){
+    pres[sec.id].himno=himnoName;
+  } else {
+    // Revertir al default
+    const defSec=PRES_SECCIONES.find(s=>s.id===sec.id);
+    pres[sec.id].himno=defSec?defSec.himno:'';
+  }
+  lsSet('pres',JSON.stringify(pres));
+}
+function isHimnoInPres(himnoName){
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  for(const sec of PRES_SECCIONES){
+    const s=pres[sec.id];
+    if(s&&s.himno===himnoName)return true;
+  }
+  return false;
+}
+
+function changeWeek(dir){if(dir===1&&weekOffset>=3)return;weekOffset+=dir;renderSemana();}
+function renderSemana(){
+  const sunday=getSunday(weekOffset),lec=getLeccion(sunday),mes=sunday.getMonth()+1;
+  const canciones=CANCIONES[mes]||[],csd=getCSDForSunday(sunday),esCinco=isFifthSunday(sunday);
+  const weekKey=`minuta_${lec.i}`;
+
+  document.getElementById('week-label').textContent=weekLabel(weekOffset);
+  document.getElementById('week-date').textContent='domingo '+fCorta(sunday);
+  document.getElementById('prev-week').disabled=false;
+  document.getElementById('next-week').disabled=weekOffset>=3;
+
+  const saved=JSON.parse(lsGet(weekKey)||'{}');
+  document.getElementById('m-oracion').value=saved.oracion||'';
+  document.getElementById('m-escritura').value=saved.escritura||'';
+  document.getElementById('m-escritura-nino').value=saved.escrituraNino||'';
+  document.getElementById('m-discurso').value=saved.discurso||'';
+  document.getElementById('m-discurso-nino').value=saved.discursoNino||'';
+  document.getElementById('m-obispado').value=saved.obispado||'';
+  document.getElementById('m-pres-escritura').checked=saved.presEscritura||false;
+  document.getElementById('m-pres-discurso').checked=saved.presDiscurso||false;
+
+  const chipsE=document.getElementById('chips-escritura'),chipsD=document.getElementById('chips-discurso');
+  chipsE.innerHTML='';chipsD.innerHTML='';
+  if(csd){
+    chipsE.innerHTML+=`<button class="chip" onclick="fillChip('m-escritura','${csd.e}')">💡 ${csd.e}</button>`;
+    if(csd.af)chipsE.innerHTML+=`<button class="chip" onclick="fillChip('m-escritura','Artículo de Fe ${csd.af}')">💡 Artículo de Fe ${csd.af}</button>`;
+    chipsD.innerHTML=`<button class="chip" onclick="fillChip('m-discurso','${csd.disc.replace(/'/g,"\'")}')">💡 ${csd.disc}</button>`;
+  }
+
+  // Himnos
+  document.getElementById('himnos-content').innerHTML=canciones.map((c,i)=>{
+    const safeT=c.t.replace(/'/g,"\\'");
+    const inPres=isHimnoInPres(c.t);
+    return `<div style="background:var(--azul-c);border-radius:10px;border:1px solid var(--azul-b);padding:13px 14px;margin-bottom:${i<canciones.length-1?'9px':'0'}">
+      <p style="font-family:'Lora',serif;font-size:15px;font-weight:600;margin-bottom:5px">${c.t}</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:12px;color:var(--suave)">${c.f}</span>
+        <a href="${c.u}" target="_blank" style="font-size:12px;color:var(--azul);font-weight:700;text-decoration:none">Escuchar →</a>
+      </div>
+      <div class="pcheck">
+        <input type="checkbox" ${inPres?'checked':''} onchange="saveHimnoToPres('${safeT}',this.checked)">
+        <span>Usar en Presentación Sacramental</span>
+      </div>
+    </div>`;}).join('');
+
+  // Clase
+  const claseEl=document.getElementById('clase-content');
+  if(esCinco){
+    claseEl.innerHTML=`<p style="font-size:12px;color:var(--violeta);font-weight:700;margin-bottom:5px">5to Domingo — Apéndice B</p>
+      <p style="font-family:'Lora',serif;font-size:15px;font-weight:600;margin-bottom:12px">Reunión especial con las familias</p>
+      <p style="font-size:13px;color:var(--suave);line-height:1.6;margin-bottom:14px">Este domingo corresponde al Apéndice B de Ven sígueme: una reunión donde la Primaria y las familias estudian juntas un principio del Evangelio.</p>
+      <a href="${URL_APENDICE_B}" target="_blank" class="extlink" style="background:var(--violeta-c);color:var(--violeta);border-color:var(--violeta-b)">Ver Apéndice B — Ven sígueme (oficial) <span>→</span></a>`;
+  } else {
+    claseEl.innerHTML=`<p style="font-size:12px;color:var(--amarillo);font-weight:700;margin-bottom:5px">${lec.e}</p>
+      <h3 style="font-family:'Lora',serif;font-size:17px;font-weight:600;margin-bottom:14px;line-height:1.3">${lec.t}</h3>
+      <button onclick="goDetail('leccion')" style="width:100%;background:var(--amarillo-c);border:2px solid var(--amarillo);border-radius:10px;padding:13px 0;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:var(--amarillo);cursor:pointer">Ver introducción, temas y recursos →</button>`;
+  }
+
+  // Especiales banner
+  const specials=getActiveSpecials();
+  const cfg={pascua:{label:'🐑 Se acerca Pascua de Resurrección',bg:'var(--rojo-c)',borde:'var(--rojo-b)',color:'var(--rojo)'},conferencia:{label:'📺 Se acerca la Conferencia General',bg:'var(--azul-c)',borde:'var(--azul-b)',color:'var(--azul)'},navidad:{label:'🎄 Llegó Navidad',bg:'var(--verde-c)',borde:'var(--verde-b)',color:'var(--verde)'}};
+  document.getElementById('especiales-banner').innerHTML=specials.map(t=>`
+    <div class="especial-card" style="background:${cfg[t].bg};border-color:${cfg[t].borde}">
+      <div><p style="font-family:'Lora',serif;font-size:15px;font-weight:600;color:${cfg[t].color};margin-bottom:3px">${cfg[t].label}</p><p style="font-size:12px;color:var(--suave)">Ideas y recursos para los niños</p></div>
+      <span style="color:${cfg[t].color};font-size:20px">→</span>
+    </div>`).join('');
+}
+function fillChip(id,val){document.getElementById(id).value=val;saveMinuta();}
+function scrollSec(id,btn){
+  document.querySelectorAll('.qbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const el=document.getElementById('sec-'+id);
+  if(!el)return;
+  const offset=el.getBoundingClientRect().top+window.scrollY-60;
+  window.scrollTo({top:Math.max(0,offset),behavior:'smooth'});
+}
+function toggleGuarderia(){const b=document.getElementById('guarderia-body'),a=document.getElementById('guard-arrow'),open=b.style.display==='block';b.style.display=open?'none':'block';a.textContent=open?'▼':'▲';}
+function saveMinuta(){
+  const lec=getLeccion(getSunday(weekOffset));
+  const sunday=getSunday(weekOffset);
+  const weekKey=`minuta_${lec.i}`;
+  const data={
+    oracion:document.getElementById('m-oracion').value,
+    escritura:document.getElementById('m-escritura').value,
+    escrituraNino:document.getElementById('m-escritura-nino').value,
+    discurso:document.getElementById('m-discurso').value,
+    discursoNino:document.getElementById('m-discurso-nino').value,
+    obispado:document.getElementById('m-obispado').value,
+    presEscritura:document.getElementById('m-pres-escritura').checked,
+    presDiscurso:document.getElementById('m-pres-discurso').checked,
+  };
+  lsSet(weekKey,JSON.stringify(data));
+  updatePresFromMinuta(weekKey,sunday,'escritura',data.escritura,data.escrituraNino,data.presEscritura);
+  updatePresFromMinuta(weekKey,sunday,'discurso',data.discurso,data.discursoNino,data.presDiscurso);
+  sheetWrite('Minuta',Object.assign({semana:lec.i},data));
+}
+
+// ═══ LECCIÓN ═══
+function renderLeccion(){
+  const lec=getLeccion(getSunday(weekOffset));
+  const gsaPath=GSA_PATHS[lec.i];
+  const gsaUrl=gsaPath?`${URL_GSA}/${gsaPath}?lang=spa`:`${URL_GSA}?lang=spa`;
+  document.getElementById('lec-titulo').textContent=lec.t;
+  document.getElementById('lec-escrituras').textContent=lec.e;
+  document.getElementById('lec-desc').textContent=lec.desc;
+  document.getElementById('lec-link').href=lec.u+'?lang=spa';
+  document.getElementById('lec-gsa').href=gsaUrl;
+  document.getElementById('lec-temas').innerHTML=(lec.temas||[]).map(tm=>`
+    <div class="tema-card">
+      <div class="tema-titulo">${tm.t}</div>
+      <div class="tema-idea">${tm.i}</div>
+      <a href="${gsaUrl}" target="_blank" style="font-size:12px;color:var(--violeta);font-weight:700;text-decoration:none">Ver en Recursos para niños →</a>
+    </div>`).join('');
+}
+
+// ═══ BAUTISMO ═══
+function renderBautismo(){document.getElementById('b-fecha').value=lsGet('bautismo_fecha')||'';document.getElementById('b-consejera').value=lsGet('bautismo_consejera')||'';}
+function saveBautismo(){
+  const fecha=document.getElementById('b-fecha').value;
+  const consejera=document.getElementById('b-consejera').value;
+  lsSet('bautismo_fecha',fecha);lsSet('bautismo_consejera',consejera);
+  sheetWrite('Bautismo',{fecha:fecha,consejera:consejera});
+}
+
+// ═══ TEMPLO ═══
+function renderTemplo(){document.getElementById('t-fecha').value=lsGet('templo_fecha')||'';document.getElementById('t-consejera').value=lsGet('templo_consejera')||'';}
+function saveTemplo(){
+  const fecha=document.getElementById('t-fecha').value;
+  const consejera=document.getElementById('t-consejera').value;
+  lsSet('templo_fecha',fecha);lsSet('templo_consejera',consejera);
+  sheetWrite('Templo',{fecha:fecha,consejera:consejera});
+}
+
+// ═══ PRESENTACIÓN ═══
+function getSeccionForDate(date){
+  const d=date.toISOString().split('T')[0];
+  for(const sec of PRES_SECCIONES){if(d>=sec.desde&&d<=sec.hasta)return sec;}
+  return null;
+}
+function getCSDForSeccion(sec){
+  return CSD.find(e=>!e.conf&&e.e&&e.d>=sec.desde&&e.d<=sec.hasta)||null;
+}
+function updatePresFromMinuta(weekKey,sunday,tipo,valor,nino,checked){
+  const sec=getSeccionForDate(sunday);
+  if(!sec)return;
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  if(!pres[sec.id])pres[sec.id]={};
+  const arrKey=tipo==='escritura'?'escrituras':'discursos';
+  if(!pres[sec.id][arrKey])pres[sec.id][arrKey]=[];
+  const arr=pres[sec.id][arrKey];
+  if(checked&&valor){
+    const idx=arr.findIndex(e=>e.weekKey===weekKey);
+    if(idx>=0){arr[idx].ref=valor;arr[idx].nino=nino;}
+    else{arr.push({ref:valor,nino:nino,weekKey,fromMinuta:true});}
+  } else {
+    const idx=arr.findIndex(e=>e.weekKey===weekKey);
+    if(idx>=0)arr.splice(idx,1);
+  }
+  lsSet('pres',JSON.stringify(pres));
+}
+function editPresEntry(secId,arrKey,idx,campo,val){
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  if(!pres[secId])pres[secId]={};
+  if(!pres[secId][arrKey])pres[secId][arrKey]=[];
+  if(!pres[secId][arrKey][idx])pres[secId][arrKey][idx]={};
+  pres[secId][arrKey][idx][campo]=val;
+  lsSet('pres',JSON.stringify(pres));
+}
+function deletePresEntry(secId,arrKey,idx){
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  if(pres[secId]&&pres[secId][arrKey])pres[secId][arrKey].splice(idx,1);
+  lsSet('pres',JSON.stringify(pres));
+  sheetWrite('Presentacion',{datos:pres});
+  renderPresentacion();
+}
+function addManualPresEntry(secId,arrKey){
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  if(!pres[secId])pres[secId]={};
+  if(!pres[secId][arrKey])pres[secId][arrKey]=[];
+  pres[secId][arrKey].push({ref:'',nino:'',fromMinuta:false});
+  lsSet('pres',JSON.stringify(pres));
+  sheetWrite('Presentacion',{datos:pres});
+  renderPresentacion();
+}
+function autoPopulateEntry(secId,arrKey,ref){
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  if(!pres[secId])pres[secId]={};
+  if(!pres[secId][arrKey])pres[secId][arrKey]=[];
+  if(pres[secId][arrKey].length===0){
+    pres[secId][arrKey].push({ref:ref,nino:'',fromMinuta:false});
+    lsSet('pres',JSON.stringify(pres));
+    renderPresentacion();
+  }
+}
+function renderEntradas(secId,arrKey,entries,csdEntry,labelField,placeholder,addLabel){
+  const isEsc=arrKey==='escrituras';
+  const sugeridaRef=csdEntry?(isEsc?csdEntry.e:csdEntry.disc)||'':'';
+  const sugeridaTexto=isEsc&&csdEntry&&csdEntry.texto?csdEntry.texto:'';
+  let html='';
+  if(entries.length===0){
+    if(sugeridaRef){
+      const safeRef=sugeridaRef.replace(/'/g,"\\'");
+      html=`<div style="background:var(--fondo);border-radius:8px;border:1.5px dashed var(--amarillo-b);padding:10px 12px;margin-bottom:6px">
+        <p style="font-size:10px;color:var(--amarillo);font-weight:700;margin-bottom:6px;letter-spacing:.06em">💡 SUGERIDA — editable</p>
+        <input class="inp-sm" type="text" value="${sugeridaRef}" placeholder="${placeholder}"
+          onfocus="autoPopulateEntry('${secId}','${arrKey}','${safeRef}')" style="margin-bottom:4px">
+        <input class="inp-sm" type="text" value="" placeholder="Niño/a asignado/a"
+          onfocus="autoPopulateEntry('${secId}','${arrKey}','${safeRef}')">
+        ${sugeridaTexto?`<p style="font-size:11px;color:var(--suave);font-style:italic;margin-top:4px">"${sugeridaTexto}"</p>`:''}
+      </div>`;
+    } else {
+      html='<p style="font-size:11px;color:var(--suave);font-style:italic;margin-bottom:6px">Sin asignación aún</p>';
+    }
+  } else {
+    html=entries.map((e,i)=>{
+      const bg=e.fromMinuta?'var(--azul-c)':'var(--fondo)';
+      const bc=e.fromMinuta?'var(--azul-b)':'var(--borde)';
+      const safeRef=(e.ref||'').replace(/"/g,'&quot;');
+      const safeNino=(e.nino||'').replace(/"/g,'&quot;');
+      return `<div style="background:${bg};border-radius:8px;border:1.5px solid ${bc};padding:8px 10px;margin-bottom:6px;display:flex;gap:8px;align-items:flex-start">
+        <div style="flex:1">
+          ${e.fromMinuta?'<p style="font-size:10px;color:var(--azul);font-weight:700;margin-bottom:4px">De la minuta ✓</p>':''}
+          <input class="inp-sm" type="text" value="${safeRef}" placeholder="${placeholder}"
+            oninput="editPresEntry('${secId}','${arrKey}',${i},'ref',this.value)" style="margin-bottom:4px">
+          <input class="inp-sm" type="text" value="${safeNino}" placeholder="Niño/a asignado/a"
+            oninput="editPresEntry('${secId}','${arrKey}',${i},'nino',this.value)">
+        </div>
+        <button onclick="deletePresEntry('${secId}','${arrKey}',${i})" style="background:none;border:none;color:var(--suave);font-size:20px;cursor:pointer;padding:0;flex-shrink:0;line-height:1">×</button>
+      </div>`;
+    }).join('');
+  }
+  html+=`<button onclick="addManualPresEntry('${secId}','${arrKey}')" style="width:100%;background:transparent;border:1.5px dashed var(--borde);border-radius:8px;padding:7px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--suave);cursor:pointer;margin-top:2px">${addLabel}</button>`;
+  return html;
+}
+
+
+function renderPresentacion(){
+  const saved=JSON.parse(lsGet('pres')||'{}');
+  document.getElementById('p-fecha').value=saved.fecha||'';
+  document.getElementById('p-narrador').value=saved.narrador||'';
+  document.getElementById('p-narrador-msg').value=saved.narradorMsg||MSG_NARRADOR;
+  document.getElementById('p-presidenta').value=saved.presidenta||'';
+  document.getElementById('p-mensaje').value=saved.mensaje||MSG_AUTO;
+  const cont=document.getElementById('pres-secciones');
+  const colorMap={rojo:'var(--rojo)',azul:'var(--azul)',verde:'var(--verde)'};
+  const claritoMap={rojo:'var(--rojo-c)',azul:'var(--azul-c)',verde:'var(--verde-c)'};
+  const bordeMap={rojo:'var(--rojo-b)',azul:'var(--azul-b)',verde:'var(--verde-b)'};
+  cont.innerHTML=PRES_SECCIONES.map((sec,idx)=>{
+    const color=colorMap[sec.color],clarito=claritoMap[sec.color],borde=bordeMap[sec.color];
+    const s=saved[sec.id]||{};
+    const csdEntry=getCSDForSeccion(sec);
+    const escrituras=s.escrituras||[];
+    const discursos=s.discursos||[];
+    return `<div class="card" style="border-top:4px solid ${color};margin:0 0 12px">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px">
+        <div style="width:28px;height:28px;border-radius:8px;background:${color};display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-weight:700;font-size:13px">${idx+1}</div>
+        <p style="font-family:'Lora',serif;font-size:14px;font-weight:600;margin-top:4px">${sec.tema}</p>
+      </div>
+      <!-- HIMNO -->
+      <div style="background:${clarito};border-radius:10px;border:1px solid ${borde};padding:10px 12px;margin-bottom:8px">
+        <p style="font-size:10px;font-weight:700;color:${color};margin-bottom:6px;letter-spacing:.06em">🎵 HIMNO</p>
+        <input class="inp-sm" type="text" value="${(s.himno||sec.himno).replace(/"/g,'&quot;')}" placeholder="Himno de la sección"
+          oninput="editPresField('${sec.id}','himno',this.value)">
+      </div>
+      <!-- VALIENTE -->
+      <div style="background:${clarito};border-radius:10px;border:1px solid ${borde};padding:10px 12px;margin-bottom:8px">
+        <p style="font-size:10px;font-weight:700;color:var(--rojo);margin-bottom:6px;letter-spacing:.06em">👦 VALIENTE &#8212; Discurso</p>
+        ${renderEntradas(sec.id,'discursos',discursos,csdEntry,'disc','Tema del discurso','+ Agregar discurso')}
+      </div>
+      <!-- ESCRITURAS HLJ -->
+      <div style="background:${clarito};border-radius:10px;border:1px solid ${borde};padding:10px 12px;margin-bottom:8px">
+        <p style="font-size:10px;font-weight:700;color:var(--azul);margin-bottom:6px;letter-spacing:.06em">📖 ESCRITURA — HLJ</p>
+        ${renderEntradas(sec.id,'escrituras',escrituras,csdEntry,'ref','Escritura o AF','+ Agregar escritura')}
+      </div>
+      <!-- RAYITO -->
+      <div style="background:${clarito};border-radius:10px;border:1px solid ${borde};padding:10px 12px">
+        <p style="font-size:10px;font-weight:700;color:var(--verde);margin-bottom:6px;letter-spacing:.06em">👧 RAYITO / GUARDERÍA</p>
+        <input class="inp-sm" type="text" value="${(s.rayitoNombre||'').replace(/"/g,'&quot;')}" placeholder="Nombre del niño/a pequeño/a"
+          oninput="editPresField('${sec.id}','rayitoNombre',this.value)" style="margin-bottom:6px">
+        <input class="inp-sm" type="text" value="${(s.rayito||sec.rayito).replace(/"/g,'&quot;')}" placeholder="Frase de los más pequeños"
+          oninput="editPresField('${sec.id}','rayito',this.value)">
+      </div>
+    </div>`;
+  }).join('');
+}
+function editPresField(secId,campo,val){
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  if(!pres[secId])pres[secId]={};
+  pres[secId][campo]=val;
+  lsSet('pres',JSON.stringify(pres));
+  clearTimeout(window._presSyncTimer);
+  window._presSyncTimer=setTimeout(()=>sheetWrite('Presentacion',{datos:pres}),2000);
+}
+function savePres(){
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  pres.fecha=document.getElementById('p-fecha').value;
+  pres.narrador=document.getElementById('p-narrador').value;
+  pres.narradorMsg=document.getElementById('p-narrador-msg').value;
+  pres.presidenta=document.getElementById('p-presidenta').value;
+  pres.mensaje=document.getElementById('p-mensaje').value;
+  lsSet('pres',JSON.stringify(pres));
+  sheetWrite('Presentacion',{datos:pres});
+}
+function restaurarMensaje(){document.getElementById('p-mensaje').value=MSG_AUTO;savePres();}
+function restaurarNarrador(){document.getElementById('p-narrador-msg').value=MSG_NARRADOR;savePres();}
+function exportPresPDF(){
+  savePres();
+  const saved=JSON.parse(lsGet('pres')||'{}');
+  const secHtml=PRES_SECCIONES.map((sec)=>{
+    const s=saved[sec.id]||{};
+    const escrituras=s.escrituras||[];
+    const discursos=s.discursos||[];
+    const csdEntry=getCSDForSeccion(sec);
+    // Si no hay escrituras, usar la sugerida
+    const escToShow=escrituras.length>0?escrituras:[{ref:csdEntry?csdEntry.e:'—',nino:'',sugerida:true}];
+    const escHtml=escToShow.map(e=>`
+      <p style="margin:4px 0 4px 16px;font-size:12px"><span style="color:#1E5F8E;font-weight:bold">📖 ${e.ref||'—'}</span>${e.nino?' — HLJ: '+e.nino:' — HLJ'}${e.sugerida?' (sugerida)':''}</p>`).join('');
+    return`<div style="margin-bottom:22px;break-inside:avoid">
+      <p style="font-size:15px;font-weight:bold;color:#1E5F8E;text-decoration:underline;margin-bottom:8px">♪ ${s.himno||sec.himno}</p>
+      ${s.valenteTema?`<p style="margin:5px 0 5px 16px;font-size:12px"><strong style="color:#B83A2A">🎓 ${s.valenteTema}</strong>${s.valenteNombre?' — Valiente: '+s.valenteNombre:' — Valiente'}</p>`:''}
+      ${escHtml}
+      <p style="margin:5px 0 5px 16px;font-size:12px"><strong style="color:#2E7D4F">👧 ${s.rayito||sec.rayito}</strong>${s.rayitoNombre?' — Rayito de Sol/Guardería: '+s.rayitoNombre:' — Rayito de Sol/Guardería'}</p>
+    </div>`;
+  }).join('');
+  const html=`<h1>Programa Sacramental | Primaria</h1>
+  <h2>${CURRICULO} — Barrio ${barrio} · Estaca Escobar</h2>
+  <p style="font-size:13px;margin-bottom:4px"><strong>Narrador/a:</strong> ${saved.narrador||'___________'}</p>
+  <p style="font-size:13px;margin-bottom:12px"><strong>Fecha:</strong> ${saved.fecha||'___________'}</p>
+  ${saved.narradorMsg?'<p style="font-size:12px;font-style:italic;color:#555;margin-bottom:20px;white-space:pre-wrap">'+saved.narradorMsg+'</p>':''}
+  ${secHtml}
+  <p style="margin-top:24px;font-size:13px">• <strong>Mensaje Final — ${saved.presidenta||'Presidenta de Primaria'}</strong></p>
+  <p style="font-size:12px;color:#555;margin-top:6px;white-space:pre-wrap">${saved.mensaje||MSG_AUTO}</p>`;
+  showPrintOverlay(html);
+}
+
+// ═══ PRINT HELPER ═══
+function showPrintOverlay(html){
+  const old=document.getElementById('print-overlay');if(old)old.remove();
+  const div=document.createElement('div');div.id='print-overlay';
+  div.innerHTML='<div class="print-toolbar">'
+    +'<button onclick="window.print()" style="background:var(--azul);color:white;border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-family:DM Sans,sans-serif;font-weight:700;font-size:13px">🖨️ Imprimir / PDF</button>'
+    +'<button onclick="document.getElementById(\'print-overlay\').remove()" style="background:var(--borde);border:none;border-radius:8px;padding:8px 16px;cursor:pointer;font-family:DM Sans,sans-serif;font-weight:600;font-size:13px">✕ Cerrar</button>'
+    +'</div><div class="print-body">'+html+'</div>';
+  document.body.appendChild(div);
+}
+
+// ═══ EXPORTAR MINUTAS ═══
+function exportMinutas(){
+  let rows='';
+  for(const lec of LECCIONES){
+    const saved=JSON.parse(lsGet('minuta_'+lec.i)||'{}');
+    if(saved.oracion||saved.escritura||saved.discurso){
+      rows+=`<tr>
+        <td>${lec.i}</td><td>${lec.e}</td>
+        <td>${saved.oracion||''}</td>
+        <td>${saved.escritura||''}</td><td>${saved.escrituraNino||''}</td>
+        <td>${saved.discurso||''}</td><td>${saved.discursoNino||''}</td>
+        <td>${saved.obispado||''}</td>
+      </tr>`;
+    }
+  }
+  if(!rows){rows='<tr><td colspan="8" style="text-align:center;color:#999;padding:20px">No hay minutas guardadas aún</td></tr>';}
+  const html=`<h1 style="font-family:Georgia,serif;font-size:20px;color:#B83A2A;margin-bottom:4px">Minutas del Año — Barrio ${barrio}</h1>
+    <p style="font-size:13px;color:#787068;margin-bottom:16px">Primaria · Estaca Escobar · Antiguo Testamento 2026</p>
+    <table style="width:100%;border-collapse:collapse;font-size:11px;font-family:sans-serif">
+      <thead><tr style="background:#1E5F8E;color:white;text-align:left">
+        <th style="padding:6px">Fecha</th><th style="padding:6px">Lección</th>
+        <th style="padding:6px">Oración</th>
+        <th style="padding:6px">Escritura</th><th style="padding:6px">Niño/a</th>
+        <th style="padding:6px">Discurso</th><th style="padding:6px">Niño/a</th>
+        <th style="padding:6px">Obispado</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+  showPrintOverlay(html);
+}
+
+// ═══ INIT ═══
+window.addEventListener('DOMContentLoaded',()=>{
+  renderBarrios();
+  const saved=localStorage.getItem('pee_barrio_sel');
+  setTimeout(()=>{
+    document.getElementById('loading').style.display='none';
+    if(saved&&BARRIOS.includes(saved)){
+      barrio=saved;
+      updateBarrioLabels();
+      document.getElementById('bottom-nav').style.display='flex';
+      goTab('home');
+      syncFromSheets();
+    } else {
+      showScreen('barrio');
+    }
+  },800);
+});
+</script>
+</body>
+</html>
