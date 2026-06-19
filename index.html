@@ -792,7 +792,7 @@ function isHimnoInPres(himnoName){
   return false;
 }
 
-function changeWeek(dir){if(dir===1&&weekOffset>=3)return;weekOffset+=dir;renderSemana();}
+function changeWeek(dir){weekOffset+=dir;renderSemana();}
 function renderSemana(){
   const sunday=getSunday(weekOffset),lec=getLeccion(sunday),mes=sunday.getMonth()+1;
   const canciones=CANCIONES[mes]||[],csd=getCSDForSunday(sunday),esCinco=isFifthSunday(sunday);
@@ -801,7 +801,7 @@ function renderSemana(){
   document.getElementById('week-label').textContent=weekLabel(weekOffset);
   document.getElementById('week-date').textContent='domingo '+fCorta(sunday);
   document.getElementById('prev-week').disabled=false;
-  document.getElementById('next-week').disabled=weekOffset>=3;
+  document.getElementById('next-week').disabled=false;
 
   const saved=JSON.parse(lsGet(weekKey)||'{}');
   document.getElementById('m-oracion').value=saved.oracion||'';
