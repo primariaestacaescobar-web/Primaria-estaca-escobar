@@ -310,7 +310,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
     <div id="sec-himnos" class="card card-a">
       <div class="slabel" style="color:var(--azul)">🎵 Himnos del mes</div>
       <div id="himnos-content"></div>
-      <p style="font-size:11px;color:var(--suave);margin-top:10px">Fuente: Apéndice C · Ven sígueme 2026</p>
+      <a href="https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/55-appendix-c?lang=spa" target="_blank" class="extlink" style="background:var(--azul-c);color:var(--azul);border-color:var(--azul-b);margin-top:10px">Apéndice C · Tiempo para cantar y Presentación <span>→</span></a>
     </div>
 
     <!-- CLASE -->
@@ -472,6 +472,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
     <a href="https://www.churchofjesuschrist.org/children?lang=spa" target="_blank" class="extlink" style="background:var(--azul-c);color:var(--azul);border-color:var(--azul-b)">Recursos para niños — 2026 <span>→</span></a>
     <a href="https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026?lang=spa" target="_blank" class="extlink" style="background:var(--rojo-c);color:var(--rojo);border-color:var(--rojo-b)">Ven sígueme — Antiguo Testamento 2026 <span>→</span></a>
     <a href="https://www.churchofjesuschrist.org/study/manual/childrens-songbook?lang=spa" target="_blank" class="extlink" style="background:var(--amarillo-c);color:var(--amarillo);border-color:var(--amarillo-b)">Canciones para los niños <span>→</span></a>
+    <a href="https://www.churchofjesuschrist.org/study/manual/general-handbook/12-primary?lang=spa" target="_blank" class="extlink" style="background:var(--azul-c);color:var(--azul);border-color:var(--azul-b)">Manual General · 12. Primaria <span>→</span></a>
     <button onclick="cambiarBarrio()" class="btn" style="background:transparent;border:1.5px solid var(--borde);color:var(--suave);margin-top:8px">Cambiar de barrio</button>
   </div>
 </div>
@@ -634,7 +635,8 @@ const GSA_PATHS={'2025-12-29':'january/01-introduction-to-the-old-testament','20
 // ═══════════════════════════════════════════════════
 // ESTADO DE LA APP
 // ═══════════════════════════════════════════════════
-const URL_APENDICE_B = 'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-doctrine-and-covenants-2025/54-appendix-b-for-primary?lang=spa';
+const URL_APENDICE_B = 'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/54-appendix-b?lang=spa';
+const URL_APENDICE_C = 'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/55-appendix-c?lang=spa';
 const MSG_NARRADOR = `Hola, hoy queremos compartir con ustedes lo que aprendimos este año en la Primaria. Estudiamos el Antiguo Testamento y descubrimos que es otro testamento de Jesucristo. En las historias que leímos conocimos a profetas y personas que confiaron en Dios y nos enseñaron que nosotros también podemos hacerlo. Aprendimos que nuestro Padre Celestial nos ama, que Él siempre cumple Sus promesas y que Jesucristo ha cuidado a Su pueblo desde el principio. Ahora los niños queremos contarles lo que sentimos y aprendimos este año.`
 
 const MSG_AUTO = `Este año los niños de nuestra Primaria caminaron junto a Adán, Noé, Abraham, Moisés, David, Isaías y tantos otros hombres y mujeres de fe del Antiguo Testamento. Aprendieron que somos hijos de Dios, que Sus convenios nos protegen, que Jesucristo vive y que las familias pueden ser eternas. Como nos recuerda Ven sígueme: lo más importante que podemos hacer es ayudar a nuestros niños a descubrir por sí mismos que el Padre Celestial los ama y que Jesucristo es su Salvador. Oramos para que estas verdades permanezcan en sus corazones y guíen sus pasos para siempre. En el nombre de Jesucristo, amén.`
@@ -1020,8 +1022,19 @@ function saveTemplo(){
 // ═══ PRESENTACIÓN ═══
 function getSeccionForDate(date){
   const d=date.toISOString().split('T')[0];
+  // 1) Coincidencia exacta
   for(const sec of PRES_SECCIONES){if(d>=sec.desde&&d<=sec.hasta)return sec;}
-  return null;
+  // 2) Sin coincidencia: devolver la sección más cercana por fecha
+  const t=new Date(d+'T00:00:00').getTime();
+  let mejor=null,mejorDist=Infinity;
+  for(const sec of PRES_SECCIONES){
+    const ini=new Date(sec.desde+'T00:00:00').getTime();
+    const fin=new Date(sec.hasta+'T00:00:00').getTime();
+    // distancia 0 si está dentro; si no, al extremo más próximo
+    const dist=t<ini?ini-t:(t>fin?t-fin:0);
+    if(dist<mejorDist){mejorDist=dist;mejor=sec;}
+  }
+  return mejor;
 }
 function getCSDForSeccion(sec){
   return CSD.find(e=>!e.conf&&e.e&&e.d>=sec.desde&&e.d<=sec.hasta)||null;
