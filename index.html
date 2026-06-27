@@ -20,7 +20,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
 .screen{display:none;min-height:100vh;padding-bottom:80px;}
 .screen.active{display:block;}
 .header{padding:22px 18px 20px;position:relative;overflow:hidden;}
-.header::after{content:'';position:absolute;top:-40px;right:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.06);}
+.header::after{content:'';position:absolute;top:-40px;right:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,0.06);pointer-events:none;}
 .hr{background:var(--rojo);color:var(--blanco);}
 .ha{background:var(--azul);color:var(--blanco);}
 .hv{background:var(--verde);color:var(--blanco);}
@@ -47,8 +47,10 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
 .extlink{display:flex;align-items:center;justify-content:space-between;border-radius:10px;padding:10px 14px;font-weight:600;font-size:13px;text-decoration:none;margin-bottom:8px;border:1.5px solid;}
 .btn{border:none;border-radius:10px;padding:12px 18px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-bottom:8px;}
 .btn-r{background:var(--rojo);color:var(--blanco);}
-.quick-nav{position:sticky;top:0;z-index:50;background:var(--blanco);border-bottom:1px solid var(--borde);display:flex;overflow-x:auto;gap:8px;padding:10px 14px;scrollbar-width:none;}
+.quick-nav{position:sticky;top:0;z-index:50;background:var(--blanco);border-bottom:1px solid var(--borde);display:flex;justify-content:center;overflow-x:auto;gap:8px;padding:10px 14px;scrollbar-width:none;}
 .quick-nav::-webkit-scrollbar{display:none;}
+#save-toast{position:fixed;bottom:86px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--verde);color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;padding:11px 20px;border-radius:24px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:300;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;}
+#save-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .qbtn{flex-shrink:0;display:flex;align-items:center;gap:5px;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--borde);background:var(--fondo);color:var(--suave);white-space:nowrap;font-family:'DM Sans',sans-serif;}
 .qbtn.active{background:var(--rojo);color:var(--blanco);border-color:var(--rojo);}
 .week-nav{background:rgba(0,0,0,.15);border-radius:12px;display:flex;align-items:center;padding:4px;margin-top:14px;}
@@ -59,9 +61,20 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
 .week-date{font-size:15px;font-weight:700;color:var(--blanco);}
 .reunion-btn{width:100%;border-radius:12px;padding:13px 15px;margin-bottom:9px;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;border:1.5px solid;background:var(--blanco);}
 .barrio-btn{background:var(--blanco);border:1.5px solid var(--borde);border-radius:12px;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;color:var(--texto);text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:9px;width:100%;}
-.tema-card{background:var(--violeta-c);border-radius:10px;border:1px solid var(--violeta-b);padding:12px 14px;margin-bottom:8px;}
-.tema-titulo{font-family:'Lora',serif;font-size:14px;font-weight:600;color:var(--violeta);margin-bottom:4px;}
-.tema-idea{font-size:13px;color:var(--suave);line-height:1.55;margin-bottom:6px;}
+.tema-card{background:var(--violeta-c);border-radius:10px;border:1px solid var(--violeta-b);padding:0;margin-bottom:8px;overflow:hidden;}
+.tema-head{width:100%;background:transparent;border:none;text-align:left;padding:12px 14px;cursor:pointer;display:flex;align-items:flex-start;gap:8px;font-family:'DM Sans',sans-serif;}
+.tema-titulo{font-family:'Lora',serif;font-size:14px;font-weight:600;color:var(--violeta);line-height:1.4;flex:1;}
+.tema-escritura{font-size:11px;font-weight:700;color:var(--violeta);opacity:.75;letter-spacing:.02em;margin-top:3px;}
+.tema-arrow{color:var(--violeta);font-size:12px;flex-shrink:0;margin-top:3px;transition:transform .2s;}
+.tema-card.open .tema-arrow{transform:rotate(180deg);}
+.tema-idea{font-size:13px;color:var(--suave);line-height:1.6;padding:0 14px 12px;display:none;}
+.tema-card.open .tema-idea{display:block;}
+/* Franja tricolor de la Primaria */
+.franja-primaria{display:flex;height:5px;}
+.franja-primaria>span{flex:1;}
+.franja-primaria .fr{background:var(--rojo);}
+.franja-primaria .fa{background:var(--amarillo);}
+.franja-primaria .faz{background:var(--azul);}
 .block-e{background:var(--azul-c);border-radius:10px;border:1px solid var(--azul-b);padding:10px 12px;margin-bottom:8px;}
 .block-e.manual{background:var(--verde-c);border-color:var(--verde-b);}
 .block-e .elabel{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
@@ -70,7 +83,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
 .minuta-time{font-size:11px;font-weight:700;color:var(--rojo);margin-bottom:12px;letter-spacing:.05em;}
 .minuta-item{background:var(--fondo);border-radius:10px;border:1px solid var(--borde);padding:11px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
 .guard-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--borde);font-size:13px;}
-.especial-card{border-radius:14px;padding:14px 16px;margin-bottom:10px;border:1.5px solid;display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+.especial-card{border-radius:14px;padding:14px 16px;margin-bottom:10px;border:1.5px solid;display:flex;justify-content:space-between;align-items:center;cursor:pointer;text-decoration:none;color:inherit;}
 #loading{position:fixed;inset:0;background:var(--fondo);display:flex;align-items:center;justify-content:center;z-index:999;}
 .load-icon{width:44px;height:44px;border-radius:12px;background:var(--rojo);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--blanco);}
 
@@ -109,19 +122,24 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
     <span class="nav-icon">📅</span><span class="nav-label">Esta Semana</span><div class="nav-bar"></div>
   </button>
 </nav>
+<div id="save-toast">✓ Guardado</div>
 
 <!-- ═══ BARRIO SELECTOR ═══ -->
 <div id="screen-barrio" class="screen active">
-  <div class="header hr" style="padding:32px 24px 28px;text-align:center">
-    <div style="width:56px;height:56px;border-radius:14px;background:rgba(255,255,255,.2);margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--blanco)">✦</div>
-    <h1 style="font-size:24px;margin-bottom:6px">Primaria</h1>
-    <p style="font-family:'Lora',serif;font-style:italic;font-size:15px;opacity:.85;margin:0">Estaca Escobar</p>
+  <div class="header hr" style="padding:22px 22px 20px;display:flex;align-items:center;gap:16px">
+    <div style="width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--blanco);flex-shrink:0">✦</div>
+    <div style="text-align:left">
+      <h1 style="font-size:23px;margin-bottom:2px">Primaria</h1>
+      <p style="font-family:'Lora',serif;font-style:italic;font-size:14px;opacity:.85;margin:0">Estaca Escobar</p>
+    </div>
   </div>
+  <div class="franja-primaria"><span class="fr"></span><span class="fa"></span><span class="faz"></span></div>
   <div style="padding:20px">
     <div style="background:var(--blanco);border-radius:16px;padding:18px;margin-bottom:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border-left:4px solid var(--amarillo)">
       <p style="font-family:'Lora',serif;font-size:15px;font-weight:600;margin-bottom:8px">Bienvenidas a la Primaria</p>
       <p style="font-size:13px;color:var(--suave);line-height:1.65">Cada llamamiento en la Primaria es una oportunidad para ayudar a los niños a sentir el amor de Jesucristo, fortalecer su fe y prepararse para avanzar en la senda de los convenios. Al servir unidas, apoyamos a las familias y a los maestros en la creación de experiencias significativas que acerquen a cada niño al Salvador.</p>
       <p style="font-size:13px;color:var(--suave);line-height:1.65;margin-top:8px">Gracias por su dedicación, amor y servicio en esta obra tan importante.</p>
+      <p style="font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--rojo);margin-top:12px;text-align:right">Pcia. Primaria Estaca Escobar</p>
     </div>
     <p style="font-size:14px;color:var(--suave);margin-bottom:14px">Elegí tu barrio para comenzar:</p>
     <div id="barrio-list"></div>
@@ -136,9 +154,10 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
         <label>Primaria · Estaca Escobar</label>
         <h1 id="home-titulo" style="margin-bottom:0">Barrio —</h1>
       </div>
-      <button onclick="openSettings()" style="background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.3);border-radius:10px;width:38px;height:38px;color:var(--blanco);font-size:17px;cursor:pointer;flex-shrink:0;margin-top:2px">⚙️</button>
+      <button onclick="openSettings()" style="background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.3);border-radius:10px;width:46px;height:46px;color:var(--blanco);cursor:pointer;flex-shrink:0;margin-top:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1"><span style="font-size:17px">⚙️</span><span style="font-size:8px;font-weight:700;letter-spacing:.04em;margin-top:1px">AJUSTES</span></button>
     </div>
   </div>
+  <div class="franja-primaria"><span class="fr"></span><span class="fa"></span><span class="faz"></span></div>
   <div style="padding:16px 14px 0">
     <!-- Anuncios home -->
     <div id="anuncios-home"></div>
@@ -154,50 +173,55 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
     </button>
 
     <!-- Reuniones especiales -->
-    <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--suave);margin-bottom:10px">Reuniones especiales</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:16px">
+    <p style="font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--suave);margin-bottom:10px">Reuniones especiales</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:18px">
       <button onclick="goDetail('bautismo')" style="background:var(--azul-c);border:1.5px solid var(--azul-b);border-radius:12px;padding:14px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
-        <span style="font-size:22px">💧</span><span style="font-size:10px;font-weight:600;color:var(--azul);line-height:1.3">Bautismo</span>
+        <span style="font-size:22px">💧</span><span style="font-size:11px;font-weight:600;color:var(--azul);line-height:1.3">Bautismo</span>
       </button>
       <button onclick="goDetail('templo')" style="background:var(--verde-c);border:1.5px solid var(--verde-b);border-radius:12px;padding:14px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
-        <span style="font-size:22px">🏛️</span><span style="font-size:10px;font-weight:600;color:var(--verde);line-height:1.3">Templo</span>
+        <span style="font-size:22px">🏛️</span><span style="font-size:11px;font-weight:600;color:var(--verde);line-height:1.3">Templo</span>
       </button>
       <button onclick="goDetail('presentacion')" style="background:var(--rojo-c);border:1.5px solid var(--rojo-b);border-radius:12px;padding:14px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
-        <span style="font-size:22px">📜</span><span style="font-size:10px;font-weight:600;color:var(--rojo);line-height:1.3">Presentación</span>
+        <span style="font-size:22px">📜</span><span style="font-size:11px;font-weight:600;color:var(--rojo);line-height:1.3">Presentación</span>
       </button>
     </div>
 
-    <!-- Exportar -->
-    <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--suave);margin-bottom:10px">Exportar datos</p>
-    <button onclick="exportMinutas()" style="width:100%;background:var(--blanco);border:1.5px solid var(--azul-b);border-radius:12px;padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:16px">
-      <span style="font-size:18px">📊</span>
-      <div style="text-align:left">
-        <p style="font-size:13px;font-weight:600;color:var(--azul);margin:0">Exportar minutas del año</p>
-        <p style="font-size:11px;color:var(--suave);margin:2px 0 0">Tabla con todas las asignaciones</p>
-      </div>
-    </button>
+    <!-- Material adicional -->
+    <p style="font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--suave);margin-bottom:10px">Material adicional</p>
+    <div class="card card-am" style="margin:0 0 12px">
+      <div class="slabel" style="color:var(--amarillo)">📜 Artículos de Fe</div>
+      <p style="font-size:13px;color:var(--suave);line-height:1.6;margin-bottom:12px">Materiales e imprimibles para aprender y memorizar los Artículos de Fe con los niños.</p>
+      <a href="https://drive.google.com/drive/folders/1kzt_O0lio0cZ1wRD1FvtQZO7LgvFPgGU?usp=share_link" target="_blank" class="extlink" style="background:var(--amarillo-c);color:var(--amarillo);border-color:var(--amarillo-b)">Ver materiales en Google Drive <span>→</span></a>
+    </div>
+    <div class="card card-vi" style="margin:0 0 18px">
+      <div class="slabel" style="color:var(--violeta)">🛡️ Seguridad niños y jóvenes</div>
+      <p style="font-size:13px;color:var(--suave);line-height:1.6;margin-bottom:6px">Todos los líderes y maestros de niños y jóvenes deben completar esta capacitación obligatoria.</p>
+      <a href="https://courses.churchofjesuschrist.org/login/5003?lang=spa" target="_blank" class="extlink" style="background:var(--violeta-c);color:var(--violeta);border-color:var(--violeta-b);margin-bottom:8px">Cómo proteger a los niños y jóvenes <span>→</span></a>
+      <button onclick="copiarMensajeSeguridad()" id="btn-copiar-seg" style="width:100%;background:var(--violeta-c);border:1.5px solid var(--violeta-b);border-radius:10px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--violeta);cursor:pointer;font-weight:700;text-align:left;display:flex;justify-content:space-between;align-items:center">
+        <span>📋 Copiar mensaje para WhatsApp</span>
+        <span id="copiar-seg-check" style="display:none">✅</span>
+      </button>
+    </div>
 
     <!-- Consejero -->
+    <p style="font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--suave);margin-bottom:10px">Datos del barrio</p>
     <div class="card card-a" style="margin:0 0 12px">
       <div class="slabel" style="color:var(--azul)">👤 Consejero del obispado</div>
       <div class="fld">
         <input id="home-consejero" type="text" placeholder="Nombre del consejero asignado" oninput="saveCfgConsejero2()">
       </div>
     </div>
-
-    <button onclick="cambiarBarrio()" style="width:100%;background:transparent;border:1.5px solid var(--borde);border-radius:10px;padding:11px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--suave);cursor:pointer;margin-bottom:12px">↩ Cambiar de barrio</button>
+    <div style="height:24px"></div>
   </div>
 </div>
 
 <!-- ═══ ESTA SEMANA ═══ -->
 <div id="screen-semana" class="screen">
   <div class="header hr">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div>
-        <label id="semana-barrio-label" onclick="openSettings()" style="cursor:pointer;text-decoration:underline;text-underline-offset:3px">Barrio —</label>
-        <h1 id="semana-titulo">Esta Semana</h1>
-      </div>
-      <button onclick="openSettings()" style="background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.3);border-radius:10px;width:38px;height:38px;color:var(--blanco);font-size:17px;cursor:pointer;flex-shrink:0;margin-top:2px">⚙️</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+      <button class="back-btn" onclick="goTab('home')" style="margin-bottom:0;flex-shrink:0">← Volver</button>
+      <div id="semana-barrio-label" style="font-family:'Lora',serif;font-size:17px;font-weight:700;color:var(--blanco);text-align:center;flex:1;line-height:1.2">Barrio —</div>
+      <button onclick="openSettings()" style="background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.3);border-radius:10px;width:46px;height:46px;color:var(--blanco);cursor:pointer;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1"><span style="font-size:17px">⚙️</span><span style="font-size:8px;font-weight:700;letter-spacing:.04em;margin-top:1px">AJUSTES</span></button>
     </div>
     <div class="week-nav">
       <button class="week-arrow" id="prev-week" onclick="changeWeek(-1)">←</button>
@@ -208,11 +232,12 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
       <button class="week-arrow" id="next-week" onclick="changeWeek(1)">→</button>
     </div>
   </div>
+  <div class="franja-primaria"><span class="fr"></span><span class="fa"></span><span class="faz"></span></div>
   <div class="quick-nav">
     <button class="qbtn active" onclick="scrollSec('minuta',this)">📋 Minuta</button>
     <button class="qbtn" onclick="scrollSec('himnos',this)">🎵 Himnos</button>
     <button class="qbtn" onclick="scrollSec('clase',this)">📖 Clase</button>
-    <button class="qbtn" onclick="scrollSec('especiales',this)">⭐ Especiales</button>
+    <button class="qbtn" onclick="goDetail('presentacion')">📜 Presentación</button>
   </div>
   <div style="padding:14px 14px 0">
     <div id="anuncios-semana"></div>
@@ -236,7 +261,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
           <div id="chips-escritura" style="margin-top:5px"></div>
           <input type="text" id="m-escritura-nino" placeholder="Niño/a asignado/a" oninput="saveMinuta()" style="width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:8px 10px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--fondo);outline:none;color:var(--texto);margin-top:6px">
           <div class="pcheck">
-            <input type="checkbox" id="m-pres-escritura" onchange="saveMinuta()" onclick="setTimeout(saveMinuta,100)">
+            <input type="checkbox" id="m-pres-escritura" onchange="togglePresMinuta('escritura')">
             <span>Usar en Presentación Sacramental</span>
           </div>
         </div>
@@ -247,7 +272,7 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
           <div id="chips-discurso" style="margin-top:5px"></div>
           <input type="text" id="m-discurso-nino" placeholder="Niño/a que da el discurso" oninput="saveMinuta()" style="width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:8px 10px;font-size:14px;font-family:'DM Sans',sans-serif;background:var(--fondo);outline:none;color:var(--texto);margin-top:6px">
           <div class="pcheck">
-            <input type="checkbox" id="m-pres-discurso" onchange="saveMinuta()" onclick="setTimeout(saveMinuta,100)">
+            <input type="checkbox" id="m-pres-discurso" onchange="togglePresMinuta('discurso')">
             <span>Usar en Presentación Sacramental</span>
           </div>
         </div>
@@ -256,9 +281,20 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
           <input type="text" id="m-obispado" placeholder="Nombre del miembro del obispado" oninput="saveMinuta()">
         </div>
       </div>
-      <div class="minuta-item" style="background:var(--azul-c);border-color:var(--azul-b)"><span>Tiempo para cantar</span><span style="font-size:11px;font-weight:700;color:var(--azul)">20 MIN</span></div>
-      <div class="minuta-item" style="background:var(--amarillo-c);border-color:var(--amarillo-b)"><span>Transición a las clases</span><span style="font-size:11px;font-weight:700;color:var(--amarillo)">5 MIN</span></div>
-      <div class="minuta-item" style="background:var(--verde-c);border-color:var(--verde-b)"><span>Clases y oración final</span><span style="font-size:11px;font-weight:700;color:var(--verde)">20 MIN</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px">
+        <div style="background:var(--azul-c);border:1px solid var(--azul-b);border-radius:10px;padding:12px 6px;text-align:center">
+          <div style="font-size:13px;font-weight:700;color:var(--azul);margin-bottom:6px">Cantar</div>
+          <div style="line-height:1"><span style="font-size:20px;font-weight:700;color:var(--azul)">20</span><span style="font-size:10px;font-weight:700;color:var(--azul);opacity:.8;margin-left:2px">MIN</span></div>
+        </div>
+        <div style="background:var(--amarillo-c);border:1px solid var(--amarillo-b);border-radius:10px;padding:12px 6px;text-align:center">
+          <div style="font-size:13px;font-weight:700;color:var(--amarillo);margin-bottom:6px">Transición</div>
+          <div style="line-height:1"><span style="font-size:20px;font-weight:700;color:var(--amarillo)">5</span><span style="font-size:10px;font-weight:700;color:var(--amarillo);opacity:.8;margin-left:2px">MIN</span></div>
+        </div>
+        <div style="background:var(--verde-c);border:1px solid var(--verde-b);border-radius:10px;padding:12px 6px;text-align:center">
+          <div style="font-size:13px;font-weight:700;color:var(--verde);margin-bottom:6px">Clases</div>
+          <div style="line-height:1"><span style="font-size:20px;font-weight:700;color:var(--verde)">20</span><span style="font-size:10px;font-weight:700;color:var(--verde);opacity:.8;margin-left:2px">MIN</span></div>
+        </div>
+      </div>
       <button onclick="toggleGuarderia()" style="width:100%;margin-top:10px;background:var(--fondo);border:1px solid var(--borde);border-radius:10px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--suave);cursor:pointer;display:flex;justify-content:space-between" id="guard-toggle">
         <span>Guardería (18 meses – 3 años)</span><span id="guard-arrow">▼</span>
       </button>
@@ -282,44 +318,9 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
       <div class="slabel" style="color:var(--amarillo)">📖 Clase esta semana</div>
       <div id="clase-content"></div>
     </div>
-
-    <!-- ESPECIALES -->
-    <div id="sec-especiales">
-      <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--suave);margin-bottom:12px">Actividades especiales</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px">
-        <button onclick="goDetail('bautismo')" style="background:var(--azul-c);border:1.5px solid var(--azul-b);border-radius:12px;padding:13px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
-          <span style="font-size:20px">💧</span><span style="font-size:10px;font-weight:600;color:var(--azul);line-height:1.3">Reunión de Bautismo</span>
-        </button>
-        <button onclick="goDetail('templo')" style="background:var(--verde-c);border:1.5px solid var(--verde-b);border-radius:12px;padding:13px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
-          <span style="font-size:20px">🏛️</span><span style="font-size:10px;font-weight:600;color:var(--verde);line-height:1.3">Templo y Sacerdocio</span>
-        </button>
-        <button onclick="goDetail('presentacion')" style="background:var(--rojo-c);border:1.5px solid var(--rojo-b);border-radius:12px;padding:13px 6px;cursor:pointer;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
-          <span style="font-size:20px">📜</span><span style="font-size:10px;font-weight:600;color:var(--rojo);line-height:1.3">Presentación Sacramental</span>
-        </button>
-      </div>
-      <button onclick="openSettings()" style="width:100%;background:transparent;border:1.5px solid var(--borde);border-radius:10px;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--suave);cursor:pointer;margin-top:4px">⚙️ Configuración · Cambiar barrio</button>
-
-    <!-- ARTÍCULOS DE FE -->
-    <div class="card card-am" style="margin-top:4px">
-      <div class="slabel" style="color:var(--amarillo)">📜 Artículos de Fe</div>
-      <p style="font-size:13px;color:var(--suave);line-height:1.6;margin-bottom:12px">Materiales e imprimibles para aprender y memorizar los Artículos de Fe con los niños.</p>
-      <a href="https://drive.google.com/drive/folders/1kzt_O0lio0cZ1wRD1FvtQZO7LgvFPgGU?usp=share_link" target="_blank" class="extlink" style="background:var(--amarillo-c);color:var(--amarillo);border-color:var(--amarillo-b)">Ver materiales en Google Drive <span>→</span></a>
-    </div>
-
-    <!-- SEGURIDAD NIÑOS Y JÓVENES -->
-    <div class="card card-vi" style="margin-top:4px">
-      <div class="slabel" style="color:var(--violeta)">🛡️ Seguridad niños y jóvenes</div>
-      <p style="font-size:13px;color:var(--suave);line-height:1.6;margin-bottom:6px">Todos los líderes y maestros de niños y jóvenes deben completar esta capacitación obligatoria.</p>
-      <a href="https://courses.churchofjesuschrist.org/login/5003?lang=spa" target="_blank" class="extlink" style="background:var(--violeta-c);color:var(--violeta);border-color:var(--violeta-b);margin-bottom:8px">Cómo proteger a los niños y jóvenes <span>→</span></a>
-      <button onclick="copiarMensajeSeguridad()" id="btn-copiar-seg" style="width:100%;background:var(--violeta-c);border:1.5px solid var(--violeta-b);border-radius:10px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--violeta);cursor:pointer;font-weight:700;text-align:left;display:flex;justify-content:space-between;align-items:center">
-        <span>📋 Copiar mensaje para WhatsApp</span>
-        <span id="copiar-seg-check" style="display:none">✅</span>
-      </button>
-      <p style="font-size:10px;color:var(--suave);margin-top:6px;line-height:1.5;font-style:italic">"Todos los líderes y los maestros de niños y jóvenes deben completar esta capacitación https://courses.churchofjesuschrist.org/login/5003?lang=spa"</p>
-    </div>
-
-    </div>
+    <div style="height:24px"></div>
   </div>
+</div>
 </div>
 
 <!-- ═══ LECCIÓN ═══ -->
@@ -417,16 +418,16 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
 <!-- ═══ PRESENTACIÓN SACRAMENTAL ═══ -->
 <div id="screen-presentacion" class="screen">
   <div class="header hr">
-    <button class="back-btn" onclick="goBack()">← Volver</button>
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div>
-        <label id="pres-barrio-label">Barrio —</label>
-        <h2>Presentación Sacramental 2026</h2>
-        <p>Antiguo Testamento</p>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+      <button class="back-btn" onclick="goBack()" style="margin-bottom:0;flex-shrink:0">← Volver</button>
+      <div style="text-align:center;flex:1">
+        <div id="pres-barrio-label" style="font-size:11px;opacity:.8;letter-spacing:.04em">Barrio —</div>
+        <div style="font-family:'Lora',serif;font-size:16px;font-weight:700;color:var(--blanco);line-height:1.2">Presentación Sacramental</div>
       </div>
+      <button onclick="exportPresPDF()" title="Exportar PDF" style="background:rgba(255,255,255,.25);border:2px solid rgba(255,255,255,.3);border-radius:10px;width:46px;height:46px;color:var(--blanco);cursor:pointer;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1"><span style="font-size:18px">🖨️</span><span style="font-size:8px;font-weight:700;letter-spacing:.04em;margin-top:1px">PDF</span></button>
     </div>
   </div>
-  <button onclick="exportPresPDF()" style="background:rgba(255,255,255,.2);border:none;border-radius:12px;padding:10px 18px;color:var(--blanco);font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:12px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px">🖨️ Exportar PDF de la Presentación</button>
+  <div class="franja-primaria"><span class="fr"></span><span class="fa"></span><span class="faz"></span></div>
   <div style="padding:14px 14px 0">
     <div class="card card-a">
       <div class="slabel" style="color:var(--azul)">📅 Datos generales</div>
@@ -459,11 +460,15 @@ h1,h2,h3{font-family:'Lora',Georgia,serif;}
       <p style="font-size:11px;font-weight:700;color:var(--rojo);margin:0 0 4px;letter-spacing:.06em;text-transform:uppercase">Barrio actual</p>
       <p id="cfg-barrio-nombre" style="font-family:'Lora',serif;font-size:16px;font-weight:600;color:var(--texto);margin:0"></p>
     </div>
-    <div style="background:var(--blanco);border-radius:12px;border:1px solid var(--borde);padding:14px;margin-bottom:16px">
-      <p style="font-size:11px;font-weight:700;color:var(--azul);margin:0 0 8px;letter-spacing:.06em;text-transform:uppercase">👤 Consejero del obispado</p>
-      <input id="cfg-consejero" type="text" placeholder="Nombre del consejero asignado" oninput="saveCfgConsejero()" style="width:100%;border:1.5px solid var(--borde);border-radius:8px;padding:9px 11px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--texto);background:var(--fondo);outline:none">
-    </div>
-    <p style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--suave);margin-bottom:10px">Recursos oficiales</p>
+    <p style="font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--suave);margin-bottom:10px">Exportar datos</p>
+    <button onclick="exportMinutas()" style="width:100%;background:var(--blanco);border:1.5px solid var(--azul-b);border-radius:12px;padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <span style="font-size:18px">📊</span>
+      <div style="text-align:left">
+        <p style="font-size:13px;font-weight:600;color:var(--azul);margin:0">Exportar minutas del año</p>
+        <p style="font-size:12px;color:var(--suave);margin:2px 0 0">Crea una tabla con todo el año para imprimir o guardar como PDF</p>
+      </div>
+    </button>
+    <p style="font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--suave);margin-bottom:10px">Recursos oficiales</p>
     <a href="https://www.churchofjesuschrist.org/children?lang=spa" target="_blank" class="extlink" style="background:var(--azul-c);color:var(--azul);border-color:var(--azul-b)">Recursos para niños — 2026 <span>→</span></a>
     <a href="https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026?lang=spa" target="_blank" class="extlink" style="background:var(--rojo-c);color:var(--rojo);border-color:var(--rojo-b)">Ven sígueme — Antiguo Testamento 2026 <span>→</span></a>
     <a href="https://www.churchofjesuschrist.org/study/manual/childrens-songbook?lang=spa" target="_blank" class="extlink" style="background:var(--amarillo-c);color:var(--amarillo);border-color:var(--amarillo-b)">Canciones para los niños <span>→</span></a>
@@ -479,7 +484,7 @@ const CURRICULO = 'Antiguo Testamento';
 const URL_VSM = 'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026';
 const URL_GSA = 'https://www.churchofjesuschrist.org/study/manual/games-stories-activities/2026';
 
-const BARRIOS = ['Escobar','Garín','Maschwitz','Matheu','Savio','Benavídez','La Cabaña'];
+const BARRIOS = ['Benavídez','Escobar','Garín','La Cabaña','Maschwitz','Matheu','Savio'];
 const MESES   = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
 // ─── CANCIONES POR MES ────────────────────────────
@@ -578,36 +583,36 @@ const LECCIONES=[
   {i:'2026-05-11',e:'Deuteronomio 6–8; 15; 18; 29–30; 34',t:'Amar a Dios con todo el corazón',desc:'Moisés exhortó a Israel a amar al Señor con todo el corazón, alma y fuerzas. Este amor se expresa a través de la obediencia a Sus mandamientos y el servicio amoroso a nuestros semejantes.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/20?lang=spa',temas:[{t:'Puedo amar a Dios con todo mi corazón.',i:''},{t:'Puedo mantener la palabra de Dios en mi corazón.',i:''},{t:'Los profetas nos enseñan sobre Jesucristo.',i:''}]},
   {i:'2026-05-18',e:'Josué 1–8; 23–24',t:'Sé fuerte y valiente — elige a quién servir',desc:'Josué tomó el liderazgo de Israel con valentía y fe. Su declaración \'Yo y mi casa serviremos al Señor\' sigue siendo un modelo inspirador para cada familia del pueblo del convenio.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/21?lang=spa',temas:[{t:'Estudiar las Escrituras me brinda bendiciones.',i:''},{t:'Debo bautizarme para entrar en el reino de los cielos.',i:''},{t:'Puedo escoger servir a Jesucristo.',i:''}]},
   {i:'2026-05-25',e:'Jueces 2–4; 6–8; 13–16',t:'Débora — fe y valentía para liderar',desc:'Todos sabemos lo que es pecar, arrepentirnos y luego caer de nuevo. El libro de Jueces repite este patrón, pero también nos recuerda que el Señor siempre está dispuesto a recibirnos de vuelta cuando nos arrepentimos.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/22?lang=spa',temas:[{t:'Jesucristo es mi Libertador.',i:''},{t:'Puedo inspirar a otros a tener fe en el Señor.',i:''},{t:'El Señor puede valerse de cosas pequeñas para realizar una gran obra.',i:''},{t:'Guardar los convenios me da fortaleza.',i:''}]},
-  {i:'2026-06-01',e:'Rut; 1 Samuel 1–7',t:'Rut y Ana — lealtad y fe',desc:'Rut eligió permanecer fiel a su suegra Noemí y al pueblo de Dios, incluso cuando podía haber regresado a su vida anterior. Su lealtad fue recompensada con bendiciones que nunca imaginó.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/23?lang=spa',temas:[{t:'Puedo demostrar amor y bondad a los que me rodean.',i:''},{t:'Puedo escuchar y obedecer la voz del Señor.',i:''}]},
-  {i:'2026-06-08',e:'1 Samuel 8–10; 13; 15–16',t:'El Señor ve el corazón',desc:'Cuando el Señor eligió a David como rey, le dijo a Samuel: \'El hombre mira lo que está delante de sus ojos, pero el Señor mira el corazón.\' Dios nos ve tal como somos en nuestro interior.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/24?lang=spa',temas:[{t:'Jesucristo es mi Rey.',i:''},{t:'Jehová mira el corazón.',i:''}]},
-  {i:'2026-06-15',e:'1 Samuel 17–18, 24–26; 2 Samuel 5–7',t:'David y Goliat — con Dios somos valientes',desc:'David, un joven pastor, venció al gigante Goliat porque su confianza estaba en el Señor, no en su propia fuerza. Con Dios de nuestro lado, podemos enfrentar cualquier adversidad.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/25?lang=spa',temas:[{t:'La fe en Jesucristo puede ayudarme a tener valor.',i:''},{t:'Los buenos amigos pueden ser una bendición de Dios.',i:''}]},
-  {i:'2026-06-22',e:'2 Samuel 11–12; 1 Reyes 3; 6–9; 11',t:'Salomón — pedir sabiduría a Dios',desc:'Cuando el Señor le preguntó a Salomón qué deseaba, él pidió sabiduría para gobernar bien a Su pueblo. Dios honra a quienes buscan servir a los demás más que a sí mismos.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/26?lang=spa',temas:[{t:'El Señor puede ayudarme cuando soy tentado.',i:''},{t:'Hacer convenios en la Casa del Señor —y guardarlos— me ayuda a andar por Sus caminos.',i:''},{t:'Puedo poner al Señor primero en mi vida.',i:''}]},
-  {i:'2026-06-29',e:'1 Reyes 12–13; 17–22',t:'Elías — valentía para defender la verdad',desc:'En un tiempo de gran apostasía, el profeta Elías se mantuvo firme en su testimonio del Señor. Su valentía nos inspira a defender nuestra fe aun cuando parezca que estamos solos.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/27?lang=spa',temas:[{t:'El Señor me bendice conforme tengo fe en Él.',i:''},{t:'Puedo escoger seguir a Jesucristo.',i:''},{t:'El Señor me habla por medio de la voz apacible y delicada del Espíritu Santo.',i:''}]},
-  {i:'2026-07-06',e:'2 Reyes 2–7',t:'Naamán — la fe sencilla sana',desc:'Naamán fue curado de lepra cuando hizo algo aparentemente simple: bañarse siete veces en el Jordán. Muchas veces el Señor nos pide hacer cosas pequeñas que requieren de grande fe.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/28?lang=spa',temas:[{t:'Dios puede obrar milagros en mi vida.',i:''},{t:'Puedo escoger hacer lo que Dios manda por medio de Su profeta.',i:''},{t:'No estoy solo.',i:''}]},
-  {i:'2026-07-13',e:'2 Reyes 16–25',t:'Consecuencias de alejarse de Dios',desc:'El pueblo de Israel y Judá fue llevado al cautiverio por alejarse de sus convenios con el Señor. Sus experiencias nos enseñan el peligro de apartarse de Dios de manera gradual y casi imperceptible.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/29?lang=spa',temas:[{t:'Puedo confiar en el Padre Celestial y en Jesucristo.',i:''},{t:'Guardaré los convenios que he hecho con Dios.',i:''}]},
-  {i:'2026-07-20',e:'2 Crónicas 14–20; 26; 30',t:'Confiar en el Señor — no en nuestra propia fuerza',desc:'Varios reyes de Judá mostraron que las bendiciones del Señor llegan cuando confiamos en Él y no en nuestra propia sabiduría o poder. La humildad y la oración son claves para el liderazgo.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/30?lang=spa',temas:[{t:'Dios escuchará y contestará mis oraciones',i:'La hoja de actividades de esta semana puede ayudar a los niños a entender el relato de la oración de Josafat y la respuesta del Señor.'},{t:'Puedo ser humilde.',i:''},{t:'Puedo ser un pacificador.',i:''}]},
-  {i:'2026-07-27',e:'Esdras 1; 3–7; Nehemías 2; 4–6; 8',t:'Reconstruir con fe — no rendirse',desc:'Cuando los judíos regresaron del cautiverio, trabajaron con fe para reconstruir el templo y los muros de Jerusalén. Su determinación de no rendirse ante las dificultades nos inspira en nuestros momentos difíciles.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/31?lang=spa',temas:[{t:'Las Escrituras son una bendición',i:'Lee en voz alta algunas frases de Nehemías 8:2–3, 5–6, 8–9, 12 que describan lo que el pueblo hizo cuando escuchó a Esdras leer las Escrituras.'}]},
-  {i:'2026-08-03',e:'Ester',t:'Ester — valor para hacer lo correcto',desc:'La joven reina Ester arriesgó su vida para salvar a su pueblo. Cuando vaciló, su tío Mardoqueo le recordó que quizás había llegado al reino \'para una ocasión como esta\'. Dios tiene un propósito para cada uno de nosotros.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/32?lang=spa',temas:[{t:'Puedo prestar servicio a mi familia',i:'tal como Mardoqueo lo hizo con Ester. Podrían leer juntos el versículo o resumirlo con sus propias palabras. Luego, tú y los niños podrían pensar en miembros de la familia que podrían necesitar su ayuda.'},{t:'El ayuno brinda las bendiciones del Señor',i:'Leer Ester 4:1–3, 10–17 podría ayudarte a enseñar a los niños acerca del ayuno. ¿Por qué ayunaron Ester y los judíos? Di a los niños por qué ayunas.'},{t:'Puedo ser un instrumento en las manos de Dios',i:'Ayuda a los niños a entender que cuando Ester tuvo temor, Mardoqueo la animó explicándole que el Señor la había ayudado a llegar a ser reina “para esta hora” (Ester 4:14).'}]},
-  {i:'2026-08-10',e:'Job 1–3; 12–14; 19; 21–24; 38–40; 42',t:'Job — fe firme en las pruebas',desc:'Job perdió todo lo que tenía, pero mantuvo su fe diciendo: \'Yo sé que mi Redentor vive.\' Su historia nos enseña que podemos mantener la fe incluso en las pruebas más devastadoras.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/33?lang=spa',temas:[{t:'Gracias a Jesucristo, volveré a vivir después de morir',i:'Job hizo una pregunta importante en Job 14:14. Tal vez los niños y tú podrían turnarse para compartir cómo responderían a Job.'},{t:'Jesucristo es mi Redentor',i:'Después de leer Job 19:23–27, tú y los niños podrían hablar sobre cómo saben que nuestro Redentor vive.'}]},
-  {i:'2026-08-17',e:'Salmos 1–2; 8; 19–33; 40; 46',t:'El Señor es mi Pastor — Salmo 23',desc:'Los Salmos son las oraciones y canciones del corazón del pueblo de Dios. El Salmo 23 nos recuerda con ternura que el Señor cuida de nosotros como un pastor fiel en cada paso de nuestra vida.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/34?lang=spa',temas:[{t:'Jesucristo puede convertir la tristeza en alegría',i:'Si tienes niños pequeños, podrías invitarlos a hacer de cuenta que están llorando mientras lees “por la noche durará el llanto”, en Salmo 30:5.'},{t:'“Quedaos tranquilos, y sabed que yo soy Dios”',i:'Ayuda a los niños a memorizar la primera línea de Salmo 46:10: “Quedaos tranquilos, y sabed que yo soy Dios”.'}]},
-  {i:'2026-08-24',e:'Salmos 49–51; 61–66; 69–72; 77–78; 85–86',t:'Alabar al Señor con gratitud',desc:'En sus momentos de angustia, David y otros salmistas clamaron al Señor y recibieron paz y consuelo. Los Salmos nos enseñan que Dios escucha nuestras oraciones más profundas y responde con amor.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/35?lang=spa',temas:[{t:'Jesucristo es mi Roca',i:'A los niños les podría gustar dibujar los símbolos que se encuentran en Salmo 61:2–3. ¿En qué sentido es Jesucristo como una “peña” alta (versículo 2), “un refugio” y una “torre fuerte”? (Versículo 3).'},{t:'Puedo hablarles a los demás sobre Jesucristo El Padre Celestial escucha y contesta',i:''}]},
-  {i:'2026-08-31',e:'Salmos 102–103; 116–119; 127–128; 146–150',t:'Gratitud y alabanza al Señor',desc:'El libro de los Salmos concluye con una explosión de alabanza y gratitud. Cuando llenamos nuestro corazón de gratitud al Señor, encontramos gozo genuino incluso en las circunstancias más difíciles.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/36?lang=spa',temas:[{t:'El Señor me consuela y me da esperanza',i:'Tú o uno de tus niños podrían leer Salmo 102:1–2 y buscar la forma en que el Señor nos ayuda durante nuestras dificultades.'},{t:'La palabra de Dios es como una luz',i:'A los niños podría gustarles hablar sobre cómo es estar en la oscuridad, o podrían analizar qué cosas son difíciles de hacer en la oscuridad.'},{t:'El Padre Celestial y Jesucristo me conocen y me aman',i:'Conforme leas las listas una a la vez, pide a los niños que adivinen a quién estás describiendo.'},{t:'Puedo alabar a Jehová',i:'Comparte algunas de las cosas buenas que el Señor ha hecho que figuran en el Salmo 146:6–9 (ayuda a los niños a entender las palabras que desconozcan). Invítalos a hablar de otras cosas que Él hace por nosotros.'}]},
-  {i:'2026-09-07',e:'Proverbios 1–4; 15–16; 22; 31; Eclesiastés',t:'La sabiduría comienza con Dios',desc:'La sabiduría, según los Proverbios, comienza con el temor del Señor. Cuando reconocemos a Dios en todo lo que hacemos y buscamos Su guía en nuestras decisiones, encontramos el camino seguro.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/37?lang=spa',temas:[{t:'“Teme[r] a Dios” significa amarlo y obedecerlo Puedo confiar en Jehová con todo',i:''},{t:'Puedo utilizar palabras amables',i:'Lean juntos Proverbios 15:1 y ayúdales a aplicar ese versículo a las situaciones que se les ocurrieron. Tal vez podrían practicar algunas respuestas “blandas”.'}]},
-  {i:'2026-09-14',e:'Isaías 1–12',t:'Isaías — profecías sobre Jesucristo',desc:'Isaías profetizó acerca de Jesucristo con claridad asombrosa, cientos de años antes de Su nacimiento. Sus palabras fortalecen nuestro testimonio de que Dios conoce el futuro y guía la historia.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/38?lang=spa',temas:[{t:'Gracias a Jesucristo, puedo arrepentirme y ser limpio',i:'En Isaías 1:2–4, tú y los niños podrían buscar las razones por las que el Señor no estaba contento con el pueblo.'},{t:'ISAÍAS 7:14; 9:6 –7 En el templo aprendo sobre Jesucristo',i:''}]},
-  {i:'2026-09-21',e:'Isaías 13–14; 22; 24–30; 35',t:'La Restauración del Evangelio',desc:'Isaías profetizó sobre la apostasía y la restauración del Evangelio. Sus palabras se cumplieron en la misión del profeta José Smith y en el establecimiento de La Iglesia de Jesucristo.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/39?lang=spa',temas:[{t:'Jesús me da “amparo contra la tempestad”',i:'Tú o los niños, ¿han experimentado la bendición de contar con un refugio seguro durante una tormenta, o de tener alguna fuente de sombra en un día caluroso de verano?, ¿o han disfrutado de una buena comida cuando tenían...'},{t:'La restauración del Evangelio es una “obra maravillosa”',i:'A medida que los niños y tú lean Isaías 29:14, comparte con ellos otras palabras que signifiquen lo mismo que “maravillosa” y “prodigio”.'},{t:'La Primera Visión El Libro de Mormón',i:''}]},
-  {i:'2026-09-28',e:'Isaías 40–49',t:'Jesucristo — nuestro Redentor y Salvador',desc:'Las palabras de Isaías \'No temas, porque yo estoy contigo\' han consolado a millones de personas a lo largo de los siglos. Jesucristo es nuestro Redentor, y Su amor nunca nos abandona.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/40?lang=spa',temas:[{t:'Puedo ayudar a preparar “el camino de Jehová”',i:'Piensa en algunas maneras de ilustrar lo que podría significar “prepara[r] el camino de Jehová”, tal como se describe en Isaías 40:3–5.'},{t:'Puedo ser un testigo del Señor',i:'Después de leer juntos Isaías 43:10, podrían hablar sobre lo que significa ser testigos.'},{t:'Guardar los mandamientos de Dios brinda paz',i:'Algunas imágenes o videos de ríos y olas del mar podrían ayudar a los niños a visualizar Isaías 48:18 (por ejemplo, las imágenes de esta reseña).'},{t:'El Señor nunca me olvidará',i:'Isaías 49:14–16 puede ser un gran consuelo para los niños en los años venideros. Al leer el versículo 14, podrían hablar sobre lo que podría hacer que las personas se sintieran olvidadas o desamparadas.'}]},
-  {i:'2026-10-05',e:'Isaías 50–57',t:'El Siervo Sufriente — la expiación de Cristo',desc:'Las profecías sobre el Siervo Sufriente describen con precisión asombrosa la vida, muerte y expiación de Jesucristo. Él tomó sobre Sí nuestras penas para que pudiéramos ser sanados y perdonados.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/41?lang=spa',temas:[{t:'El Señor me invita a “v[estirme] de [mi] poder” Jesucristo tomó sobre Sí mis pecados',i:''},{t:'Puedo buscar a Jehová y llamarlo',i:'Para enseñar a los niños acerca de Isaías 55:6, podrías esconder una imagen de Jesús en algún lugar del salón e invitarlos a encontrar la imagen y a nombrar una manera en la que pueden “busca[r] a Jehová mientras pueda...'},{t:'Los caminos de Jehová son más altos que los míos',i:'Después de leer Isaías 55:9, podría ser divertido para los niños pararse en un taburete bajo y hablar sobre cómo las cosas se ven diferentes cuando están “más altos”; o bien, podrían hacer un dibujo de lo que Isaías...'}]},
-  {i:'2026-10-12',e:'Isaías 58–66',t:'El ayuno verdadero — la luz del Señor',desc:'El verdadero ayuno, según Isaías, no es solo abstenerse de comer. Es liberar al oprimido, compartir con el necesitado y cuidar a los vulnerables. El servicio es una forma de adoración.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/42?lang=spa',temas:[{t:'El ayuno me bendice a mí y a otras personas necesitadas',i:'Considera leer juntos Isaías 58:6–11 para buscar respuesta a estas preguntas: ¿Por qué ayunamos? 282'}]},
-  {i:'2026-10-19',e:'Jeremías 1–3; 7; 16–18; 20',t:'Jeremías — Dios nos llama aunque seamos jóvenes',desc:'Cuando Jeremías expresó dudas sobre su capacidad por ser joven, el Señor respondió: \'No digas que eres un joven, porque a donde yo te envíe irás.\' Dios llama y capacita a quienes Él escoge.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/43?lang=spa',temas:[{t:'El Padre Celestial me conocía antes de que naciera',i:'Para explicar la importante verdad que se enseña en Jeremías 1:5, podrías mostrar a los niños alguna imagen de un bebé (o, si es posible, podrían mirar imágenes de los niños cuando eran bebés).'},{t:'Se llama a los profetas a hablar las palabras del Señor',i:'en el Libro de obras de arte del Evangelio y en Ven, sígueme). Pregunta a los niños qué saben acerca de estos profetas.'},{t:'Puedo ayudar a los hijos del Padre Celestial a volver a Él',i:'Mientras lees Jeremías 16:16, los niños podrían hacer de cuenta que “pescan” o “cazan” objetos por el salón. El presidente Russell M.'}]},
-  {i:'2026-10-26',e:'Jeremías 31–33; 36–38; Lamentaciones',t:'El nuevo convenio en nuestro corazón',desc:'El nuevo convenio que Dios prometió a Su pueblo no estaría escrito en tablas de piedra, sino en el corazón de cada persona. El Evangelio es una experiencia del corazón, no solo una lista de reglas.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/44?lang=spa',temas:[{t:'El Padre Celestial y Jesús me aman “con amor eterno”',i:'Mientras lees Jeremías 31:3 con los niños, ellos podrían ayudarte a buscar objetos (o imágenes de objetos) que duren mucho tiempo, como una moneda de metal, y algunos que no, como una fruta.'},{t:'Puedo defender lo correcto',i:'Tal vez podrías ayudarlos a buscar un versículo en el que Ebed–melec haya hecho algo valiente para ayudar al profeta del Señor. ¿Qué podemos hacer para demostrar que sabemos que nuestro profeta actual es llamado'},{t:'Las Escrituras son la palabra de Dios',i:'La hoja de actividades de esta semana podría ayudar a los niños a aprender sobre Jeremías, Baruc y el rey (véase Jeremías 36).'}]},
-  {i:'2026-11-02',e:'Ezequiel 1–3; 33–34; 36–37; 47',t:'El valle de los huesos secos — el poder de Dios',desc:'La visión del valle de los huesos secos nos enseña que el Señor puede revivir lo que parece muerto. Donde hay apostasía puede restaurar la fe; donde hay corazones endurecidos puede traer el renacimiento.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/45?lang=spa',temas:[{t:'La Biblia y el Libro de Mormón nos ayudan a ser “recog[idos]” en Jesucristo',i:'Después de leer juntos Ezequiel 37:15–23, los niños y tú podrían buscar dos palos y escribir en uno Para Judá (Biblia) y en el otro Para José (Libro de Mormón).'},{t:'Nuestro corazón y nuestra familia pueden encontrar sanación en la Casa del Señor',i:'En Ezequiel 47, se describe la visión de Ezequiel en la que fluye agua desde el templo que sana el mar Muerto, que es un mar tan salado que ni los peces ni las plantas pueden vivir en él.'}]},
-  {i:'2026-11-09',e:'Daniel 1–7',t:'Daniel en el foso de los leones — Dios protege',desc:'Daniel y sus amigos se negaron a comprometer su fe incluso frente a la muerte. Su historia nos recuerda que podemos mantenernos fieles a nuestros convenios en cualquier circunstancia.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/46?lang=spa',temas:[{t:'El Padre Celestial desea que cuide mi cuerpo',i:'Leer el relato de cuando Daniel y sus amigos rechazaron la comida y el vino del rey podría inspirar una conversación sobre la ley de salud que el Padre Celestial nos ha dado en la actualidad (véase Doctrina y Convenios...'},{t:'El Padre Celestial desea que ore a menudo',i:'¿Por qué orar al Padre Celestial era tan importante para Daniel? Tal vez los niños y tú podrían hablar sobre esa pregunta mientras leen juntos Daniel 6.'},{t:'309 16 – 22 NOVIEMBRE: “LOS AMARÉ POR MI PROPIA VOLUNTAD”',i:''}]},
-  {i:'2026-11-16',e:'Oseas 1–6; 10–14; Joel',t:'El amor de Dios — Él siempre nos espera',desc:'A través del profeta Oseas, el Señor expresó Su amor por Israel usando la imagen de un esposo fiel. El amor de Dios por Sus hijos nunca cambia, sin importar cuánto nos alejemos de Él.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/47?lang=spa',temas:[{t:'Puedo guardar mis convenios fielmente',i:'En el libro de Oseas, Jehová comparó Sus convenios con Su pueblo a un matrimonio. Para aprender de esa comparación, tú y los niños podrían ver alguna imagen de una novia y un novio, y hablar sobre cómo el Padre...'},{t:'“Es el tiempo de buscar a Jehová”',i:'En Oseas 10:12, se utilizan metáforas sobre la siembra, la siega, el tiempo y la lluvia para invitarnos a buscar al Señor.'},{t:'Jesucristo es mi Salvador y Redentor',i:'Para recalcar la verdad que se encuentra en Oseas 13:4 de que no hay más Salvador que Jesucristo, podrías mostrar a los niños imágenes de varias personas, entre ellas, de Jesús.'},{t:'El Espíritu Santo puede guiarme',i:'¿Qué podría significar que se derrame el Espíritu sobre nosotros?'},{t:'Enseña la verdad.',i:''}]},
-  {i:'2026-11-23',e:'Amós; Abdías; Jonás',t:'Jonás — la misericordia del Señor para todos',desc:'El Señor ordenó a Jonás predicar arrepentimiento a Nínive, los enemigos de Israel. Cuando Jonás intentó escapar, aprendió que la misericordia del Señor se extiende a todos Sus hijos.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/48?lang=spa',temas:[{t:'Los profetas son mensajeros de Jesucristo',i:'A fin de ayudar a los niños a entender Amós 3:7, podrías susurrarle un mensaje sencillo a uno de ellos y pedirle que lo comparta con los otros niños.'},{t:'La restauración del Evangelio dio fin al hambre de la Apostasía',i:'¿Qué se siente cuando tenemos hambre de la palabra de Dios? Tal vez los niños podrían hacer de cuenta que están comiendo mientras comparten unos con otros algunos de sus pasajes favoritos de las Escrituras.'},{t:'El Señor es misericordioso con todos los que se vuelven a Él',i:'¿Qué preguntas le harían? Anímalos a hacer preguntas para averiguar lo que Jonás aprendió acerca del Señor.'},{t:'El Señor me ayudará a obedecerle, aun cuando sea difícil',i:'Para ayudar a los niños a aprender la historia de Jonás, podrías repasar “Jonás el profeta”. Luego, podrías preguntar: ◦ ¿Qué sucedió cuando Jonás no obedeció a Jehová? (Véase Jonás 1:4–17).'}]},
-  {i:'2026-11-30',e:'Miqueas; Nahúm; Habacuc; Sofonías',t:'Andar humildemente con tu Dios — Miqueas 6:8',desc:'Miqueas resumió hermosamente los requisitos del Señor: hacer justicia, amar misericordia y andar humildemente con Dios. Estos principios son el corazón de la vida del verdadero discípulo.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/49?lang=spa',temas:[{t:'Jesucristo nació en Belén',i:'Es posible que los niños no sepan que fue una profecía de Miqueas la que ayudó a los magos a encontrar al Niño Jesús en Belén.'},{t:'“Jehová es bueno, fortaleza en el día de la angustia”',i:'Después de leer Nahúm 1:7, los niños podrían construir o dibujar una “fortaleza” sencilla (en esta reseña hay una imagen de una). ¿Cuáles 324 Mique a s; N a húm; H a b acuc; So f o ní a s'},{t:'Dios siempre cumplirá Sus promesas',i:'Para presentar Habacuc 2:3, los niños y tú podrían hablar de cosas que son buenas, pero solo después de esperar, como la fruta, que necesita madurar, o la masa, que necesita hornearse.'},{t:'Puedo ayudar a llenar la tierra con el conocimiento de Jesucristo',i:'Para ilustrar Habacuc 2:14, los niños y tú podrían llenar un frasco u otro recipiente con imágenes o palabras que representen lo que Jesús hizo o enseñó. ¿Cómo podemos ayudar a llenar el mundo del conocimiento del Señor?'},{t:'Jesucristo se regocija con aquellos que lo siguen',i:'En Sofonías 3:14–20, los niños podrían buscar algo que los haga querer “canta[r], […] alegra[rnos] y regoc[ijarnos] de todo corazón”.'}]},
-  {i:'2026-12-07',e:'Hageo 1–2; Zacarías 1–4; 7–14',t:'El templo del Señor — lugar sagrado',desc:'Después del exilio, el Señor llamó a Su pueblo a reconstruir el templo. Zacarías prometió que Sus ojos nunca descansan de Sus hijos. El templo sigue siendo el centro de la vida del convenio.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/50?lang=spa',temas:[{t:'“Meditad bien sobre vuestros caminos”',i:'A medida que leas partes de Hageo 1:2–5 con los niños, ayúdales a descubrir por qué el Señor no estaba complacido con el pueblo. Quizás podrían escoger una frase del versículo 6 y hacer un dibujo de ella.'},{t:'Hacer y guardar convenios me puede ayudar a ser más como el Padre Celestial y Jesucristo',i:'En una visión, Zacarías vio a un sumo sacerdote que estaba “vestido con vestimentas sucias” (Zacarías 3:3). Un ángel le daba ropa limpia.'}]},
-  {i:'2026-12-14',e:'Malaquías',t:'El mensajero del Señor — Malaquías 3:1',desc:'Malaquías prometió que el Señor enviaría a Elías para \'volver el corazón de los padres hacia los hijos\'. Esta promesa se cumple en el trabajo de templo que une a las familias por la eternidad.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/51?lang=spa',temas:[{t:'El Señor me ama',i:'¿Cómo responderían tú y los niños la pregunta que se encuentra en Malaquías 1:2: “¿En qué nos h[a] amado [el Señor]?”? Compartan entre sí las razones por las que saben que Él los ama.'},{t:'Elías el Profeta vino para hacer volver nuestro corazón hacia nuestras familias',i:''},{t:'El Señor me bendecirá al pagar el diezmo',i:'¿Cómo ayudarás a los niños a aprender acerca del diezmo? Podrías pedirles que cuenten diez objetos pequeños, tal como las monedas de la hoja de actividades de esta semana; luego, podrían separar uno de los objetos del...'}]},
-  {i:'2026-12-21',e:'Navidad',t:'El nacimiento de Jesucristo — el mayor regalo',desc:'El nacimiento de Jesucristo fue el cumplimiento de siglos de profecías del Antiguo Testamento. El Niño que nació en Belén es el mismo Señor que guió a Israel por el desierto y que nos guía hoy.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/52?lang=spa',temas:[{t:'El Antiguo Testamento me enseña sobre Jesús.',i:'Podés buscar junto a los niños pasajes de las Escrituras que simbolicen a Jesucristo: Génesis 22:8; Números 24:17; Salmos 23:1; 27:1.'},{t:'Las tradiciones navideñas pueden recordarnos a Jesucristo.',i:'Tú y los niños pueden usar decoraciones navideñas para iniciar una conversación sobre el Salvador — una estrella, las luces o un regalo nos pueden recordar a Jesucristo.'}]},
+  {i:'2026-06-01',e:'Rut; 1 Samuel 1–7',t:'Rut y Ana — lealtad y fe',desc:'Rut eligió permanecer fiel a su suegra Noemí y al pueblo de Dios, incluso cuando podía haber regresado a su vida anterior. Su lealtad fue recompensada con bendiciones que nunca imaginó.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/23?lang=spa',temas:[{t:'Puedo demostrar amor y bondad a los que me rodean',e:'Rut 1',i:'Comparte el relato de Rut e invita a los niños a levantar la mano cada vez que escuchen un acto de bondad. Pueden contar cómo se sienten cuando alguien es bondadoso con ellos. Conversen sobre cómo el Salvador ha sido bondadoso con nosotros y cómo seguir Su ejemplo.'},{t:'El Padre Celestial escucha y contesta mis oraciones',e:'1 Samuel 1:1-18',i:'Ayuda a los niños a conocer a Ana leyendo el relato o viendo el video "La fe de Ana". Para que participen, lanza una pelota a un niño e invítalo a contar una parte de la historia antes de pasarla. Conversen sobre lo que el ejemplo de Ana nos enseña acerca de la oración.'},{t:'Puedo tener fe en el Señor',e:'Rut; 1 Samuel 1',i:'Las historias de Rut y Ana inspiran a permanecer fieles en tiempos difíciles. Pueden armar un cuadro con tres columnas —Pruebas, Acciones, Bendiciones— y anotar lo que encuentren en los versículos. Compartan cómo el Señor los ha bendecido en momentos difíciles.'},{t:'Puedo escuchar y obedecer la voz del Señor',e:'1 Samuel 3:1-10',i:'Una dramatización sencilla puede ayudar a los niños a aprender de la experiencia de Samuel con la revelación. Un niño puede hacer de Samuel y otro de Elí, representando el momento en que el Señor llama a Samuel y él responde.'}]},
+  {i:'2026-06-08',e:'1 Samuel 8–10; 13; 15–16',t:'El Señor ve el corazón',desc:'Cuando el Señor eligió a David como rey, le dijo a Samuel: \'El hombre mira lo que está delante de sus ojos, pero el Señor mira el corazón.\' Dios nos ve tal como somos en nuestro interior.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/24?lang=spa',temas:[{t:'Jesucristo es mi Rey',e:'1 Samuel 8',i:'Al leer 1 Samuel 8, ayuda a los niños a encontrar las razones por las que Samuel dijo que tener un rey era mala idea, y por qué es mejor tener a Jesucristo como Rey. Pueden hacer una corona de papel, turnarse para ponérsela y compartir algo que podamos hacer para demostrar que queremos que Jesús sea nuestro Rey.'},{t:'Quienes prestan servicio en la Iglesia son llamados por Dios',e:'1 Samuel 8:6; 9:15-17; 10:1-24; 16:1-13',i:'Los relatos de cómo Dios eligió a Saúl y a David ayudan a entender que se llama a servir por revelación. Escribe los acontecimientos en tiras de papel y pide a los niños que las ordenen mientras leen los pasajes. Cuéntales cómo recibiste tu propio llamamiento.'},{t:'Jehová mira el corazón',e:'1 Samuel 16:1-13',i:'Una lección práctica ayuda a entender 1 Samuel 16:7: muéstrales un alimento o un libro con una envoltura que no coincida con su contenido. Conversen sobre cómo debemos vernos a nosotros mismos y a los demás, mirando el corazón y no solo la apariencia.'}]},
+  {i:'2026-06-15',e:'1 Samuel 17–18, 24–26; 2 Samuel 5–7',t:'David y Goliat — con Dios somos valientes',desc:'David, un joven pastor, venció al gigante Goliat porque su confianza estaba en el Señor, no en su propia fuerza. Con Dios de nuestro lado, podemos enfrentar cualquier adversidad.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/25?lang=spa',temas:[{t:'La fe en Jesucristo puede ayudarme a tener valor',e:'1 Samuel 17:20-54',i:'Usa el relato de David y Goliat para que los niños se familiaricen con la historia y luego la vuelvan a contar con imágenes o dibujos sencillos. Pueden hacer una lista de desafíos difíciles y buscar lo que David dijo que puede ayudarlos. Comparte cómo Jesucristo te ha ayudado en tus desafíos.'},{t:'Los buenos amigos pueden ser una bendición de Dios',e:'1 Samuel 18:1-4',i:'Da a cada niño dos corazones de papel, uno para David y otro para Jonatán. Lean juntos 1 Samuel 18:1-4 y resalten el amor que se tenían. Después los niños pueden escribir o dibujar en sus corazones cómo demostrar amor a un amigo.'},{t:'Si necesito guía, puedo pedírsela al Padre Celestial',e:'2 Samuel 5:19, 23',i:'Puede ser entretenido que los niños hagan de cuenta que son reyes o reinas y piensen a quién acudirían en busca de ayuda. Ayúdalos a descubrir que cuando David necesitó ayuda, "consultó" a Jehová. Cuéntales de alguna ocasión en que oraste pidiendo ayuda al Padre Celestial.'},{t:'Jesucristo es mi Rey Eterno',e:'2 Samuel 7:16-17',i:'Todos los reyes del Antiguo Testamento tuvieron fallas y sus reinos terminaron, pero Jesucristo es un Rey perfecto que reinará para siempre. Lean lo que el profeta Natán dijo a David y busquen pasajes que enseñan que Jesús, descendiente de David, es nuestro Rey. Conversen sobre cómo honrarlo.'}]},
+  {i:'2026-06-22',e:'2 Samuel 11–12; 1 Reyes 3; 6–9; 11',t:'Salomón — pedir sabiduría a Dios',desc:'Cuando el Señor le preguntó a Salomón qué deseaba, él pidió sabiduría para gobernar bien a Su pueblo. Dios honra a quienes buscan servir a los demás más que a sí mismos.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/26?lang=spa',temas:[{t:'El Señor puede ayudarme cuando soy tentado',e:'2 Samuel 11',i:'Cuenta la historia de David y pide a los niños que identifiquen las malas decisiones que tomó y sugieran las buenas que pudo haber tomado en su lugar. Conversen sobre qué cosas podemos hacer cuando estamos siendo tentados para escoger lo correcto.'},{t:'Hacer convenios en la Casa del Señor —y guardarlos— me ayuda a andar por Sus caminos',e:'1 Reyes 8:22-61',i:'Al aprender sobre la dedicación del templo, miren juntos imágenes de templos y conversen sobre los detalles que ven. Pueden hacer hincapié en los versículos 57-58 y dar un paso por cada respuesta sobre lo que significa "andar en los caminos" del Señor.'},{t:'Puedo poner al Señor primero en mi vida',e:'1 Reyes 11:1-11',i:'Leer sobre la influencia de las esposas de Salomón puede llevar a una conversación sobre los "dioses ajenos": las cosas que las personas aman o adoran en lugar del Señor. Conversen sobre cómo mostramos que lo amamos a Él más que a cualquier otra cosa.'}]},
+  {i:'2026-06-29',e:'1 Reyes 12–13; 17–22',t:'Elías — valentía para defender la verdad',desc:'En un tiempo de gran apostasía, el profeta Elías se mantuvo firme en su testimonio del Señor. Su valentía nos inspira a defender nuestra fe aun cuando parezca que estamos solos.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/27?lang=spa',temas:[{t:'El Señor me bendice conforme tengo fe en Él',e:'1 Reyes 17',i:'Muestra imágenes u objetos que ilustren los relatos de fe de 1 Reyes 17, como pájaros, pan o un niño. Mientras cuentas cada historia, invita a los niños a buscar el objeto que corresponda. Conversen sobre qué enseña cada relato acerca de mostrar fe en Jesucristo.'},{t:'Cuando el Señor me pide que sacrifique, puedo obedecer con fe',e:'1 Reyes 17:8-16',i:'Los niños pueden dibujar lo que el Señor le pidió a la viuda que le diera a Elías y lo que ella recibió a cambio. También pueden buscar ejemplos de personas que renunciaron a algo que querían por algo mejor. Conversen sobre qué nos pide el Señor que sacrifiquemos y cómo nos bendice.'},{t:'Puedo escoger seguir a Jesucristo',e:'1 Reyes 18:17-39',i:'Mientras leen juntos el relato, los niños pueden elegir un versículo y dibujar lo que describe, para después relatar la historia con sus propias palabras. Ayúdalos a pensar en situaciones reales donde tengan que decidir si seguir a Jesucristo.'},{t:'El Señor me habla por medio de la voz apacible y delicada del Espíritu Santo',e:'1 Reyes 19:9-12',i:'Al resumir el pasaje, invita a los niños a hacer movimientos que representen el viento fuerte, el terremoto y el fuego. Luego pídeles que se sienten en silencio mientras lees con voz suave "tras el fuego, una voz apacible y delicada". Cuéntales de ocasiones en que sentiste esa voz del Espíritu.'}]},
+  {i:'2026-07-06',e:'2 Reyes 2–7',t:'Naamán — la fe sencilla sana',desc:'Naamán fue curado de lepra cuando hizo algo aparentemente simple: bañarse siete veces en el Jordán. Muchas veces el Señor nos pide hacer cosas pequeñas que requieren de grande fe.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/28?lang=spa',temas:[{t:'Dios puede obrar milagros en mi vida',e:'2 Reyes 4',i:'Después de ayudar a los niños a entender qué es un milagro, invítalos a enumerar tantos ejemplos como puedan; las imágenes del Libro de obras de arte del Evangelio pueden ayudar. Luego busquen los milagros en 2 Reyes 4 y conversen sobre qué enseñan acerca del Padre Celestial.'},{t:'Puedo escoger hacer lo que Dios manda por medio de Su profeta',e:'2 Reyes 5:1-15',i:'Cuenta el relato de Naamán y pregunta por qué no quería lavarse en el Jordán aunque Eliseo le dijo que eso lo sanaría. Conversen sobre cómo fue bendecido al obedecer, y cómo podemos ayudar a otros a escuchar y obedecer al profeta.'},{t:'No estoy solo',e:'2 Reyes 6:8-17',i:'Los niños imaginan que están rodeados por un ejército y conversan cómo se sentirían. Pídeles que cierren los ojos mientras lees 2 Reyes 6:16-17, y que los abran al llegar a "que abras sus ojos". Cuéntales cómo sentiste que el Señor estuvo contigo en tus desafíos, aun cuando parecía que estabas solo.'}]},
+  {i:'2026-07-13',e:'2 Reyes 16–25',t:'Consecuencias de alejarse de Dios',desc:'El pueblo de Israel y Judá fue llevado al cautiverio por alejarse de sus convenios con el Señor. Sus experiencias nos enseñan el peligro de apartarse de Dios de manera gradual y casi imperceptible.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/29?lang=spa',temas:[{t:'Puedo confiar en el Padre Celestial y en Jesucristo',e:'2 Reyes 18:3-6; 19:14-19',i:'Ayuda a los niños a descubrir qué hizo de Ezequías un buen rey y cómo demostró que confiaba en el Señor. Observen una imagen de Jesús y conversen por qué podemos confiar en Él y cómo demostrarlo.'},{t:'El Padre Celestial y Jesucristo pueden confiar en mí',e:'2 Reyes 22:1-7',i:'Descubran la edad que tenía Josías al ser rey y qué se dice de él. A los obreros del templo se les confió el dinero "porque procedían con honradez". Conversen sobre cosas que se les han confiado y cómo ser dignos de confianza.'},{t:'Las Escrituras me enseñan a seguir a Jesucristo',e:'2 Reyes 22:8-11; 23:2-3',i:'Esconde un ejemplar de las Escrituras en la sala e invita a los niños a buscarlo, como cuando un sacerdote de Josías las encontró en el templo. Conversen sobre qué pasaría si no tuviéramos las Escrituras y por qué se alegran de tenerlas hoy.'},{t:'Guardaré los convenios que he hecho con Dios',e:'2 Reyes 23:1-3',i:'Josías y su pueblo hicieron convenio de vivir los mandamientos. Lean 2 Reyes 23:1-3 y busquen palabras que muestren lo que sentían. Pueden ponerse de pie para "confirmar el pacto", caminar en su lugar para "ir en pos de Jehová" y poner la mano en el corazón al hablar de guardar convenios.'}]},
+  {i:'2026-07-20',e:'2 Crónicas 14–20; 26; 30',t:'Confiar en el Señor — no en nuestra propia fuerza',desc:'Varios reyes de Judá mostraron que las bendiciones del Señor llegan cuando confiamos en Él y no en nuestra propia sabiduría o poder. La humildad y la oración son claves para el liderazgo.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/30?lang=spa',temas:[{t:'Puedo confiar en Dios',e:'2 Crónicas 14-16; 20',i:'Muestra algo en lo que confías para mantenerte seco bajo la lluvia, como un paraguas, y compáralo con la confianza en el Señor. Descubran cómo los reyes Asa y Josafat respondieron a los desafíos confiando en Jehová, y compartan maneras de mostrarle al Señor que confían en Él.'},{t:'Dios escuchará y contestará mis oraciones',e:'2 Crónicas 20:1-29',i:'La hoja de actividades puede ayudar a entender el relato de la oración de Josafat y la respuesta del Señor. Conversen sobre ocasiones en que Dios escuchó y contestó sus oraciones, incluso de maneras inesperadas. Una canción sobre la oración puede edificar su fe.'},{t:'Puedo ser humilde',e:'2 Crónicas 26:3-23',i:'Para aprender de los peligros del orgullo, los niños construyen una torre con bloques mientras identifican los logros de Uzías. Conversen qué la mantiene firme y qué la haría caer; al leer el versículo 16, hablen de lo que significa que el corazón "se enaltezca para su ruina".'},{t:'Puedo ser un pacificador',e:'2 Crónicas 30',i:'Ezequías invitó al pueblo vecino a celebrar la Pascua, aunque algunos no se habían purificado según la ley. Observen la imagen, lean los versículos 18-19 y conversen qué hizo Ezequías y cómo pueden ser como él en la forma de tratar a los demás.'}]},
+  {i:'2026-07-27',e:'Esdras 1; 3–7; Nehemías 2; 4–6; 8',t:'Reconstruir con fe — no rendirse',desc:'Cuando los judíos regresaron del cautiverio, trabajaron con fe para reconstruir el templo y los muros de Jerusalén. Su determinación de no rendirse ante las dificultades nos inspira en nuestros momentos difíciles.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/31?lang=spa',temas:[{t:'La Casa del Señor es un lugar de gozo',e:'Esdras 3:8-13; 6:16-22',i:'Muestra una imagen del gozo de los judíos al reconstruir el templo y cuéntales por qué el templo es un lugar de gozo para ti. Al leer Esdras 3:10-13, busquen palabras que muestren cómo se sintieron y, al final del versículo 13, pueden dar gritos de alegría juntos.'},{t:'El Señor me ayudará a llevar a cabo Su "gran obra"',e:'Nehemías 2:17-20; 6:1-9',i:'Comparte el relato de Nehemías. Al leer 2:20 pueden "levantarse" y hacer de cuenta que edifican los muros de Jerusalén, o construir un muro con bloques. Al leer 6:9, levantan las manos al decir "fortalece, pues, oh Dios, mis manos".'},{t:'Las Escrituras son una bendición',e:'Nehemías 8:1-12',i:'Lee frases de Nehemías 8 que describen lo que el pueblo hizo al escuchar a Esdras leer las Escrituras, y los niños pueden dramatizarlas. Muéstrales cómo usar las ayudas para el estudio de las Escrituras e invítalos a compartir algo que hayan aprendido sobre el Salvador.'}]},
+  {i:'2026-08-03',e:'Ester',t:'Ester — valor para hacer lo correcto',desc:'La joven reina Ester arriesgó su vida para salvar a su pueblo. Cuando vaciló, su tío Mardoqueo le recordó que quizás había llegado al reino \'para una ocasión como esta\'. Dios tiene un propósito para cada uno de nosotros.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/32?lang=spa',temas:[{t:'Puedo prestar servicio a mi familia',e:'Ester 2:5-7',i:'Usa Ester 2:7 para enseñar sobre ayudar a los miembros de la familia necesitados, como Mardoqueo hizo con Ester. Lean el versículo o resúmanlo con sus palabras, piensen en familiares que podrían necesitar ayuda y planifiquen cómo ayudarlos.'},{t:'El Señor puede ayudarme a ser valiente',e:'Ester 3:1-11; 4:10-17',i:'Ester y Mardoqueo ayudan a entender que ser valiente es hacer lo correcto aun con temor. Completen frases como "Mardoqueo fue valiente cuando…" y "Demostraré valor al…". También aprendan sobre ocasiones en que Jesucristo fue valiente.'},{t:'El ayuno brinda las bendiciones del Señor',e:'Ester 4:1-3, 10-17',i:'Lean estos versículos para enseñar sobre el ayuno: ¿por qué ayunaron Ester y los judíos? Cuéntales por qué ayunas tú y conversen cómo explicarían el ayuno a un amigo. Anímalos a pensar en algo que harán parte de su próximo ayuno.'},{t:'Puedo ser un instrumento en las manos de Dios',e:'Ester 4:14',i:'Mardoqueo animó a Ester recordándole que el Señor la hizo reina "para esta hora". Conversen qué quiso decir y cómo Ester fue un instrumento del Señor. Para ilustrarlo, invita a alguien a tocar un instrumento musical o muestra una herramienta.'}]},
+  {i:'2026-08-10',e:'Job 1–3; 12–14; 19; 21–24; 38–40; 42',t:'Job — fe firme en las pruebas',desc:'Job perdió todo lo que tenía, pero mantuvo su fe diciendo: \'Yo sé que mi Redentor vive.\' Su historia nos enseña que podemos mantener la fe incluso en las pruebas más devastadoras.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/33?lang=spa',temas:[{t:'La fe en Jesucristo me ayudará durante los momentos difíciles',e:'Job 1-2; 12; 19',i:'Pide a los niños que cuenten lo que saben de Job y cómo respondió ante sus desafíos. Miren imágenes de Jesucristo y conversen sobre lo que Job sabía acerca de Jehová según Job 12 y 19, y por qué es valioso saber esas cosas de Él.'},{t:'Gracias a Jesucristo, volveré a vivir después de morir',e:'Job 14:14',i:'Job hizo una pregunta importante en Job 14:14. Túrnense para compartir cómo le responderían, buscando ideas en Alma 11:42-44, en un video de Pascua o en una canción sobre la Resurrección.'},{t:'Los buenos amigos se edifican y alientan unos a otros',e:'Job 16:1-5; 22:5',i:'Los amigos de Job dijeron que Dios lo castigaba por pecar. Conversen cómo lo habrían ayudado ustedes y cómo nuestras palabras pueden ayudar a quienes están tristes. Piensen en alguien que pasa un momento difícil y en cómo ser un amigo semejante a Cristo.'},{t:'Jesucristo es mi Redentor',e:'Job 19:23-27',i:'Después de leer Job 19:23-27, conversen cómo saben que su Redentor vive. Entre todos pueden escribir sus testimonios o hacer dibujos del Salvador en un "libro", y cantar una canción que testifique de Jesucristo.'}]},
+  {i:'2026-08-17',e:'Salmos 1–2; 8; 19–33; 40; 46',t:'El Señor es mi Pastor — Salmo 23',desc:'Los Salmos son las oraciones y canciones del corazón del pueblo de Dios. El Salmo 23 nos recuerda con ternura que el Señor cuida de nosotros como un pastor fiel en cada paso de nuestra vida.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/34?lang=spa',temas:[{t:'El Señor me ofrece paz, fortaleza y guía',e:'Salmos 23; 27-28; 32; 46',i:'Escribe "El Señor es…" e invita a los niños a completar la frase usando pasajes como Salmos 23:1; 27:1; 28:7; 46:1. Conversen qué nos enseñan sobre cómo el Salvador puede ayudarnos, y comparen lo que un pastor hace por un cordero con lo que Jesús hace por nosotros.'},{t:'Para entrar en el templo, necesitamos estar "limpios de manos y puros de corazón"',e:'Salmo 24:3-4',i:'Al leer el Salmo 24:3, los niños buscan palabras que les recuerden el templo y ven una imagen de uno. Lean el versículo 4 para saber quién puede entrar. Conversen cómo nos ensuciamos espiritualmente y cómo el Salvador nos ayuda a limpiarnos.'},{t:'Jesucristo puede convertir la tristeza en alegría',e:'Salmo 30:5',i:'Con niños pequeños, invítalos a hacer de cuenta que lloran al leer "por la noche durará el llanto" y a mostrar alegría con "a la mañana vendrá la alegría". Muestra una imagen del Salvador y cuenta cosas que Él ha hecho por ti que te dan alegría.'},{t:'"Quedaos tranquilos, y sabed que yo soy Dios"',e:'Salmo 46:10',i:'Ayuda a los niños a memorizar la primera línea del Salmo 46:10. Conversen qué significa "quedarse tranquilos" y dediquen tiempo a practicar estar en silencio. Piensen en momentos del día en que pueden quedarse tranquilos para sentirse cerca del Padre Celestial.'}]},
+  {i:'2026-08-24',e:'Salmos 49–51; 61–66; 69–72; 77–78; 85–86',t:'Alabar al Señor con gratitud',desc:'En sus momentos de angustia, David y otros salmistas clamaron al Señor y recibieron paz y consuelo. Los Salmos nos enseñan que Dios escucha nuestras oraciones más profundas y responde con amor.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/35?lang=spa',temas:[{t:'Cuando tomo una mala decisión, Jesús puede ayudarme a cambiar',e:'Salmos 51; 86:5, 13, 15',i:'Dibuja un corazón grande y escriban dentro las cosas malas que Satanás nos tienta a hacer; luego, al leer el Salmo 51:10, 17, los niños las borran y escriben cómo Jesús puede cambiarnos cuando nos arrepentimos. Busquen también palabras que describan al Salvador en el Salmo 86.'},{t:'Jesucristo es mi Roca',e:'Salmo 61:2-3',i:'A los niños les puede gustar dibujar los símbolos del Salmo 61:2-3. Conversen en qué sentido Jesucristo es como una "peña" alta, "un refugio" y una "torre fuerte".'},{t:'"Me acordaré de las obras de Jah"',e:'Salmos 66:16; 77:11; 78:6-7',i:'Pide a los niños que compartan sus relatos favoritos de las Escrituras y qué enseñan sobre el Señor. Al leer estos versículos, conversen cómo tratan de "acordarse de las obras de Jah" y cómo la Santa Cena nos ayuda a "recordarle siempre".'},{t:'Puedo hablarles a los demás sobre Jesucristo',e:'Salmo 71:8',i:'Después de leer el Salmo 71:8, los niños dibujan una boca grande y la "llenan" con imágenes o palabras de lo que podemos decir a otros sobre Jesucristo. Pueden pasarse una imagen del Salvador y, quien la sostenga, decir algo que sepa de Él.'},{t:'El Padre Celestial escucha y contesta mis oraciones',e:'Salmo 86:7',i:'Muestra cosas que usamos para comunicarnos con personas lejanas, como un teléfono o una carta, y lean el Salmo 86:7. Conversen cómo "invocamos" al Padre Celestial y cómo nos responde. Canten una canción sobre la oración y cuéntense ocasiones en que Dios contestó sus oraciones.'}]},
+  {i:'2026-08-31',e:'Salmos 102–103; 116–119; 127–128; 146–150',t:'Gratitud y alabanza al Señor',desc:'El libro de los Salmos concluye con una explosión de alabanza y gratitud. Cuando llenamos nuestro corazón de gratitud al Señor, encontramos gozo genuino incluso en las circunstancias más difíciles.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/36?lang=spa',temas:[{t:'El Señor me consuela y me da esperanza',e:'Salmo 102:1-2',i:'Lean el Salmo 102:1-2 y busquen cómo el Señor nos ayuda durante las dificultades. Conversen cómo podemos buscar Su ayuda y sobre momentos en que necesitaron ayuda y sintieron que Dios escuchó sus oraciones.'},{t:'La palabra de Dios es como una luz',e:'Salmo 119:105',i:'Conversen cómo es estar en la oscuridad y qué cosas son difíciles de hacer en ella; pueden hacer un dibujo con los ojos cerrados. Lean el Salmo 119:105 y busquen qué nos ha dado el Padre Celestial para permanecer en Su senda. Una canción como "Hazme andar en la luz" puede acompañar.'},{t:'El Padre Celestial y Jesucristo me conocen y me aman',e:'Salmo 139:1-3, 23-24',i:'Haz listas cortas de lo que sabes de cada niño y, al leerlas, ellos adivinan a quién describes; luego, al leer el Salmo 139:1-3, hacen una lista de lo que el Padre Celestial y Jesús saben de nosotros. Subrayen en los versículos 23-24 lo que Dios puede hacer por nosotros.'},{t:'Puedo alabar a Jehová',e:'Salmo 146:1, 5-9',i:'Invita a los niños a compartir experiencias en que alguien los elogió. Comparte las cosas buenas que el Señor ha hecho según el Salmo 146:6-9 (ayúdalos con las palabras que no conozcan) e invítalos a hablar de otras cosas que Él hace por nosotros y cómo alabarlo.'}]},
+  {i:'2026-09-07',e:'Proverbios 1–4; 15–16; 22; 31; Eclesiastés',t:'La sabiduría comienza con Dios',desc:'La sabiduría, según los Proverbios, comienza con el temor del Señor. Cuando reconocemos a Dios en todo lo que hacemos y buscamos Su guía en nuestras decisiones, encontramos el camino seguro.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/37?lang=spa',temas:[{t:'"Temer a Dios" significa amarlo y obedecerlo',e:'Proverbios 1:7; 2:5; 15:33; 16:6; Eclesiastés 12:13',i:'Para entender los pasajes sobre temer a Dios, sustituye la palabra "temor" por reverencia, amor u obediencia. Conversen cómo cambia eso la manera de ver esos versículos y cómo podemos mostrar que somos temerosos del Señor.'},{t:'Puedo confiar en Jehová con todo mi corazón',e:'Proverbios 3:5-7',i:'Inventen movimientos que concuerden con Proverbios 3:5-7, como hacer un corazón con las manos o apoyarse en algo. Para mostrar "no te apoyes en tu propia prudencia", apóyense en algo firme como una pared y luego en algo inestable como una escoba, y conversen por qué confiar en Jehová.'},{t:'Puedo utilizar palabras amables',e:'Proverbios 15:1, 18',i:'Piensen en situaciones en que podrían enojarse, lean Proverbios 15:1 y practiquen respuestas "blandas". Para entender "tardar en airarse", cuenten experiencias en que sintieron enojo pero eligieron ser amables, y piensen en lo que podemos hacer "rápido" en su lugar.'}]},
+  {i:'2026-09-14',e:'Isaías 1–12',t:'Isaías — profecías sobre Jesucristo',desc:'Isaías profetizó acerca de Jesucristo con claridad asombrosa, cientos de años antes de Su nacimiento. Sus palabras fortalecen nuestro testimonio de que Dios conoce el futuro y guía la historia.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/38?lang=spa',temas:[{t:'Gracias a Jesucristo, puedo arrepentirme y ser limpio',e:'Isaías 1:2-4, 16-19',i:'Busquen en Isaías 1:2-4 las razones por las que el Señor no estaba contento con el pueblo. Para visualizar 1:16-18, observen algo rojo brillante y algo blanco, o laven algo juntos, y conversen cómo nos ensuciamos espiritualmente y cómo Jesucristo nos ayuda a quedar limpios.'},{t:'En el templo aprendo sobre Jesucristo',e:'Isaías 2:2-4',i:'Isaías previó que personas de todas las naciones acudirían a la casa de Jehová. Los niños dibujan su hogar y luego "la casa de Jehová" (un templo), agregando muchas personas que van, incluida su familia. Conversen cómo el templo nos brinda paz.'},{t:'Jesucristo vino a la tierra a ser mi Salvador',e:'Isaías 7:14; 9:6-7',i:'Conversen sobre los títulos de las personas (presidente, obispo, maestro) y luego busquen los títulos de Jesucristo en Isaías 7:14 y 9:6-7. Conversen qué enseña cada título acerca de Él, y cómo se cumplieron esas profecías (Mateo 1:21-23; Lucas 1:31-33).'}]},
+  {i:'2026-09-21',e:'Isaías 13–14; 22; 24–30; 35',t:'La Restauración del Evangelio',desc:'Isaías profetizó sobre la apostasía y la restauración del Evangelio. Sus palabras se cumplieron en la misión del profeta José Smith y en el establecimiento de La Iglesia de Jesucristo.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/39?lang=spa',temas:[{t:'Jesucristo puede salvarme del pecado y de la muerte',e:'Isaías 14:3; 25:8-9; 28:16',i:'Ayuda a los niños a encontrar frases que les recuerden al Salvador en estos versículos y compáralos con otros que enseñan de Él. Vean imágenes del Salvador en Getsemaní, en la cruz y resucitado, y conversen por qué se alegran en Su salvación.'},{t:'Jesús me da "amparo contra la tempestad"',e:'Isaías 25:4-6',i:'Conversen sobre la bendición de tener un refugio durante una tormenta, sombra en un día caluroso o una buena comida con hambre. Lean Isaías 25:4-6 y conversen en qué sentido Jesús se asemeja a esas cosas.'},{t:'La restauración del Evangelio es una "obra maravillosa"',e:'Isaías 29:11-18, 24',i:'Al leer Isaías 29:14, comparte palabras que signifiquen lo mismo que "maravillosa" y "prodigio". Busquen objetos o imágenes que representen las obras maravillosas del Señor en los últimos días, como el Libro de Mormón, un templo o la Primera Visión, y conversen por qué son maravillosas.'}]},
+  {i:'2026-09-28',e:'Isaías 40–49',t:'Jesucristo — nuestro Redentor y Salvador',desc:'Las palabras de Isaías \'No temas, porque yo estoy contigo\' han consolado a millones de personas a lo largo de los siglos. Jesucristo es nuestro Redentor, y Su amor nunca nos abandona.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/40?lang=spa',temas:[{t:'Puedo ayudar a preparar "el camino de Jehová"',e:'Isaías 40:3-5',i:'Ilustra qué significa "preparar el camino de Jehová" enderezando algo torcido, despejando un piso o demarcando un sendero. Vean láminas de Juan el Bautista y de José Smith, y conversen cómo prepararon el camino del Señor y cómo podemos ayudar.'},{t:'Puedo ser un testigo del Señor',e:'Isaías 43:10',i:'Después de leer Isaías 43:10, conversen qué significa ser testigos. Compartan cosas que hayan experimentado de las que pueden ser "testigos", como un alimento que probaron o un lugar que visitaron, y conversen qué podemos decir a otros sobre el Señor.'},{t:'El Señor "derramará" Sus bendiciones sobre mí',e:'Isaías 44:3-4; 45:8',i:'Después de leer estos versículos, los niños pueden regar una planta mientras hablan de las bendiciones que el Señor ha derramado sobre ellos. Conversen qué les pasa a las plantas cuando las regamos y cómo las bendiciones del Señor nos han ayudado a crecer.'},{t:'Guardar los mandamientos de Dios brinda paz',e:'Isaías 48:17-18',i:'Usa imágenes o videos de ríos y olas para visualizar Isaías 48:18; los niños pueden mover las manos como un río y las olas. Conversen en qué sentido la paz es como un río y la rectitud como las olas, y cómo guardar los mandamientos te ha dado paz.'},{t:'El Señor nunca me olvidará',e:'Isaías 49:14-16',i:'Al leer el versículo 14, conversen qué puede hacer que alguien se sienta olvidado. Pregunta a los niños por alguien a quien nunca olvidarán y lean los versículos 15-16 para descubrir por qué el Señor nunca nos olvidará. Compartan sus sentimientos por Jesucristo.'}]},
+  {i:'2026-10-05',e:'Isaías 50–57',t:'El Siervo Sufriente — la expiación de Cristo',desc:'Las profecías sobre el Siervo Sufriente describen con precisión asombrosa la vida, muerte y expiación de Jesucristo. Él tomó sobre Sí nuestras penas para que pudiéramos ser sanados y perdonados.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/41?lang=spa',temas:[{t:'El Señor me invita a "vestirme de mi poder"',e:'Isaías 51-52',i:'Los niños descubren y representan frases como "despierta", "levántate" y "vístete de tu poder" en Isaías 51-52. Conversen qué significa eso espiritualmente y qué nos está pidiendo el Señor. Determinen también a quiénes habla Jehová en Isaías 51:1, 4, 7 y qué significa "oír" al Señor.'},{t:'Jesucristo tomó sobre Sí mis pecados y mis dolores',e:'Isaías 53:3-9',i:'Miren imágenes del padecimiento y la muerte de Jesucristo y busquen en Isaías 53 palabras que las describan; ayúdalos a ver que Isaías lo escribió cientos de años antes. Al leer 53:4, los niños pueden hacer de cuenta que levantan un objeto pesado y conversar por qué Jesús llevó nuestras cargas.'},{t:'Puedo buscar a Jehová y llamarlo',e:'Isaías 55:6',i:'Esconde una imagen de Jesús en el salón e invita a los niños a encontrarla y a nombrar una manera de "buscar a Jehová mientras pueda ser hallado". Una canción como "Buscaré al Señor" puede darles ideas, y luego un niño puede esconder la imagen para repetir la actividad.'},{t:'Los caminos de Jehová son más altos que los míos',e:'Isaías 55:8-9',i:'Después de leer Isaías 55:9, los niños pueden pararse en un taburete bajo y hablar de cómo las cosas se ven diferentes desde más alto, o dibujar lo que significa para ellos. Conversen sobre caminos del Señor que son más altos, como Su manera de tratar a los pecadores y de guiar a los demás.'}]},
+  {i:'2026-10-12',e:'Isaías 58–66',t:'El ayuno verdadero — la luz del Señor',desc:'El verdadero ayuno, según Isaías, no es solo abstenerse de comer. Es liberar al oprimido, compartir con el necesitado y cuidar a los vulnerables. El servicio es una forma de adoración.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/42?lang=spa',temas:[{t:'El ayuno me bendice a mí y a otras personas necesitadas',e:'Isaías 58:6-11',i:'Para alentar a los niños a ayunar cuando estén listos, ayúdalos a entender los propósitos del Señor para esta ley. Lean Isaías 58:6-11 buscando respuesta a: ¿por qué ayunamos?, ¿cómo ayunamos? Si tienes una experiencia significativa con el ayuno, compártela.'},{t:'El día de reposo puede ser una delicia para mí',e:'Isaías 58:13-14',i:'Señala los días de la semana en un calendario y, al llegar al día de reposo, los niños lo llaman "delicia". Compartan maneras de "deleitarse en Jehová" en ese día; pueden dibujar sus ideas y ponerlas en una "caja de delicias del día de reposo" para usarlas cuando necesiten ideas.'},{t:'El Salvador es como una luz para mí',e:'Isaías 60:1-3',i:'Invita a los niños a cerrar los ojos mientras lees Isaías 60:1-3, a abrirlos al oír "luz" y a cerrarlos al oír "tinieblas" u "oscuridad". Explica que Jesucristo y Su Evangelio son como una luz que nos ayuda a ver el camino de regreso al Padre Celestial.'},{t:'Cuando Jesús venga de nuevo, traerá paz y gozo',e:'Isaías 65:17-25',i:'Isaías 65:17-25 describe cómo será la tierra cuando el Salvador venga de nuevo. Al leer los versículos, ayúdalos a determinar cómo será diferente la vida en la "nueva tierra" y por qué será una época para regocijarnos. Canten una canción sobre la Segunda Venida.'}]},
+  {i:'2026-10-19',e:'Jeremías 1–3; 7; 16–18; 20',t:'Jeremías — Dios nos llama aunque seamos jóvenes',desc:'Cuando Jeremías expresó dudas sobre su capacidad por ser joven, el Señor respondió: \'No digas que eres un joven, porque a donde yo te envíe irás.\' Dios llama y capacita a quienes Él escoge.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/43?lang=spa',temas:[{t:'El Padre Celestial me conocía antes de que naciera',e:'Jeremías 1:5',i:'Para explicar Jeremías 1:5, muestra una imagen de un bebé o de los niños cuando eran bebés, y pregúntales si saben dónde vivían antes de nacer. Pueden cantar "Viví en los cielos" y, si quieren aprender más, buscar "Vida preterrenal" en la Guía para el Estudio de las Escrituras.'},{t:'Se llama a los profetas a hablar las palabras del Señor',e:'Jeremías 1:4-19',i:'Muestra imágenes del profeta viviente o de profetas de las Escrituras y pregunta qué saben de ellos. Para enseñar lo que hacen los profetas, los niños escogen un versículo de Jeremías 1 (como 5, 7, 10, 19), lo leen y comparten algo que aprendieron.'},{t:'Puedo ayudar a los hijos del Padre Celestial a volver a Él',e:'Jeremías 16:14-16',i:'Al leer Jeremías 16:16, los niños hacen de cuenta que "pescan" o "cazan" objetos por el salón. El presidente Nelson comparó a estos pescadores y cazadores con los misioneros; conversen qué hacen los misioneros y cómo podemos ayudar a recoger al Israel disperso.'},{t:'Puedo dejar que el Señor guíe mi vida, como el alfarero da forma al barro',e:'Jeremías 18:1-6',i:'Analicen o muestren cómo se hace la alfarería. Conversen qué mensaje tiene el Señor para nosotros en Jeremías 18:1-6 y qué significa ser barro en las manos del Señor (véase también Isaías 64:8).'}]},
+  {i:'2026-10-26',e:'Jeremías 31–33; 36–38; Lamentaciones',t:'El nuevo convenio en nuestro corazón',desc:'El nuevo convenio que Dios prometió a Su pueblo no estaría escrito en tablas de piedra, sino en el corazón de cada persona. El Evangelio es una experiencia del corazón, no solo una lista de reglas.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/44?lang=spa',temas:[{t:'El Padre Celestial y Jesús me aman "con amor eterno"',e:'Jeremías 31:3',i:'Al leer Jeremías 31:3, los niños buscan objetos que duren mucho, como una moneda de metal, y otros que no, como una fruta. Conversen qué significa "eterno" y compartan cómo han sentido el "amor eterno" del Padre Celestial.'},{t:'Dios me ayudará a guardar mis convenios',e:'Jeremías 31:31-34; 32:38-41',i:'Los niños dibujan un corazón y escriben dentro lo que aprenden de Jeremías 31:31-34 sobre hacer convenios con Dios. Repasen el convenio que hacemos al bautizarnos y conversen qué significa tener esas promesas escritas en el corazón.'},{t:'Las Escrituras son la palabra de Dios',e:'Jeremías 36:1-4',i:'La hoja de actividades ayuda a aprender sobre Jeremías, Baruc y el rey. Los niños pueden hacer movimientos que concuerden con Jeremías 36:4-10, como escribir en un libro y leer al pueblo. Comparen un libro infantil con las Escrituras y conversen qué las hace especiales.'},{t:'Puedo defender lo correcto',e:'Jeremías 38:6-13',i:'Usa una imagen para visualizar el relato de Ebed-melec en Jeremías 38:6-13 y busquen un versículo donde él hizo algo valiente para ayudar al profeta. Conversen qué podemos hacer para demostrar que sabemos que nuestro profeta actual es llamado por Dios.'},{t:'El Salvador hizo posible que yo reciba el perdón de mis pecados',e:'Lamentaciones 1:1-2, 16; 3:22-26',i:'Explica que, como los israelitas no se arrepintieron, Jerusalén y el templo fueron destruidos; conversen cómo se habrían sentido. Lean Lamentaciones 3:22-26 y conversen cómo ese mensaje da esperanza y nos ayuda a entender el perdón que ofrece Jesucristo.'}]},
+  {i:'2026-11-02',e:'Ezequiel 1–3; 33–34; 36–37; 47',t:'El valle de los huesos secos — el poder de Dios',desc:'La visión del valle de los huesos secos nos enseña que el Señor puede revivir lo que parece muerto. Donde hay apostasía puede restaurar la fe; donde hay corazones endurecidos puede traer el renacimiento.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/45?lang=spa',temas:[{t:'Los profetas son como atalayas que nos advierten del peligro',e:'Ezequiel 3:17; 33:1-5',i:'Los niños señalan ojos, oídos y boca al oír "atalaya", "oirás" y "boca". Hagan una caminata en la que les adviertes de cosas en el camino, o un niño hace de "atalaya" mirando por una ventana. Conversen cómo el profeta viviente es como un atalaya para nosotros.'},{t:'La Biblia y el Libro de Mormón nos ayudan a ser "recogidos" en Jesucristo',e:'Ezequiel 37:15-23',i:'Después de leer Ezequiel 37:15-23, busquen dos palos y escriban en uno "Para Judá (Biblia)" y en el otro "Para José (Libro de Mormón)". Compartan relatos de cada libro que los acerquen al Salvador y conversen por qué es bueno tener ambas Escrituras.'},{t:'Nuestro corazón y nuestra familia pueden encontrar sanación en la Casa del Señor',e:'Ezequiel 47:1-12',i:'En Ezequiel 47, el agua que fluye del templo sana el mar Muerto. Los niños dibujan objetos de la visión —un templo, un río, peces, un árbol con fruto— y los muestran al leer los versículos 1-12. Conversen cómo esas bendiciones son como las del templo.'}]},
+  {i:'2026-11-09',e:'Daniel 1–7',t:'Daniel en el foso de los leones — Dios protege',desc:'Daniel y sus amigos se negaron a comprometer su fe incluso frente a la muerte. Su historia nos recuerda que podemos mantenernos fieles a nuestros convenios en cualquier circunstancia.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/46?lang=spa',temas:[{t:'Jesús me ayudará a hacer lo correcto aun cuando sea difícil',e:'Daniel 1; 3; 6',i:'Encuentra imágenes de los acontecimientos de Daniel 1, 3 y 6, colócalas boca abajo y un niño da vuelta una y habla de la historia. Ayúdalos a pensar en situaciones de presión para tomar una mala decisión y cómo fueron bendecidos al elegir lo correcto, aun cuando fue difícil.'},{t:'El Padre Celestial desea que cuide mi cuerpo',e:'Daniel 1:1-17',i:'Leer cómo Daniel y sus amigos rechazaron la comida y el vino del rey puede inspirar una conversación sobre la ley de salud (Palabra de Sabiduría). Busquen las bendiciones que recibieron y compárenlas con las prometidas en Doctrina y Convenios 89.'},{t:'La Iglesia de Jesucristo de los Santos de los Últimos Días es el reino de Dios sobre la tierra',e:'Daniel 2',i:'Al leer Daniel 2:31-35, 44-45, los niños dibujan el sueño de Nabucodonosor y entienden que la piedra representa a la Iglesia. Conversen qué aprendemos de la Iglesia en ese sueño y muestren imágenes de la Restauración.'},{t:'El Padre Celestial desea que ore a menudo',e:'Daniel 6',i:'Conversen por qué orar era tan importante para Daniel mientras leen Daniel 6, y explíquense por qué orar es importante para ustedes. A los niños puede gustarles dibujarse orando en distintas situaciones y enseñarse unos a otros que podemos orar dondequiera que estemos.'}]},
+  {i:'2026-11-16',e:'Oseas 1–6; 10–14; Joel',t:'El amor de Dios — Él siempre nos espera',desc:'A través del profeta Oseas, el Señor expresó Su amor por Israel usando la imagen de un esposo fiel. El amor de Dios por Sus hijos nunca cambia, sin importar cuánto nos alejemos de Él.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/47?lang=spa',temas:[{t:'Puedo guardar mis convenios fielmente',e:'Oseas 2:19-20',i:'En Oseas, Jehová comparó Sus convenios con un matrimonio. Vean una imagen de una novia y un novio y conversen cómo el Padre Celestial quiere que el esposo y la esposa se traten. Busquen en Oseas 2:19-20 palabras que describen lo que el Señor siente por nosotros y cómo demostrarle fidelidad.'},{t:'"Es el tiempo de buscar a Jehová"',e:'Oseas 10:12',i:'Oseas 10:12 usa metáforas de siembra, siega, tiempo y lluvia para invitarnos a buscar al Señor. Los niños pueden dibujar un reloj y anotar maneras de buscarlo en distintos momentos del día, o hacer movimientos de plantar y cosechar, comparando vivir en rectitud con recibir bendiciones.'},{t:'Jesucristo es mi Salvador y Redentor',e:'Oseas 13:4, 14',i:'Para recalcar que no hay más Salvador que Jesucristo (Oseas 13:4), muestra imágenes de varias personas, entre ellas Jesús, y los niños señalan a quien tiene el poder de salvarnos. Busquen palabras que describan a Jesucristo en Oseas 13:4, 14.'},{t:'El Espíritu Santo puede guiarme',e:'Joel 2:28-29',i:'Ayuda a los niños a entender Joel 2:28-29 dejándolos verter un líquido y comparándolo con un gotero o un chorrito: ¿qué significa que se derrame el Espíritu sobre nosotros? Inserten los nombres de otros en lugar de "vuestros hijos" y "vuestras hijas" y vean cómo el Espíritu puede ayudarlos.'}]},
+  {i:'2026-11-23',e:'Amós; Abdías; Jonás',t:'Jonás — la misericordia del Señor para todos',desc:'El Señor ordenó a Jonás predicar arrepentimiento a Nínive, los enemigos de Israel. Cuando Jonás intentó escapar, aprendió que la misericordia del Señor se extiende a todos Sus hijos.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/48?lang=spa',temas:[{t:'Los profetas son mensajeros de Jesucristo',e:'Amós 3:7',i:'Susúrrale un mensaje sencillo a un niño y pídele que lo comparta con los demás: ¿en qué se parece a un profeta?, ¿por qué el Señor nos envía profetas? Repasen mensajes recientes del Presidente de la Iglesia y canten "Sigue al Profeta".'},{t:'La restauración del Evangelio dio fin al hambre de la Apostasía',e:'Amós 8:11-12',i:'Invita a los niños a hacer de cuenta que tienen hambre mientras lees Amós 8:11-12: ¿qué se siente tener hambre de la palabra de Dios? Pueden hacer de cuenta que comen mientras comparten sus pasajes favoritos. Conversen sobre la Apostasía y cómo terminó con la Restauración.'},{t:'El Señor es misericordioso con todos los que se vuelven a Él',e:'Jonás 1-4',i:'Los niños pueden hacer de cuenta que entrevistan a Jonás sobre su experiencia: ¿qué preguntas le harían?, ¿qué aprendió sobre la misericordia del Señor? Piensen en ejemplos en que el Salvador mostró misericordia y en oportunidades de ser misericordiosos con otros.'},{t:'El Señor me ayudará a obedecerle, aun cuando sea difícil',e:'Jonás 1-3',i:'Repasa "Jonás el profeta" y pregunta qué pasó cuando Jonás no obedeció, qué hizo para arrepentirse y qué ocurrió cuando sí obedeció. A los niños puede gustarles dramatizar la historia y compartir experiencias en que el Señor les pidió algo difícil y cómo los ayudó a obedecer.'}]},
+  {i:'2026-11-30',e:'Miqueas; Nahúm; Habacuc; Sofonías',t:'Andar humildemente con tu Dios — Miqueas 6:8',desc:'Miqueas resumió hermosamente los requisitos del Señor: hacer justicia, amar misericordia y andar humildemente con Dios. Estos principios son el corazón de la vida del verdadero discípulo.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/49?lang=spa',temas:[{t:'Jesucristo nació en Belén',e:'Miqueas 5:2',i:'Una profecía de Miqueas ayudó a los magos a encontrar al Niño Jesús en Belén. Usando Miqueas 5:2 y Mateo 2:1-6, los niños pueden dramatizar aquella experiencia y conversar por qué el nacimiento de Jesús fue tan importante que los profetas lo supieron años antes.'},{t:'"Jehová es bueno, fortaleza en el día de la angustia"',e:'Nahúm 1:7',i:'Después de leer Nahúm 1:7, los niños construyen o dibujan una "fortaleza" sencilla. Conversen por qué alguien necesitaría una fortaleza, por qué nuestra época es un "día de angustia" y en qué sentido Jesucristo es como una fortaleza para nosotros.'},{t:'Dios siempre cumplirá Sus promesas',e:'Habacuc 2:3',i:'Hablen de cosas que son buenas solo después de esperar, como la fruta que madura o la masa que se hornea. Conversen sobre Habacuc, que deseaba saber cuándo el Señor pondría fin a la iniquidad, lean su respuesta en 2:3 y, con cada promesa de Dios, digan juntos "Espérala; porque sin duda vendrá".'},{t:'Puedo ayudar a llenar la tierra con el conocimiento de Jesucristo',e:'Habacuc 2:14',i:'Llenen un frasco con imágenes o palabras de lo que Jesús hizo o enseñó para ilustrar Habacuc 2:14. Muestra un mapa del mundo y ayúdalos a encontrar dónde viven y dónde han servido misioneros que conocen. Canten "Llevaremos Su verdad al mundo".'},{t:'Jesucristo se regocija con aquellos que lo siguen',e:'Sofonías 3:14-20',i:'En Sofonías 3:14-20, los niños buscan algo que los haga querer "cantar, alegrarse y regocijarse de todo corazón". Pueden cantar himnos o canciones alegres y conversar sobre el gozo que se encuentra en el Evangelio de Jesucristo.'}]},
+  {i:'2026-12-07',e:'Hageo 1–2; Zacarías 1–4; 7–14',t:'El templo del Señor — lugar sagrado',desc:'Después del exilio, el Señor llamó a Su pueblo a reconstruir el templo. Zacarías prometió que Sus ojos nunca descansan de Sus hijos. El templo sigue siendo el centro de la vida del convenio.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/50?lang=spa',temas:[{t:'"Meditad bien sobre vuestros caminos"',e:'Hageo 1:2-8',i:'Al leer Hageo 1:2-5, ayuda a los niños a descubrir por qué el Señor no estaba complacido con el pueblo; pueden dibujar una frase del versículo 6 y adivinarla. Al leer el versículo 8, hacen de cuenta que reedifican la casa de Jehová, y "meditan bien sobre sus caminos" encerrando lo más importante de su día.'},{t:'Hacer y guardar convenios me puede ayudar a ser más como el Padre Celestial y Jesucristo',e:'Zacarías 3:1-7',i:'Zacarías vio a un sumo sacerdote con "vestimentas sucias" a quien un ángel dio ropa limpia. Lean Zacarías 3:1-7 y conversen qué representan la ropa sucia y la limpia, y cómo llegamos a ser limpios de nuestros pecados. Vean una ilustración de un bautismo y canten "Cuando me bautice".'},{t:'Jesucristo es el Mesías prometido',e:'Zacarías 9:9-11; 11:12; 13:6-7',i:'Muestra una imagen de Jesús entrando en Jerusalén (Zacarías 9:9) y los niños señalan a quienes "se alegran mucho". Comparen las profecías de Zacarías con su cumplimiento en el Nuevo Testamento (por ejemplo, Zacarías 9:9 y Mateo 21:5-9).'}]},
+  {i:'2026-12-14',e:'Malaquías',t:'El mensajero del Señor — Malaquías 3:1',desc:'Malaquías prometió que el Señor enviaría a Elías para \'volver el corazón de los padres hacia los hijos\'. Esta promesa se cumple en el trabajo de templo que une a las familias por la eternidad.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/51?lang=spa',temas:[{t:'El Señor me ama',e:'Malaquías 1:2',i:'Conversen cómo responderían la pregunta de Malaquías 1:2: "¿En qué nos ha amado el Señor?". Compartan las razones por las que saben que Él los ama; los niños pueden hacer dibujos que les recuerden Su amor, o pasarse una pelota y, al sostenerla, decir por qué saben que Jesús los ama.'},{t:'El Señor me bendecirá al pagar el diezmo',e:'Malaquías 3:8-12',i:'Los niños cuentan diez objetos pequeños y separan uno: eso es lo que damos al Señor como diezmo. Según Malaquías 3:8-12, conversen por qué el Señor desea que paguemos el diezmo. Al leer 3:10 pueden pararse junto a una ventana ("las ventanas de los cielos") y cuéntales las bendiciones que has recibido.'},{t:'Elías el Profeta vino para hacer volver nuestro corazón hacia nuestras familias',e:'Malaquías 4:5-6',i:'Los niños buscan en Malaquías 4:5-6 respuestas sobre la profecía: a quién prometió enviar Jehová, cuándo, qué haría y por qué. Repasen cómo se cumplió y usen FamilySearch o "Mi familia" para encontrar actividades que ayuden a volver el corazón hacia sus antepasados.'}]},
+  {i:'2026-12-21',e:'Navidad',t:'El nacimiento de Jesucristo — el mayor regalo',desc:'El nacimiento de Jesucristo fue el cumplimiento de siglos de profecías del Antiguo Testamento. El Niño que nació en Belén es el mismo Señor que guió a Israel por el desierto y que nos guía hoy.',u:'https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/52?lang=spa',temas:[{t:'El Antiguo Testamento me enseña sobre Jesús',e:'Génesis 22:8; Números 24:17; Salmos 23:1; 27:1',i:'Usen decoraciones navideñas para iniciar una conversación sobre el Salvador y busquen en estos pasajes algo que simbolice a Jesucristo. Los niños pueden sostener una ilustración que concuerde con cada versículo: ¿en qué sentido Jesús es como un cordero, una estrella, un pastor o una luz?'},{t:'Las tradiciones navideñas pueden recordarnos a Jesucristo',e:'Éxodo 12',i:'Las familias israelitas tenían tradiciones, como la Pascua, para orientar su corazón al Señor. Conversen qué tradiciones les ayudan a centrarse en Jesucristo en la época navideña y qué tradiciones nuevas les gustaría comenzar, como prestar servicio o compartir el mensaje de Su nacimiento.'},{t:'El Padre Celestial me dio la dádiva de Su Hijo para que fuera mi Salvador',e:'Isaías 25:8-9; 53:3-5; Lucas 2:1-20',i:'Vean el video "El Niño Jesús: Un relato de la Natividad" o lean los relatos del nacimiento; cada niño escoge un personaje y narra lo que sentía por el Salvador. Conversen por qué se regocijan de que el Padre Celestial nos haya enviado un Salvador y canten una canción de Navidad.'}]},
 ];
 
 // ─── PRESENTACIÓN SACRAMENTAL ─────────────────────
@@ -729,6 +734,14 @@ function getActiveSpecials(sunday){const h=new Date(sunday);h.setHours(0,0,0,0);
 function lsKey(k){return`pee_${sk(barrio||'_')}_${k}`;}
 function lsGet(k){try{return localStorage.getItem(lsKey(k));}catch{return null;}}
 function lsSet(k,v){try{localStorage.setItem(lsKey(k),v);}catch{}}
+function showSaved(msg){
+  const t=document.getElementById('save-toast');
+  if(!t)return;
+  t.textContent=msg||'✓ Guardado';
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
 function getEscriturasFromMinuta(desde,hasta){
   const d1=new Date(desde),d2=new Date(hasta),seen=new Set(),result=[];
   let d=new Date(d1);
@@ -767,9 +780,9 @@ function renderHome(){
 }
 function saveCfgConsejero2(){lsSet('consejero',document.getElementById('home-consejero').value);}
 function cambiarBarrio(){barrio=null;localStorage.removeItem('pee_barrio_sel');closeSettings();document.getElementById('bottom-nav').style.display='none';showScreen('barrio');}
-function openSettings(){document.getElementById('settings-overlay').style.display='flex';document.getElementById('cfg-consejero').value=lsGet('consejero')||'';document.getElementById('cfg-barrio-nombre').textContent='Barrio '+barrio;}
+function openSettings(){document.getElementById('settings-overlay').style.display='flex';document.getElementById('cfg-barrio-nombre').textContent='Barrio '+barrio;}
 function closeSettings(){document.getElementById('settings-overlay').style.display='none';}
-function saveCfgConsejero(){lsSet('consejero',document.getElementById('cfg-consejero').value);}
+function saveCfgConsejero(){const el=document.getElementById('cfg-consejero');if(el)lsSet('consejero',el.value);}
 
 // ═══ BARRIOS ═══
 function renderBarrios(){
@@ -788,30 +801,41 @@ function updateBarrioLabels(){
   ['bautismo-barrio-label','templo-barrio-label','pres-barrio-label','semana-barrio-label','home-titulo'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.textContent='Barrio '+barrio;
   });
-  const st=document.getElementById('semana-titulo');if(st)st.textContent=barrio;
 }
 
 // ═══ SEMANA ═══
 function saveHimnoToPres(himnoName,checked){
   const sunday=getSunday(weekOffset);
   const sec=getSeccionForDate(sunday);
-  if(!sec)return;
+  if(!sec)return {sec:null};
   const pres=JSON.parse(lsGet('pres')||'{}');
   if(!pres[sec.id])pres[sec.id]={};
+  // Migrar formato viejo a lista
+  let arr;
+  if(Array.isArray(pres[sec.id].himnos))arr=pres[sec.id].himnos;
+  else if(pres[sec.id].himno)arr=[{ref:pres[sec.id].himno}];
+  else arr=[];
+  let accion=null;
+  const idx=arr.findIndex(h=>h.ref===himnoName);
   if(checked){
-    pres[sec.id].himno=himnoName;
+    if(idx<0){arr.push({ref:himnoName,fromMinuta:true});accion='add';}
   } else {
-    // Revertir al default
-    const defSec=PRES_SECCIONES.find(s=>s.id===sec.id);
-    pres[sec.id].himno=defSec?defSec.himno:'';
+    if(idx>=0){arr.splice(idx,1);accion='remove';}
   }
+  pres[sec.id].himnos=arr;
+  delete pres[sec.id].himno;
   lsSet('pres',JSON.stringify(pres));
+  clearTimeout(window._himnoSync);
+  window._himnoSync=setTimeout(()=>sheetWrite('Presentacion',{datos:pres}),10000);
+  return {sec:sec.tema,accion};
 }
 function isHimnoInPres(himnoName){
   const pres=JSON.parse(lsGet('pres')||'{}');
   for(const sec of PRES_SECCIONES){
     const s=pres[sec.id];
-    if(s&&s.himno===himnoName)return true;
+    if(!s)continue;
+    if(Array.isArray(s.himnos)){if(s.himnos.some(h=>h.ref===himnoName))return true;}
+    else if(s.himno===himnoName)return true;
   }
   return false;
 }
@@ -856,7 +880,7 @@ function renderSemana(){
         <a href="${c.u}" target="_blank" style="font-size:12px;color:var(--azul);font-weight:700;text-decoration:none">Escuchar →</a>
       </div>
       <div class="pcheck">
-        <input type="checkbox" ${inPres?'checked':''} onchange="saveHimnoToPres('${safeT}',this.checked)">
+        <input type="checkbox" ${inPres?'checked':''} onchange="toggleHimnoMinuta('${safeT}',this.checked)">
         <span>Usar en Presentación Sacramental</span>
       </div>
     </div>`;}).join('');
@@ -876,12 +900,16 @@ function renderSemana(){
 
   // Especiales banner
   const specials=getActiveSpecials(sunday);
-  const cfg={pascua:{label:'🐑 Se acerca Pascua de Resurrección',bg:'var(--rojo-c)',borde:'var(--rojo-b)',color:'var(--rojo)'},conferencia:{label:'📺 Se acerca la Conferencia General',bg:'var(--azul-c)',borde:'var(--azul-b)',color:'var(--azul)'},navidad:{label:'🎄 Llegó Navidad',bg:'var(--verde-c)',borde:'var(--verde-b)',color:'var(--verde)'}};
+  const cfg={
+    pascua:{label:'🐑 Se acerca Pascua de Resurrección',bg:'var(--rojo-c)',borde:'var(--rojo-b)',color:'var(--rojo)',url:'https://drive.google.com/drive/folders/1KqiQICwT-2Vrta_NwQFsBLstYzgKLi4n?usp=share_link'},
+    conferencia:{label:'📺 Se acerca la Conferencia General',bg:'var(--azul-c)',borde:'var(--azul-b)',color:'var(--azul)',url:'https://drive.google.com/drive/folders/1QBN_95JY5PEA6Hs8qJww5-ahX1AqU-E4?usp=share_link'},
+    navidad:{label:'🎄 Llegó Navidad',bg:'var(--verde-c)',borde:'var(--verde-b)',color:'var(--verde)',url:'https://drive.google.com/drive/folders/1KhO4kBebyBsEP8CTUDXV06p_wgSOYGFW?usp=share_link'}
+  };
   document.getElementById('especiales-banner').innerHTML=specials.map(t=>`
-    <div class="especial-card" style="background:${cfg[t].bg};border-color:${cfg[t].borde}">
+    <a href="${cfg[t].url}" target="_blank" class="especial-card" style="background:${cfg[t].bg};border-color:${cfg[t].borde};text-decoration:none">
       <div><p style="font-family:'Lora',serif;font-size:15px;font-weight:600;color:${cfg[t].color};margin-bottom:3px">${cfg[t].label}</p><p style="font-size:12px;color:var(--suave)">Ideas y recursos para los niños</p></div>
       <span style="color:${cfg[t].color};font-size:20px">→</span>
-    </div>`).join('');
+    </a>`).join('');
 }
 function fillChip(id,val){document.getElementById(id).value=val;saveMinuta();}
 function scrollSec(id,btn){
@@ -908,10 +936,36 @@ function saveMinuta(){
     presDiscurso:document.getElementById('m-pres-discurso').checked,
   };
   lsSet(weekKey,JSON.stringify(data));
-  updatePresFromMinuta(weekKey,sunday,'escritura',data.escritura,data.escrituraNino,data.presEscritura);
-  updatePresFromMinuta(weekKey,sunday,'discurso',data.discurso,data.discursoNino,data.presDiscurso);
+  const rEsc=updatePresFromMinuta(weekKey,sunday,'escritura',data.escritura,data.escrituraNino,data.presEscritura);
+  const rDisc=updatePresFromMinuta(weekKey,sunday,'discurso',data.discurso,data.discursoNino,data.presDiscurso);
   clearTimeout(window._minutaSync);
   window._minutaSync=setTimeout(()=>sheetWrite('Minuta',Object.assign({semana:lec.i},data)),10000);
+  return {escritura:rEsc,discurso:rDisc};
+}
+function togglePresMinuta(tipo){
+  const r=saveMinuta();
+  const res=tipo==='escritura'?r.escritura:r.discurso;
+  if(res&&res.sec&&res.accion==='add'){
+    showSaved('✓ Agregado a: '+res.sec);
+  } else if(res&&res.accion==='remove'){
+    showSaved('✓ Quitado de la Presentación');
+  } else if(res&&!res.sec){
+    showSaved('Esta fecha no tiene sección');
+  } else {
+    showSaved();
+  }
+}
+function toggleHimnoMinuta(himnoName,checked){
+  const res=saveHimnoToPres(himnoName,checked);
+  if(res&&res.sec&&res.accion==='add'){
+    showSaved('✓ Himno agregado a: '+res.sec);
+  } else if(res&&res.accion==='remove'){
+    showSaved('✓ Himno quitado de la Presentación');
+  } else if(res&&!res.sec){
+    showSaved('Esta fecha no tiene sección');
+  } else {
+    showSaved();
+  }
 }
 
 // ═══ LECCIÓN ═══
@@ -924,11 +978,23 @@ function renderLeccion(){
   document.getElementById('lec-desc').textContent=lec.desc;
   document.getElementById('lec-link').href=lec.u+'?lang=spa';
   document.getElementById('lec-gsa').href=gsaUrl;
-  document.getElementById('lec-temas').innerHTML=(lec.temas||[]).map(tm=>`
-    <div class="tema-card">
-      <div class="tema-titulo">${tm.t}</div>
-      ${tm.i?`<div class="tema-idea">${tm.i}</div>`:''}
-    </div>`).join('');
+  document.getElementById('lec-temas').innerHTML=(lec.temas||[]).map(tm=>{
+    const esc=tm.e?`<div class="tema-escritura">${tm.e}</div>`:'';
+    const idea=tm.i?`<div class="tema-idea">${tm.i}</div>`:'';
+    const arrow=tm.i?`<span class="tema-arrow">▼</span>`:'';
+    const onclick=tm.i?` onclick="toggleTema(this)"`:'';
+    return `<div class="tema-card">
+      <button type="button" class="tema-head"${onclick}>
+        <div style="flex:1"><div class="tema-titulo">${tm.t}</div>${esc}</div>
+        ${arrow}
+      </button>
+      ${idea}
+    </div>`;
+  }).join('');
+}
+function toggleTema(btn){
+  const card=btn.closest('.tema-card');
+  if(card)card.classList.toggle('open');
 }
 
 // ═══ BAUTISMO ═══
@@ -962,21 +1028,24 @@ function getCSDForSeccion(sec){
 }
 function updatePresFromMinuta(weekKey,sunday,tipo,valor,nino,checked){
   const sec=getSeccionForDate(sunday);
-  if(!sec)return;
+  if(!sec)return {sec:null};
   const pres=JSON.parse(lsGet('pres')||'{}');
   if(!pres[sec.id])pres[sec.id]={};
   const arrKey=tipo==='escritura'?'escrituras':'discursos';
   if(!pres[sec.id][arrKey])pres[sec.id][arrKey]=[];
   const arr=pres[sec.id][arrKey];
+  let accion=null;
   if(checked&&valor){
     const idx=arr.findIndex(e=>e.weekKey===weekKey);
     if(idx>=0){arr[idx].ref=valor;arr[idx].nino=nino;}
     else{arr.push({ref:valor,nino:nino,weekKey,fromMinuta:true});}
+    accion='add';
   } else {
     const idx=arr.findIndex(e=>e.weekKey===weekKey);
-    if(idx>=0)arr.splice(idx,1);
+    if(idx>=0){arr.splice(idx,1);accion='remove';}
   }
   lsSet('pres',JSON.stringify(pres));
+  return {sec:sec.tema,accion};
 }
 function editPresEntry(secId,arrKey,idx,campo,val){
   const pres=JSON.parse(lsGet('pres')||'{}');
@@ -1055,6 +1124,92 @@ function renderEntradas(secId,arrKey,entries,csdEntry,labelField,placeholder,add
   return html;
 }
 
+// ─── HIMNOS (lista por sección) ───
+function getHimnos(secId){
+  // Devuelve el array de himnos de la sección, migrando formato viejo si hace falta
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  const s=pres[secId]||{};
+  if(Array.isArray(s.himnos))return s.himnos;
+  if(s.himno)return [{ref:s.himno}]; // dato viejo: string único
+  return null; // sin datos → usar sugerido
+}
+function renderHimnos(sec){
+  const lista=getHimnos(sec.id);
+  let html='';
+  if(lista===null){
+    // Mostrar el sugerido como editable
+    const safeH=(sec.himno||'').replace(/'/g,"\\'");
+    html=`<div style="background:var(--fondo);border-radius:8px;border:1.5px dashed var(--amarillo-b);padding:8px 10px;margin-bottom:6px">
+      <p style="font-size:10px;color:var(--amarillo);font-weight:700;margin-bottom:6px;letter-spacing:.06em">💡 SUGERIDO — editable</p>
+      <input class="inp-sm" type="text" value="${(sec.himno||'').replace(/"/g,'&quot;')}" placeholder="Himno de la sección"
+        onfocus="autoPopulateHimno('${sec.id}','${safeH}')">
+    </div>`;
+  } else if(lista.length===0){
+    html='<p style="font-size:11px;color:var(--suave);font-style:italic;margin-bottom:6px">Sin himno asignado</p>';
+  } else {
+    html=lista.map((h,i)=>{
+      const bg=h.fromMinuta?'var(--azul-c)':'var(--fondo)';
+      const bc=h.fromMinuta?'var(--azul-b)':'var(--borde)';
+      const pos=lista.length>1?(i===0?'<p style="font-size:9px;color:var(--suave);font-weight:700;margin-bottom:3px">APERTURA</p>':(i===lista.length-1?'<p style="font-size:9px;color:var(--suave);font-weight:700;margin-bottom:3px">CIERRE</p>':'')):'';
+      return `<div style="background:${bg};border-radius:8px;border:1.5px solid ${bc};padding:8px 10px;margin-bottom:6px;display:flex;gap:8px;align-items:flex-start">
+        <div style="flex:1">
+          ${pos}
+          ${h.fromMinuta?'<p style="font-size:10px;color:var(--azul);font-weight:700;margin-bottom:4px">De la minuta ✓</p>':''}
+          <input class="inp-sm" type="text" value="${(h.ref||'').replace(/"/g,'&quot;')}" placeholder="Himno de la sección"
+            oninput="editHimno('${sec.id}',${i},this.value)">
+        </div>
+        <button onclick="deleteHimno('${sec.id}',${i})" style="background:none;border:none;color:var(--suave);font-size:20px;cursor:pointer;padding:0;flex-shrink:0;line-height:1">×</button>
+      </div>`;
+    }).join('');
+  }
+  html+=`<div style="display:flex;gap:6px;margin-top:2px">
+    <button onclick="addHimno('${sec.id}')" style="flex:1;background:transparent;border:1.5px dashed var(--borde);border-radius:8px;padding:7px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--suave);cursor:pointer">+ Agregar himno</button>`;
+  if(lista!==null){
+    html+=`<button onclick="restaurarHimnoSugerido('${sec.id}')" title="Restaurar himno sugerido" style="background:var(--amarillo-c);border:1.5px solid var(--amarillo-b);border-radius:8px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--amarillo);cursor:pointer;font-weight:700">↺</button>`;
+  }
+  html+=`</div>`;
+  return html;
+}
+function setHimnos(secId,arr){
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  if(!pres[secId])pres[secId]={};
+  pres[secId].himnos=arr;
+  delete pres[secId].himno; // limpiar formato viejo
+  lsSet('pres',JSON.stringify(pres));
+  clearTimeout(window._himnoSync);
+  window._himnoSync=setTimeout(()=>sheetWrite('Presentacion',{datos:pres}),10000);
+}
+function autoPopulateHimno(secId,ref){
+  if(getHimnos(secId)!==null)return;
+  setHimnos(secId,[{ref:ref,fromMinuta:false}]);
+  renderPresentacion();
+}
+function editHimno(secId,idx,val){
+  const arr=getHimnos(secId)||[];
+  if(!arr[idx])arr[idx]={};
+  arr[idx].ref=val;
+  setHimnos(secId,arr);
+}
+function deleteHimno(secId,idx){
+  const arr=getHimnos(secId)||[];
+  arr.splice(idx,1);
+  setHimnos(secId,arr);
+  renderPresentacion();
+}
+function addHimno(secId){
+  const arr=getHimnos(secId)||[];
+  arr.push({ref:'',fromMinuta:false});
+  setHimnos(secId,arr);
+  renderPresentacion();
+}
+function restaurarHimnoSugerido(secId){
+  const pres=JSON.parse(lsGet('pres')||'{}');
+  if(pres[secId]){delete pres[secId].himnos;delete pres[secId].himno;}
+  lsSet('pres',JSON.stringify(pres));
+  sheetWrite('Presentacion',{datos:pres});
+  renderPresentacion();
+}
+
 
 function renderPresentacion(){
   const saved=JSON.parse(lsGet('pres')||'{}');
@@ -1080,9 +1235,8 @@ function renderPresentacion(){
       </div>
       <!-- HIMNO -->
       <div style="background:${clarito};border-radius:10px;border:1px solid ${borde};padding:10px 12px;margin-bottom:8px">
-        <p style="font-size:10px;font-weight:700;color:${color};margin-bottom:6px;letter-spacing:.06em">🎵 HIMNO</p>
-        <input class="inp-sm" type="text" value="${(s.himno||sec.himno).replace(/"/g,'&quot;')}" placeholder="Himno de la sección"
-          oninput="editPresField('${sec.id}','himno',this.value)">
+        <p style="font-size:10px;font-weight:700;color:${color};margin-bottom:6px;letter-spacing:.06em">🎵 HIMNOS</p>
+        ${renderHimnos(sec)}
       </div>
       <!-- VALIENTE -->
       <div style="background:${clarito};border-radius:10px;border:1px solid ${borde};padding:10px 12px;margin-bottom:8px">
@@ -1134,6 +1288,15 @@ function exportPresPDF(){
     const escrituras=s.escrituras||[];
     const discursos=s.discursos||[];
     const csdEntry=getCSDForSeccion(sec);
+    // Himnos: lista nueva, o string viejo, o sugerido
+    let himnos;
+    if(Array.isArray(s.himnos))himnos=s.himnos.map(h=>h.ref).filter(Boolean);
+    else if(s.himno)himnos=[s.himno];
+    else himnos=[sec.himno];
+    const himnosHtml=himnos.map((h,i)=>{
+      const etq=himnos.length>1?(i===0?'Apertura: ':(i===himnos.length-1?'Cierre: ':'')):'';
+      return '<p style="font-size:15px;font-weight:bold;color:#1E5F8E;margin:2px 0">♪ '+(etq?'<span style="font-size:11px;color:#888;font-weight:normal">'+etq+'</span>':'')+h+'</p>';
+    }).join('');
     const escToShow=escrituras.length>0?escrituras:[{ref:csdEntry?csdEntry.e:'—',nino:''}];
     const discToShow=discursos.length>0?discursos:[{ref:csdEntry?csdEntry.disc:'—',nino:''}];
     const escHtml=escToShow.map(e=>
@@ -1143,7 +1306,8 @@ function exportPresPDF(){
       '<p style="margin:4px 0 4px 16px;font-size:12px"><span style="color:#B83A2A;font-weight:bold">🎓 '+
       (e.ref||'—')+'</span>'+(e.nino?' — '+e.nino:'')+'</p>').join('');
     return '<div style="margin-bottom:22px;break-inside:avoid">'+
-      '<p style="font-size:15px;font-weight:bold;color:#1E5F8E;text-decoration:underline;margin-bottom:8px">♪ '+(s.himno||sec.himno)+'</p>'+
+      '<p style="font-size:13px;font-weight:bold;color:#555;text-decoration:underline;margin-bottom:6px">'+sec.tema+'</p>'+
+      himnosHtml+
       discHtml+
       escHtml+
       '<p style="margin:5px 0 5px 16px;font-size:12px"><strong style="color:#2E7D4F">👧 '+(s.rayito||sec.rayito)+'</strong>'+(s.rayitoNombre?' — '+s.rayitoNombre:'')+'</p>'+
@@ -1170,19 +1334,22 @@ let _anuncios = [];
 
 async function syncAnuncios(){
   try{
-    const url=SHEET_URL+'?action=read&tab=Anuncios&barrio='+encodeURIComponent(barrio)+'&todos=SI';
+    const url=SHEET_URL+'?action=read&tab=Anuncios&barrio='+encodeURIComponent(barrio);
     const res=await fetch(url,{redirect:'follow'});
     if(!res.ok)return;
-    const data=await res.json();
-    if(data&&data.rows){
-      _anuncios=data.rows.filter(r=>
-        r.Activo&&r.Activo.toString().toUpperCase()==='SI'&&
-        r.Mensaje&&r.Mensaje.toString().trim()&&
-        (r.Barrio==='TODOS'||r.Barrio===barrio)
-      );
-      renderAnuncios();
-    }
-  }catch(e){}
+    const text=await res.text();
+    let data;
+    try{data=JSON.parse(text);}catch{return;}
+    if(!data)return;
+    const rows=data.rows||[];
+    _anuncios=rows.filter(r=>{
+      if(!r||!r.Mensaje)return false;
+      const activo=(r.Activo||'').toString().trim().toUpperCase();
+      const bOk=(r.Barrio||'').toString().trim();
+      return activo==='SI'&&(bOk==='TODOS'||bOk===barrio);
+    });
+    renderAnuncios();
+  }catch(e){console.log('Anuncios error:',e);}
 }
 
 function renderAnuncios(){
@@ -1286,6 +1453,10 @@ window.addEventListener('DOMContentLoaded',()=>{
       showScreen('barrio');
     }
   },800);
+});
+// Refrescar anuncios al volver a la app (sin tener que cerrarla)
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible'&&barrio){syncAnuncios();}
 });
 </script>
 </body>
