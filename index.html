@@ -801,6 +801,7 @@ a{color:inherit;text-decoration:none;}
   </div>
 
   <div style="padding:18px 16px 0">
+    <div id="demo-aviso-home"></div>
     <div id="anuncios-home"></div>
 
     <p class="sec-title">Reuniones especiales</p>
@@ -884,6 +885,7 @@ a{color:inherit;text-decoration:none;}
   </div>
 
   <div style="padding:18px 16px 0">
+    <div id="demo-aviso"></div>
     <div id="anuncios-semana"></div>
     <div id="cumple-aviso"></div>
     <div id="especiales-banner"></div>
@@ -1215,6 +1217,8 @@ const URL_VSM = 'https://www.churchofjesuschrist.org/study/manual/come-follow-me
 const URL_GSA = 'https://www.churchofjesuschrist.org/study/manual/games-stories-activities/2026';
 
 const BARRIOS = ['Escobar','Garín','Maschwitz','Matheu','Savio','Benavídez','La Cabaña'];
+const BARRIO_INVITADO = 'Invitado';   // modo demostración: nada sale del celular
+function esInvitado(){return barrio===BARRIO_INVITADO;}
 const MESES   = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
 // ─── CANCIONES POR MES ────────────────────────────
@@ -1375,6 +1379,7 @@ let barrio=null, weekOffset=0, prevDetail='semana';
 const SHEET_URL='https://script.google.com/macros/s/AKfycbznQrG3BKzhk2AjIodRCiCtn5v1xFAXHpWMJmnCxg6ss5jG-OWjSgMLTHm3RpFWsbVJ/exec';
 
 function sheetWrite(tab,data){
+  if(esInvitado())return;   // el barrio invitado nunca escribe en el Drive
   try{
     if(tab==='Ninos'){
       fetch(SHEET_URL,{method:'POST',body:JSON.stringify({action:'write',tab:'Ninos',barrio:barrio,ninos:data.ninos||[]}),redirect:'follow'}).catch(()=>{});
@@ -1408,6 +1413,7 @@ function sheetWrite(tab,data){
 }
 
 async function sheetRead(tab){
+  if(esInvitado())return null;   // el barrio invitado no lee del Drive
   try{
     const url=SHEET_URL+'?action=read&tab='+encodeURIComponent(tab)+'&barrio='+encodeURIComponent(barrio);
     const res=await fetch(url,{redirect:'follow'});
@@ -1498,14 +1504,14 @@ function goTab(tab){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   const nb=document.getElementById('nav-'+tab);if(nb)nb.classList.add('active');
   if(tab==='semana')renderSemana();
-  if(tab==='home'){renderHome();restoreFolds();paintIcons();}
+  if(tab==='home'){renderHome();renderDemoAviso();restoreFolds();paintIcons();}
 }
 function goDetail(detail){
   prevDetail=document.querySelector('.nav-btn.active')?.id?.replace('nav-','')||'semana';
   document.getElementById('bottom-nav').style.display='none';
   showScreen(detail);
   if(detail==='bautismo')renderBautismo();if(detail==='templo')renderTemplo();if(detail==='presentacion')renderPresentacion();if(detail==='leccion')renderLeccion();
-  if(detail==='cumples'){const l=document.getElementById('cumple-barrio-label');if(l)l.textContent='Barrio '+barrio;renderCumples();}
+  if(detail==='cumples'){const l=document.getElementById('cumple-barrio-label');if(l)l.textContent=esInvitado()?'Modo demostración':'Barrio '+barrio;renderCumples();}
   paintIcons();
 }
 function goBack(){document.getElementById('bottom-nav').style.display='flex';goTab(prevDetail||'semana');}
@@ -1515,13 +1521,21 @@ function renderHome(){
 }
 function saveCfgConsejero2(){lsSet('consejero',document.getElementById('home-consejero').value);}
 function cambiarBarrio(){barrio=null;localStorage.removeItem('pee_barrio_sel');closeSettings();document.getElementById('bottom-nav').style.display='none';showScreen('barrio');}
-function openSettings(){document.getElementById('settings-overlay').style.display='flex';document.getElementById('cfg-consejero').value=lsGet('consejero')||'';document.getElementById('cfg-barrio-nombre').textContent='Barrio '+barrio;}
+function openSettings(){document.getElementById('settings-overlay').style.display='flex';document.getElementById('cfg-consejero').value=lsGet('consejero')||'';document.getElementById('cfg-barrio-nombre').textContent=esInvitado()?'Modo demostración':'Barrio '+barrio;}
 function closeSettings(){document.getElementById('settings-overlay').style.display='none';}
 function saveCfgConsejero(){lsSet('consejero',document.getElementById('cfg-consejero').value);}
 
 // ═══ BARRIOS ═══
 function renderBarrios(){
-  document.getElementById('barrio-list').innerHTML=BARRIOS.map(b=>`<button class="barrio-btn" onclick="selectBarrio('${b}')"><span>Barrio ${b}</span><span style="color:var(--rojo);font-size:17px">→</span></button>`).join('');
+  const lista=BARRIOS.map(b=>`<button class="barrio-btn" onclick="selectBarrio('${b}')"><span>Barrio ${b}</span><span style="color:var(--rojo);font-size:17px">→</span></button>`).join('');
+  const demo=`<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--borde)">
+      <button class="barrio-btn" onclick="selectBarrio('${BARRIO_INVITADO}')" style="border-color:var(--violeta-b);background:var(--violeta-c)">
+        <span style="color:var(--violeta);font-weight:600">Probar como invitada</span>
+        <span style="color:var(--violeta);font-size:17px">→</span>
+      </button>
+      <p style="font-size:12px;color:var(--suave);line-height:1.55;margin-top:8px">Para conocer la app. Lo que cargues queda solo en tu celular.</p>
+    </div>`;
+  document.getElementById('barrio-list').innerHTML=lista+demo;
 }
 function selectBarrio(b){
   barrio=b;
@@ -1535,7 +1549,7 @@ function selectBarrio(b){
 }
 function updateBarrioLabels(){
   ['bautismo-barrio-label','templo-barrio-label','pres-barrio-label','semana-barrio-label','home-titulo'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.textContent='Barrio '+barrio;
+    const el=document.getElementById(id);if(el)el.textContent=esInvitado()?'Modo demostración':'Barrio '+barrio;
   });
   const st=document.getElementById('semana-titulo');if(st)st.textContent='Domingo';
 }
@@ -1600,6 +1614,7 @@ function renderSemana(){
   setFoldSummary('clase',lec.t||'—');
   renderNinos();
   renderAvisoCumples();
+  renderDemoAviso();
   paintIcons();
   restoreFolds();
 
@@ -2135,6 +2150,19 @@ function copiarCandidatos(contId,titulo,okId){
   copiarTexto(titulo+' — Primaria Barrio '+barrio+' '+new Date().getFullYear()+'\n\n'+filas.join('\n'),okId);
 }
 
+function renderDemoAviso(){
+  const html=esInvitado()?`<div class="announce" style="background:linear-gradient(135deg,#F6F1FD,#EDE4FA);border-color:var(--violeta-b)">
+    <span class="announce-ico" style="background:var(--violeta)" data-ico="personas"></span>
+    <div style="flex:1;min-width:0">
+      <p class="announce-tag" style="color:var(--violeta)">Modo demostración</p>
+      <p class="announce-msg">Estás probando la app. Lo que cargues queda solo en este celular y no se comparte.</p>
+    </div></div>`:'';
+  ['demo-aviso','demo-aviso-home'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.innerHTML=html;if(html)paintIcons(el);}
+  });
+}
+
 // ═══ SECCIONES PLEGABLES ═══
 function toggleFold(id){
   const el=document.getElementById(id);
@@ -2544,6 +2572,7 @@ function exportPresPDF(){
 let _anuncios = [];
 
 async function syncAnuncios(){
+  if(esInvitado()){_anuncios=[];renderAnuncios();return;}   // sin anuncios de la estaca
   try{
     const url=SHEET_URL+'?action=read&tab=Anuncios&barrio='+encodeURIComponent(barrio);
     const res=await fetch(url,{redirect:'follow'});
@@ -2653,7 +2682,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const saved=localStorage.getItem('pee_barrio_sel');
   setTimeout(()=>{
     document.getElementById('loading').style.display='none';
-    if(saved&&BARRIOS.includes(saved)){
+    if(saved&&(BARRIOS.includes(saved)||saved===BARRIO_INVITADO)){
       barrio=saved;
       updateBarrioLabels();
       document.getElementById('bottom-nav').style.display='flex';
